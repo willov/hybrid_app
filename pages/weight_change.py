@@ -104,6 +104,8 @@ if 'height' not in st.session_state:
 if 'age' not in st.session_state:
     st.session_state['age'] = 50
 
+st.session_state['meal'] = 0
+
 anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['weight'], "height": st.session_state['height']}
 anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
 anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state.weight, 0.1, key="weight") # max, min # 0.1?
@@ -128,9 +130,9 @@ start_time = st.session_state['age']
 st.markdown(f"**Blood pressure medication {i+1}**")
 
 diet_times.append(st.number_input("TStart of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time{i}"))
-BPmed_time.append(st.number_input("Start of blood pressure medication (age): ", start_time, key=f"BPmed_time{i}"))
 diet_lengths.append(st.number_input("Diet length (years): ", 0.0, 240.0, 20.0, 0.1, key=f"diet_length{i}"))
 diet_kcals.append(st.number_input("Change in kcal of diet (kcal): ", 0.0, 1000.0, 45.0, 1.0, key=f"diet_kcals{i}"))
+BPmed_time.append(st.number_input("Start of blood pressure medication (age): ", start_time, key=f"BPmed_time{i}"))
 start_time += 1
 st.divider()
 
@@ -151,6 +153,6 @@ stim = {
 
 sim_results = simulate(model, anthropometrics, stim, extra_time=extra_time)
 
-st.subheader("Plotting the time course given the alcoholic drinks specified")
+st.subheader("Plotting the time course given the specified diet and blood pressure medication")
 feature = st.selectbox("Feature of the model to plot", model_features)
 st.line_chart(sim_results, x="Time", y=feature)
