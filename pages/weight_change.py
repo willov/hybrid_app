@@ -76,26 +76,25 @@ def simulate(m, anthropometrics, stim, extra_time = 10):
 st.title("Simulation weight change")
 st.markdown("""Using the model for insulin resistance and blood pressure, you can simulate the dynamics of different changes in energy intake and blood pressure medication based on custom anthropometrics. 
 
-Below, you can specify how big change in energy intake you want to simulate and when/if to take blood pressure medication, and some anthropometrics to see how weight and blood pressure changes.
+Below, you can specify how big change in energy intake you want to simulate and when/how big meals to simulate.
 
 """)
    
 # Anthropometrics            
 st.subheader("Anthropometrics")
     
-# Shared variables between the pages
 
 if 'sex' not in st.session_state:
     st.session_state['sex'] = 'Man'
 if 'weight' not in st.session_state:
     st.session_state['weight'] = 90.0
 st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']    
-if 'fat' not in st.session_state:
+if 'Finit' not in st.session_state:
     if st.session_state['sex']== 'Woman':
-        st.session_state['fat'] = (st.session_state['weight']/100)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((0.01*st.session_state['height'])^2)) - 102.01)
+        st.session_state['Finit'] = (st.session_state['weight']/100)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((0.01*st.session_state['height'])^2)) - 102.01)
     elif st.session_state['sex']== 'Man': 
         st.session_state['fat'] = (st.session_state['weight']/100)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((0.01*st.session_state['height'])^2)) - 103.95) 
-if 'lean' not in st.session_state:
+if 'Linit' not in st.session_state:
     st.session_state['Ginit'] = (1 + 2.7)*0.5
     st.session_state['lean'] = st.session_state['weight'] - (st.session_state['fat'] + (1 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 else
@@ -111,8 +110,8 @@ st.session_state['meal'] = 0
 anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['weight'], "height": st.session_state['height']}
 anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
 anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state.weight, 0.1, key="weight") # max, min # 0.1?
-anthropometrics["fat mass weight"] = st.number_input("Fat mass (kg):", 0.0, 1000.0, st.session_state.weight, 0.1, key="fat") # max, min
-anthropometrics["lean mass weight"] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.weight, 0.1, key="lean") # max, min
+anthropometrics["Finit"] = st.number_input("Fat mass (kg):", 0.0, 1000.0, st.session_state.weight, 0.1, key="fat") # max, min
+anthropometrics["Linit"] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.weight, 0.1, key="lean") # max, min
 anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_state.height, key="height")
 anthropometrics["age"] = st.number_input("Age (years):", 0.0, 200, st.session_state.age, key="age")
 
@@ -121,9 +120,9 @@ anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man",
 # Specifying diet
 st.subheader("Diet")
 
-diet_times = []
+diet_time = []
 diet_kcals = []
-diet_lengths = []
+diet_length = []
 BPmed_time = []
 
 st.divider()
@@ -131,30 +130,66 @@ start_time = st.session_state['age']
 
 st.markdown(f"**Blood pressure medication {i+1}**")
 
-diet_times.append(st.number_input("TStart of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time{i}"))
-diet_lengths.append(st.number_input("Diet length (years): ", 0.0, 240.0, 20.0, 0.1, key=f"diet_length{i}"))
+diet_time.append(st.number_input("TStart of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time{i}"))
+diet_length.append(st.number_input("Diet length (years): ", 0.0, 240.0, 20.0, 0.1, key=f"diet_length{i}"))
 diet_kcals.append(st.number_input("Change in kcal of diet (kcal): ", 0.0, 1000.0, 45.0, 1.0, key=f"diet_kcals{i}"))
 BPmed_time.append(st.number_input("Start of blood pressure medication (age): ", start_time, key=f"BPmed_time{i}"))
 start_time += 1
 st.divider()
 
+
 EIchange = [0]+[c*on for c in diet_kcals for on in [1 , 0]]
-diet_length = [0]+[t*on for t in diet_lengths for on in [1 , 0]]
-t = [t+(l/60)*on for t,l in zip(diet_times, diet_lengths) for on in [0,1]]
+diet_length = [0]+[t*on for t in diet_length for on in [1 , 0]]
+
+t_long = [t_long+(l/60)*on for t_long,l in zip(diet_time, diet_length) for on in [0,1]]
+
+
+st.subheader(f"Specifying meals")
+
+start_time = 0
+
+meal_times = []
+meal_kcals = []
+
+n_meals = st.slider("Number of (solid) meals:", 0, 5, 1)
+
+for i in range(n_meals):
+    st.markdown(f"**Meal {i+1}**")
+    meal_times.append(st.number_input("Start of meal simulations (years): ", 0.0, diet_length, 0.1, key=f"meal_times{i}"))
+    meal_kcals.append(st.number_input("Change in kcal of diet (kcal): ", 78000, key=f"diet_kcals{i}"))
+    meal_amount = meal_kcals/4*1000 # converting from kcal to mg glucose
+    start_time += 0.1
+    st.divider()
+if n_meals < 1.0:
+    st.divider()
+
+meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
+meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
+
+t_meal = [t_meal+(l/60)*on for t_meal,l in zip(meal_times, 0.3) for on in [0,1]]
 
 # Setup stimulation to the model
 
-stim = {
-    "EIchange": {"t": t, "f": EIchange},
-    "kcal_solid": {"t": diet_times, "f": diet_kcals},
-    "diet_length": {"t": t, "f": diet_length},
-    "BPmed_start": {"t": t, "f": diet_length},
+stim_long = {
+    "EIchange": {"t": diet_time, "f": EIchange},
+    "meal": {"t": t_meal, "f": 0}
+    }
+
+stim_meal = {
+    "meal_amount": {"t": t_meal, "f": meal_amount},
+    "meal": {"t": t_meal, "f": 1}
     }
 
 # Plotting the drinks
 
-sim_results = simulate(model, anthropometrics, stim, extra_time=extra_time)
+sim_long = simulate(model, anthropometrics, stim_long, extra_time=extra_time)
+sim_meal = simulate(model, anthropometrics, stim_meal, extra_time=extra_time)
 
-st.subheader("Plotting the time course given the specified diet and blood pressure medication")
+st.subheader("Plotting long term simulation of weight change")
+
 feature = st.selectbox("Feature of the model to plot", model_features)
-st.line_chart(sim_results, x="Time", y=feature)
+st.line_chart(sim_long, x="Time", y=feature)
+
+st.subheader("Plotting meal simulations based on time points chosen in long term simulation")
+feature = st.selectbox("Feature of the model to plot", model_features)
+st.line_chart(sim_meal, x="Time", y=feature)

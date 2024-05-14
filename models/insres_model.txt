@@ -296,6 +296,7 @@ f_IR_EGP  = (f_IR_diabetes < 1.0046) ? (1 + (b_EGP*log(xF))*scale)  :   0.860830
 f_IR_Ins  = (f_IR_diabetes < 1.0046) ? (1 + (b_Ins*log(xF))*scale)  :   0.908717502534490 
 
 %% body composition
+BWinit =  weight
 CC = 10.4*rhol/rhof
 p = CC/(CC+F) 
 EEinit = PAE*RMRinit 
@@ -364,7 +365,6 @@ tconvD = 24
 Food_glucose=EIn/4184/4*0.45
 nutrition=Food_glucose*1000
 
-weight = BW
 insulin = I
 
 FM = F
@@ -446,23 +446,23 @@ V_met = p2*G6P
 ********** MODEL FUNCTIONS
 
 ********** MODEL EVENTS
-eventMeal1 = gt(time,0), Q_sto1, 78000
-eventMeal2 = gt(time,0), D, 78000
+eventMeal1 = gt(time,0), Q_sto1, meal_amount
+eventMeal2 = gt(time,0), D, meal_amount
 event3 = gt(G_p,k_e2), RE, E
 eventDiabetes = gt(BMI,29), betamass, 0.3
-
 
 ########## OUTPUTS
 
 ########## INPUTS
-EIchange = EIchange     @ 0
-Finit = Finit           @ 23.4
-Linit = Linit           @ 44.95
-ECFinit = ECFinit       @ 14.804999999999998
-weight = weight         @ 90
-height = height         @ 185
-age = age               @ 40
-meal = meal             @ 1           % 1 meal 0 no meal
+EIchange = EIchange         @ 0
+Finit = Finit               @ 23.4
+Linit = Linit               @ 44.95
+ECFinit = ECFinit           @ 14.804999999999998
+weight = weight             @ 90
+height = height             @ 185
+age = age                   @ 40
+meal = meal                 @ 0           % 1 meal 0 no meal
+meal_amount = meal_amount   @ 78000
 
 ########## FEATURES
 
