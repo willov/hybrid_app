@@ -97,7 +97,7 @@ if 'Finit' not in st.session_state:
 if 'Linit' not in st.session_state:
     st.session_state['Ginit'] = (1 + 2.7)*0.5
     st.session_state['lean'] = st.session_state['weight'] - (st.session_state['fat'] + (1 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
-else
+else:
     st.session_state['Ginit'] = st.session_state['weight'] - (st.session_state['fat'] + (1 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
 if 'height' not in st.session_state:
