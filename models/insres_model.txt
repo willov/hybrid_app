@@ -10,7 +10,7 @@ timeunit = d
 
 d/dt(betamass) = 0   
 
-%% body composition
+// body composition
 d/dt(Gly) = ss_x*v1/rhog
 d/dt(ECF) = ss_x*v2
 d/dt(F) = ss_x*(1 - v3)*(k1 - v1)/rhof
@@ -18,12 +18,12 @@ d/dt(L) = ss_x*v3*(k1 - v1)/rhol
 d/dt(AT) = ss_x*v4
 d/dt(dosage) = 0
 
-%% topiramate
-d/dt(A) = (-Ka*A)*tconvD                            % absorption
-d/dt(C) = (Ka*A/V-K23*C+K23*C2-k10*C)*tconvD        % plasma
-d/dt(C2) = (K32*C-K32*C2)*tconvD                    % tissue
+// topiramate
+d/dt(A) = (-Ka*A)*tconvD                            // absorption
+d/dt(C) = (Ka*A/V-K23*C+K23*C2-k10*C)*tconvD        // plasma
+d/dt(C2) = (K32*C-K32*C2)*tconvD                    // tissue
 
-%% glucose control organs                                    
+// glucose control organs                                    
 d/dt(G_p) = (EGP+Ra-RE-U_ii-k_1*G_p+k_2*G_t)*tconv
 d/dt(G_t) = ((-U_id)+k_1*G_p-k_2*G_t)*tconv                                      
 d/dt(I_l) = ((-m_1*I_l)-m_3*I_l+m_2*I_p+S)*tconv  
@@ -39,14 +39,13 @@ d/dt(Y2) = -alpha*Y2-alpha*S_b*tconv
 d/dt(INS_f) = ((-p_2U*INS_f)+p_2U*(I-I_b))*tconv*(Q_sto1/(Q_sto1+0.01))
 d/dt(INS) = (V_1-V_2)*tconv*(Q_sto1/(Q_sto1+0.01))
 d/dt(RE) = 0 
-% d/dt(U) = 0 
 
-%% fat cell
-d/dt(IRm)               = (-v1a-v1basal+v1g+v1r+vIR)*tconv   % 
+// fat cell
+d/dt(IRm)               = (-v1a-v1basal+v1g+v1r+vIR)*tconv   
 d/dt(IRp)               = (v1basal-v1d-v1g+v1c)*tconv  
 d/dt(IRins)             = (v1a-v1c)*tconv              
 d/dt(IRip)              = (v1d-v1e)*tconv             
-d/dt(IRi)               = (v1e-v1r-vIRdeg)*tconv  % 
+d/dt(IRi)               = (v1e-v1r-vIRdeg)*tconv  
 d/dt(IRS1)              = (v2b+v2g-v2a-v2basal)*tconv
 d/dt(IRS1p)             = (v2a+v2d-v2b-v2c)*tconv  
 d/dt(IRS1p307)          = (v2c-v2d-v2f)*tconv    
@@ -63,8 +62,8 @@ d/dt(mTORC2)            = (-v5c+v5d)*tconv
 d/dt(mTORC2a)           = (v5c-v5d)*tconv  
 d/dt(AS160)             = (v6b1-v6f1)*tconv 
 d/dt(AS160p)            = (v6f1-v6b1)*tconv       
-d/dt(GLUT4m)            = (v7f-v7b-vGLUTdeg)*tconv  %          
-d/dt(GLUT4)             = (-v7f+v7b+vGLUT)*tconv    %            
+d/dt(GLUT4m)            = (v7f-v7b-vGLUTdeg)*tconv           
+d/dt(GLUT4)             = (-v7f+v7b+vGLUT)*tconv               
 d/dt(S6K)               = (v9b1-v9f1)*tconv           
 d/dt(S6Kp)              = (v9f1-v9b1)*tconv           
 d/dt(S6)                = (v9b2-v9f2)*tconv             
@@ -75,7 +74,7 @@ d/dt(G6P) = (V_G6P-V_met)*tconv
 
 betamass(0) = 1
      
-%% inits from Fast Food study
+// inits from Fast Food study
 Gly(0) = 1.85
 ECF(0) = 11.120199999999997
 F(0) = 12.7000 
@@ -102,7 +101,6 @@ Y2(0) = 0
 INS_f(0) = 0
 INS(0) = 0
 RE(0) = 0 
-% U(0) = 0
 
 IRm(0)              = 98.950794548537430
 IRp(0)              = 0.002065056368513
@@ -137,39 +135,39 @@ G6P(0) = 0.004273753196181
 
 ########## PARAMETERS 
 
-%% organs
-V_G = 1.88  %%47                                                                 
-k_1 = 0.065  %%48                                                                
-k_2 = 0.079  %%49                                                                
-G_b = 95  %%50                                                                   
-V_I = 0.05  %%51                                                                 
-m_1 = 0.19  %%52                                                                 
-m_2 = 0.484    %% 53                                                                  
-m_4 = 0.194    %% 54                                                                  
-m_5 = 0.0304  %%55                                                               
-m_6 = 0.6471   %% 56                                                                  
-HE_b = 0.6  %%57                                                                 
-I_b = 25  %%58                                                                   
-S_b = 1.8  %%59                                                                  
-k_max = 0.0558  %%60                                                             
-k_min = 0.008  %%61                                                              
-k_abs = 0.057  %%62                                                              
-k_gri = 0.0558  %%63                                                             
-f = 0.9  %%64                                                                    
-b = 0.82  %%65                                                                   
-dd = 0.01  %%66                                                                   
-k_p1 = 2.7  %%67                                                                 
-k_p2 = 0.0021  %%68                                                              
-k_p3 = 0.009  %%69                                                               
-k_p4 = 0.0618  %%70                                                              
-k_i = 0.0079  %%71                                                      
-p_2U = 0.0331  %%72                                                               
-K = 2.3  %%73                                                                    
-alpha = 0.05  %%74                                                               
-beta = 0.11 %%75                                                     
-gamma = 0.5  %%76                                                                
-k_e1 = 0.0005  %%77                                                              
-k_e2 = 339  %%78    
+// organs
+V_G = 1.88                                                                 
+k_1 = 0.065                                                                 
+k_2 = 0.079                                                                  
+G_b = 95                                                                     
+V_I = 0.05                                                                  
+m_1 = 0.19                                                                  
+m_2 = 0.484                                                                      
+m_4 = 0.194                                                                      
+m_5 = 0.0304                                                                 
+m_6 = 0.6471                                                                     
+HE_b = 0.6                                                                  
+I_b = 25                                                                     
+S_b = 1.8                                                               
+k_max = 0.0558                                                              
+k_min = 0.008                                                               
+k_abs = 0.057                                                                
+k_gri = 0.0558                                                              
+f = 0.9                                                                    
+b = 0.82                                                                     
+dd = 0.01                                                                     
+k_p1 = 2.7                                                                  
+k_p2 = 0.0021                                                               
+k_p3 = 0.009                                                                 
+k_p4 = 0.0618                                                                
+k_i = 0.0079                                                        
+p_2U = 0.0331                                                                 
+K = 2.3                                                                     
+alpha = 0.05                                                                
+beta = 0.11                                                      
+gamma = 0.5                                                                 
+k_e1 = 0.0005                                                              
+k_e2 = 339    
 INS_offset = 7 
 be = 3          
 bradykinin = 1  
@@ -187,7 +185,7 @@ V_l = 2.004669019320863
 K_l = 354.8519629537153
 V_lx = 0.043932686418002
 
-%% cell                                                                        
+// cell                                                                        
 k1a = 0.633         
 k1basal = 0.0368   
 k1c = 0.877         
@@ -242,10 +240,10 @@ k_gluin = 2.136098648464447
 k_G6P = 11495.60694632059
 V_G6Pmax = 410.2032883752426   
                   
-D = 78000  %%79 
+D = 78000  //79 
 
-%% Body composition
-joules = 4183 % = 1 % kcal
+// Body composition
+joules = 4183 
 RMRinit = 7.1025492e+06 
 Ginit = 1.85
 ECFinit = 11.120199999999997
@@ -268,18 +266,14 @@ bTEF = 0.1
 bAT = 0.14
 tAT = 14
 
-scale           = 2.35 %651
+scale           = 2.35 
 b_CLGI          = 0.605258205407204
-b_EGP           = 1.142839561915420 % 3 %
+b_EGP           = 1.142839561915420 
 b_Ins           = 0.749598731223457 
 
-% b_CLGI          = 0.2
-% b_EGP           = 1.14 % 3 %
-% b_Ins           = 0.25
-
-b_IR            = 0.13696 % 1.3696
-b_GLUT          = 0.15865 % 1.5865
-b_diabetes      = 0.08962 % 0.8962
+b_IR            = 0.13696 
+b_GLUT          = 0.15865 
+b_diabetes      = 0.08962 
 
 kIR = 0.0323845 
 kIRdeg = 1 
@@ -290,12 +284,12 @@ ss_x            = 1
 
 delta = 30
 
-CL=1.21 %L/h
-V=4.61 % L
-k10=0.2625% CL/V %1/h
-Ka=0.105 %1/h
-K23=0.577 %1/h
-K32=0.0586 %1/h  
+CL=1.21 //L/h
+V=4.61 // L
+k10=0.2625// CL/V 
+Ka=0.105 //1/h
+K23=0.577 //1/h
+K32=0.0586 //1/h  
 
 d1=0
 d2=0
@@ -334,7 +328,7 @@ t_half = 1.424047740519107
  
 ########## VARIABLES
 
-%% Insulin resistance
+// Insulin resistance
 
 xF              = (ss_x > 0)  ? (F/Finit)    : 1
 xL              = (ss_x > 0)  ? (L/Linit)  : 1   
@@ -347,7 +341,7 @@ f_IR_CLGI = (f_IR_diabetes < 1.0046) ? (1 + (b_CLGI*log(xF))*scale) :   0.926294
 f_IR_EGP  = (f_IR_diabetes < 1.0046) ? (1 + (b_EGP*log(xF))*scale)  :   0.860830533146272 
 f_IR_Ins  = (f_IR_diabetes < 1.0046) ? (1 + (b_Ins*log(xF))*scale)  :   0.908717502534490 
 
-%% body composition
+// body composition
 CC = 10.4*rhol/rhof
 p = CC/(CC+F) 
 EEinit = PAE*RMRinit 
@@ -358,10 +352,7 @@ dEI_init = EIchange*joules
 
 IC = (1-lmax*power(C,h2)/(power(C,h2)+power(IC_50,h2))) 
 
-% undereating
-% EI_vehicle = EIninit - dEI_init + ss_x*(dEI_init - dEI_ss*joules)*(power(time,h1)/(power(time,h1) + power(t_half,h1)))
-% overeating
-EI_vehicle = EIninit + dEI_init % - ss_x*(dEI_init - dEI_ss*joules)*(power(time,h1)/(power(time,h1) + power(t_half,h1))) % (dEI_init/abs(dEI_init))*
+EI_vehicle = EIninit + dEI_init 
 EIn = (1-ss_x)*EIninit+ss_x*EI_vehicle*IC
 
 CInvalue = fCIn*EI_vehicle
@@ -375,15 +366,14 @@ KK = EEinit-(gf*Finit+gl*Linit+delta*BWinit)
 EE = (-BW*delta*rhof*rhol-KK*rhof*rhol-rhof*rhol*TEF-rhof*rhol*AT+etal*p*rhof*CIn+etaf*rhol*CIn-etaf*p*rhol*CIn-etal*p*rhof*EIn-etaf*rhol*EIn+etaf*p*rhol*EIn-gf*rhof*rhol*F-etal*kg*p*rhof*Gly*Gly-etaf*kg*rhol*Gly*Gly+etaf*kg*p*rhol*Gly*Gly-gl*rhof*rhol*L)/(-etal*p*rhof-etaf*rhol+etaf*p*rhol-rhof*rhol)
 k1 = EIn-EE
 
-%% organs
+// organs
 
 I = I_p/V_I                                                                      
 G = G_p/V_G  
 aa = 5/2/(1-b)/D                                                                 
 cc = 5/2/dd/D                                                                     
 EGP = (k_p1 -(k_p2*G_p+k_p3*I_d+k_p4*I_po))*f_IR_EGP                                                
-E = k_e1*(G_p-k_e2)   
-% RE = E                                                                        
+E = k_e1*(G_p-k_e2)                                                                   
 S = gamma*I_po*betamass                                                      
 HE = (-m_5*S)+m_6                                                              
 m_3 = HE*m_1/(1-HE)                                                              
@@ -391,7 +381,7 @@ Q_sto = Q_sto1+Q_sto2
 Ra = f*k_abs*Q_gut/BW                                                           
 k_empt = k_min+(k_max-k_min)/2*(tanh(aa*(Q_sto-b*D))-tanh(cc*(Q_sto-dd*D))+2)   
 bf_f = bradykinin*(be+kbf*(INS_f+INS_offset))
-bfe_f = bf_f % (bf_f-bf_b)*(INS_f-INS_b)*p_bf
+bfe_f = bf_f // (bf_f-bf_b)*(INS_f-INS_b)*p_bf
 S_po = (Y+K*(EGP+Ra-RE-U_ii-k_1*G_p+k_2*G_t)/V_G+S_b)
                                   
 V_mmax = V_m+V_mx*INS
@@ -408,12 +398,12 @@ U_idf = xF*(V_in-V_out)
 U_id = (U_idf + U_idm + U_idl)
 U = U_id + U_ii
 
-%% for plotting
-measuredIRS1      = IRS1p + IRS1p307        %%1
-measuredPKB308    = PKB308p + PKB308p473p       %%2
-measuredIR        = IRp + IRip % SS = 0.0186 for diabetes
+// for plotting
+measuredIRS1      = IRS1p + IRS1p307       
+measuredPKB308    = PKB308p + PKB308p473p    
+measuredIR        = IRp + IRip 
 
-%% merge stuff
+// merge stuff
 tconv = 24*60
 tconvD = 24
 Food_glucose=EIn/4184/4*0.45
@@ -428,10 +418,10 @@ FFM = L + (1 + 2.7)*Gly + ECF
 LM = L + ECF
 GlyM = Gly
 ECFM = ECF 
-glucose = G*0.0555 % mg/dl -> mmol/l
+glucose = G*0.0555 // mg/dl -> mmol/l
 metabolicRate = 0.8569*(EE/PAE)/joules
 
-%% insulin resistance cell
+// insulin resistance cell
 vIR      =  kIR*f_IR_ir 
 vIRdeg   =  kIRdeg*IRi 
 vGLUT    =  kGLUT*f_IR_glut4               
@@ -442,20 +432,19 @@ GLUT4tot = GLUT4 + GLUT4m
 INSf = INS_f
  
 diabetes_def = (252 - 126*(1-meal))
-% betamass = (G > diabetes_def) ? 0.3 : 1 
 BMI = BW/height^2
 
-%% body composition
+// body composition
 v1 = (CIn - kg*(Gly)^2)
-v2 = 0 %(1/Na)*(deltaNaDiet - epNa*(ECF - ECFinit) - epCI*(1 - CIn/CIninit)) 
+v2 = 0 
 v3 = p
 v4 = (bAT*(EIn - EIninit) - AT)/tAT
 
-%% organs
+// organs
 V_1 = kI1*(I-I_b)
 V_2 = kI2*INS 
                                                                                                                                
-%% fat cell
+// fat cell
 v1a      = IRm*k1a*(INS_f+5)*1e-3
 v1basal  = k1basal*IRm
 v1c      = IRins*k1c
@@ -517,7 +506,7 @@ Linit = Linit               @ 44.95
 ECFinit = ECFinit           @ 14.804999999999998
 weight = weight             @ 90
 height = height             @ 185
-meal = meal                 @ 0           % 1 meal 0 no meal
+meal = meal                 @ 0           // 1 meal 0 no meal
 meal_amount = meal_amount   @ 78000
 
 ########## FEATURES

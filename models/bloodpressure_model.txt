@@ -7,8 +7,8 @@ timeunit = y
 ########## MACROS
 
 ########## STATES
-d/dt(SBP) = ((k1_SBP + k2_SBP*age) * SBP_vs_IC) - drugS  % ~ linear with time
-d/dt(DBP) = ((k1_DBP - k2_DBP*age) * DBP_vs_IC) - drugD  % ~ exponential with time 
+d/dt(SBP) = ((k1_SBP + k2_SBP*age) * SBP_vs_IC) - drugS  // ~ linear with time
+d/dt(DBP) = ((k1_DBP - k2_DBP*age) * DBP_vs_IC) - drugD  // ~ exponential with time 
 
 SBP(0) = IC_SBP
 DBP(0) = IC_DBP
@@ -29,7 +29,7 @@ IC_DBP = 70
 t_drug = 2 
 effect_drugS = 20
 effect_drugD = 5
-drug_on = 0 %set to 1 at time of treatment
+drug_on = 0 //set to 1 at time of treatment
 
 ########## VARIABLES
 age = time
