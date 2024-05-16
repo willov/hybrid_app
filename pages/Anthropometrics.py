@@ -9,7 +9,7 @@ import math
 
 st.title("Anthropometrics")
 st.markdown("""
-Here you can specify the anthropometrics of the person the person you want to make simulations for.
+Here you can specify the anthropometrics of the person you want to make simulations for.
 """)
 
 

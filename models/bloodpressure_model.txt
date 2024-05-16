@@ -2,7 +2,7 @@
 bloodpressure_model
 
 ########## METADATA
-t0 = 30 years
+timeunit = y
 
 ########## MACROS
 
