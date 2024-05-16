@@ -46,7 +46,6 @@ drugD = (effect_drugD/t_drug)*drug_on
 ########## FUNCTIONS
 
 ########## EVENTS
-
 event = gt(time,BPmed_time), drug_on, 1
 
 ########## OUTPUTS

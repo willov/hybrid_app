@@ -7,7 +7,6 @@ timeunit = d
 ########## MACROS
 
 ########## STATES
-
 d/dt(betamass) = 0   
 
 // body composition
@@ -133,8 +132,7 @@ S6p(0)              = 2.206305601018096
 Glu_in(0) = 2.470962100570481
 G6P(0) = 0.004273753196181
 
-########## PARAMETERS 
-
+########## PARAMETERS
 // organs
 V_G = 1.88                                                                 
 k_1 = 0.065                                                                 
@@ -327,9 +325,7 @@ dEI_ss = 1.226464396357887e+03
 t_half = 1.424047740519107
  
 ########## VARIABLES
-
 // Insulin resistance
-
 xF              = (ss_x > 0)  ? (F/Finit)    : 1
 xL              = (ss_x > 0)  ? (L/Linit)  : 1   
 
