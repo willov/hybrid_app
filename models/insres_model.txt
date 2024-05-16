@@ -1,10 +1,11 @@
-********** MODEL NAME
+########## NAME
 insres_model
 
-********** MODEL NOTES
+########## METADATA
 
+########## MACROS
 
-********** MODEL STATES
+########## STATES
 
 d/dt(betamass) = 0   
 
@@ -133,7 +134,7 @@ S6p(0)              = 2.206305601018096
 Glu_in(0) = 2.470962100570481
 G6P(0) = 0.004273753196181
 
-********** MODEL PARAMETERS 
+########## PARAMETERS 
 
 %% organs
 V_G = 1.88  %%47                                                                 
@@ -330,7 +331,7 @@ h1 = 4.999973082721017
 dEI_ss = 1.226464396357887e+03
 t_half = 1.424047740519107
  
-********** MODEL VARIABLES
+########## VARIABLES
 
 %% Insulin resistance
 
@@ -443,8 +444,6 @@ diabetes_def = (252 - 126*(1-meal))
 % betamass = (G > diabetes_def) ? 0.3 : 1 
 BMI = BW/height^2
 
-********** MODEL REACTIONS 
-
 %% body composition
 v1 = (CIn - kg*(Gly)^2)
 v2 = 0 %(1/Na)*(deltaNaDiet - epNa*(ECF - ECFinit) - epCI*(1 - CIn/CIninit)) 
@@ -498,9 +497,9 @@ V_G6P = V_G6Pmax*Glu_in/(k_gluin+Glu_in)*1/(k_G6P+G6P)
 V_met = p2*G6P
 
 
-********** MODEL FUNCTIONS
+########## FUNCTIONS
 
-********** MODEL EVENTS
+########## EVENTS
 eventMeal1 = gt(time,0), Q_sto1, meal_amount
 eventMeal2 = gt(time,0), D, meal_amount
 event3 = gt(G_p,k_e2), RE, E

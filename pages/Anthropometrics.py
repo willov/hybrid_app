@@ -12,8 +12,6 @@ st.markdown("""
 Here you can specify the anthropometrics of the person the person you want to make simulations for.
 """)
 
-st.session_state['Ginit'] = (1 + 2.7)*0.5
-st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']  
 
 if 'sex' not in st.session_state:
     st.session_state['sex'] = 'Man'
@@ -22,7 +20,11 @@ if 'weight' not in st.session_state:
 if 'height' not in st.session_state:
     st.session_state['height'] = 185
 if 'age' not in st.session_state:
-    st.session_state['age'] = 50
+    st.session_state['age'] = 40
+
+st.session_state['Ginit'] = (1 + 2.7)*0.5
+st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']  
+
 if 'Finit' not in st.session_state:
     if st.session_state['sex']== 'Woman':
         st.session_state['Finit'] = (st.session_state['weight']/100)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((0.01*st.session_state['height'])^2)) - 102.01)

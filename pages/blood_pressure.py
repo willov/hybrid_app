@@ -39,7 +39,7 @@ def setup_model(model_name):
     features = model.featurenames
     return model, features
 
-model, model_features = setup_model('insres_model')
+model, model_features = setup_model('bloodpressure_model')
 
 # Define functions needed
 
@@ -59,17 +59,14 @@ def simulate(m, anthropometrics, stim):
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
     
     sim.ResetStatesDerivatives()
-    t_start = min(stim["EIchange"]["t"]+stim["BP_med"]["t"])-0.25 # -0.25??
+    t_start = min(stim["BPmed_time"]["t"])
 
-    sim.Simulate(timevector = np.linspace(t_start, max(stim["EIchange"]["t"]), 10000))
+    sim.Simulate(timevector = np.linspace(t_start, max(stim["BPmed_time"]["t"]), 10000))
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
 
-    t_start_diet = min(stim["EIchange"]["t"])-0.25
-
-    sim_diet_results = sim_results[(sim_results['Time']>=t_start_diet)]
-    return sim_diet_results
+    return sim_results
 
 # Start the app
 
@@ -80,10 +77,13 @@ Below, you can specify for how long you want to simulate and if you want to take
 
 """)
 
-# Specifying diet
+anthropometrics = {st.session_state['age']}
+
+# Specifying blood pressure medication
 st.subheader("Blood pressure")
 
 BPmed_time = []
+t_long = []
 
 st.divider()
 
@@ -91,53 +91,19 @@ if 'age' not in st.session_state:
     st.session_state['age'] = 40
 start_time = st.session_state['age']
 
-diet_time.append(st.number_input("TStart of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time{i}"))
-diet_length.append(st.number_input("Diet length (years): ", 0.0, 240.0, 20.0, 0.1, key=f"diet_length{i}"))
-diet_kcals.append(st.number_input("Change in kcal of diet (kcal): ", 0.0, 1000.0, 45.0, 1.0, key=f"diet_kcals{i}"))
-BPmed_time.append(st.number_input("Start of blood pressure medication (age): ", start_time, key=f"BPmed_time{i}"))
-start_time += 1
+BPmed_time(st.number_input("Start of blood pressure medication (age): ", start_time, key=f"BPmed_time"))
+t_long(st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long"))
+t_long = t_long + start_time
 st.divider()
 
-
-EIchange = [0]+[c*on for c in diet_kcals for on in [1 , 0]]
-diet_length = [0]+[t*on for t in diet_length for on in [1 , 0]]
-
-t_long = [t_long+(l/60)*on for t_long,l in zip(diet_time, diet_length) for on in [0,1]]
-
-
-st.subheader(f"Specifying meals")
-
-start_time = 0
-
-meal_times = []
-meal_kcals = []
-
-n_meals = st.slider("Number of (solid) meals:", 0, 5, 1)
-
-for i in range(n_meals):
-    st.markdown(f"**Meal {i+1}**")
-    meal_times.append(st.number_input("Start of meal simulations (years): ", 0.0, diet_length, 0.1, key=f"meal_times{i}"))
-    meal_kcals.append(st.number_input("Change in kcal of diet (kcal): ", 78000, key=f"diet_kcals{i}"))
-    meal_amount = meal_kcals/4*1000 # converting from kcal to mg glucose
-    start_time += 0.1
-    st.divider()
-if n_meals < 1.0:
-    st.divider()
-
-meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
-meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
-
-t_meal = [t_meal+(l/60)*on for t_meal,l in zip(meal_times, 0.3) for on in [0,1]]
 
 # Setup stimulation to the model
 
 stim = {
-    "EIchange": {"t": diet_time, "f": EIchange},
-    "meal": {"t": t_meal, "f": 0}
+    "BPmed_time": {"t": t_long, "f": BPmed_time}
     }
 
-
-# Plotting the drinks
+# Plotting blood pressure 
 
 sim = simulate(model, anthropometrics, stim)
 

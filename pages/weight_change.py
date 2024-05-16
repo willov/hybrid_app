@@ -59,17 +59,18 @@ def simulate(m, anthropometrics, stim):
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
     
     sim.ResetStatesDerivatives()
-    t_start = anthropometrics.age 
-
-    sim.Simulate(timevector = np.linspace(t_start, t_long, 10000))
+    t_start = anthropometrics.age
+    # steady state first
+    sim.Simulate(timevector = np.linspace(t_start, max(stim["EIchange"]["t"]), 10000))
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
 
-    t_start_diet = 
+    #t_start_diet = 
 
-    sim_diet_results = sim_results[(sim_results['Time']>=t_start_diet)]
-    return sim_diet_results
+    # sim_diet_results = sim_results[(sim_results['Time']>=t_start_diet)]
+    #return sim_diet_results
+    return sim_results
 
 # Start the app
 
@@ -89,7 +90,7 @@ anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['w
 # Specifying diet
 st.subheader("Diet")
 
-diet_time = []
+#diet_time = []
 EIchange = []
 diet_length = []
 t_long = []
@@ -97,10 +98,11 @@ t_long = []
 st.divider()
 start_time = st.session_state['age']
 
-diet_time(st.number_input("Start of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time"))
+# diet_time(st.number_input("Start of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time"))
 diet_length(st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length"))
 EIchange(st.number_input("Change in kcal of diet (kcal): ", 0.0, 1000.0, 400, 1.0, key=f"EIchange"))
 t_long(st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long"))
+t_long = t_long+anthropometrics.age
 st.divider()
 
 st.subheader(f"Meals")
@@ -128,8 +130,8 @@ t_meal = [t_meal+(l/60)*on for t_meal,l in zip(meal_times, 0.3) for on in [0,1]]
 # Setup stimulation to the model
 
 stim_long = {
-    "EIchange": {"t": diet_time, "f": EIchange},
-    "meal": {"t": t_meal, "f": 0}
+    "EIchange": {"t": t_long, "f": EIchange},
+    "meal": {"t": t_long, "f": 0}
     }
 
 stim_meal = {
@@ -137,7 +139,7 @@ stim_meal = {
     "meal": {"t": t_meal, "f": 1}
     }
 
-# Plotting the drinks
+# Plotting weight change and meals
 
 sim_long = simulate(model, anthropometrics, stim_long)
 sim_meal = simulate(model, anthropometrics, stim_meal)
