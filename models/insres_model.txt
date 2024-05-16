@@ -3,19 +3,26 @@ insres_model
 
 ********** MODEL NOTES
 
+
 ********** MODEL STATES
 
-%% Body composition
-d/dt(Gly) = v1/rhog  
-d/dt(ECF) = v2
-d/dt(F) = (1 - v3)*(k1 - v1)/rhof
-d/dt(L) = v3*(k1 - v1)/rhol
-d/dt(AT) = v4
+d/dt(betamass) = 0   
+
+%% body composition
+d/dt(Gly) = ss_x*v1/rhog
+d/dt(ECF) = ss_x*v2
+d/dt(F) = ss_x*(1 - v3)*(k1 - v1)/rhof
+d/dt(L) = ss_x*v3*(k1 - v1)/rhol
+d/dt(AT) = ss_x*v4
 d/dt(dosage) = 0
 
-%% glucose control organs 
-d/dt(RE) = 0                                                     
-d/dt(G_p) = (EGP+Ra-E-U_ii-k_1*G_p+k_2*G_t)*tconv
+%% topiramate
+d/dt(A) = (-Ka*A)*tconvD                            % absorption
+d/dt(C) = (Ka*A/V-K23*C+K23*C2-k10*C)*tconvD        % plasma
+d/dt(C2) = (K32*C-K32*C2)*tconvD                    % tissue
+
+%% glucose control organs                                    
+d/dt(G_p) = (EGP+Ra-RE-U_ii-k_1*G_p+k_2*G_t)*tconv
 d/dt(G_t) = ((-U_id)+k_1*G_p-k_2*G_t)*tconv                                      
 d/dt(I_l) = ((-m_1*I_l)-m_3*I_l+m_2*I_p+S)*tconv  
 d/dt(I_p) = ((-m_2*I_p)-m_4*I_p+m_1*I_l)*tconv                                           
@@ -25,70 +32,77 @@ d/dt(Q_gut) = ((-k_abs*Q_gut)+k_empt*Q_sto2)*tconv
 d/dt(I_1) = -k_i*(I_1-I)*tconv                                                             
 d/dt(I_d) = -k_i*(I_d-I_1)*tconv                                                           
 d/dt(I_po) = ((-gamma*I_po)+S_po)*f_IR_Ins*tconv                                                  
-d/dt(Y) = (-alpha*(Y-beta*(G-G_b)))*tconv                                                     
-d/dt(INS_f) = ((-p_2U*INS_f)+p_2U*(I-I_b))*tconv  
-d/dt(INS) = (V_1-V_2)*tconv 
-
-d/dt(betamass) = 0   
+d/dt(Y) = (-alpha*(Y-beta*(G-G_b)))*tconv                                                    
+d/dt(Y2) = -alpha*Y2-alpha*S_b*tconv                                                    
+d/dt(INS_f) = ((-p_2U*INS_f)+p_2U*(I-I_b))*tconv*(Q_sto1/(Q_sto1+0.01))
+d/dt(INS) = (V_1-V_2)*tconv*(Q_sto1/(Q_sto1+0.01))
+d/dt(RE) = 0 
+% d/dt(U) = 0 
 
 %% fat cell
-d/dt(IRm)                = (-v1a-v1basal+v1r+v1g+vIR)*tconv  
-d/dt(IRp)               = (v1basal+v1c-v1d-v1g)*tconv   
+d/dt(IRm)               = (-v1a-v1basal+v1g+v1r+vIR)*tconv   % 
+d/dt(IRp)               = (v1basal-v1d-v1g+v1c)*tconv  
 d/dt(IRins)             = (v1a-v1c)*tconv              
-d/dt(IRip)              = (v1d-v1e)*tconv               
-d/dt(IRi)               = (v1e-v1r-vIRdeg)*tconv        
-d/dt(IRS1)              = (v2b+v2g-v2a-v2basal)*tconv   
-d/dt(IRS1p)             = (v2a+v2d-v2b-v2c)*tconv       
-d/dt(IRS1p307)          = (v2c-v2d-v2f)*tconv           
-d/dt(IRS1307)           = (v2basal+v2f-v2g)*tconv       
-d/dt(X)                 = (v3b-v3a)*tconv               
-d/dt(Xp)                = (v3a-v3b)*tconv               
-d/dt(PKB)               = (-v4a+v4b+v4h)*tconv             
-d/dt(PKB308p)           = (v4a-v4b-v4c)*tconv           
-d/dt(PKB473p)           = (-v4e+v4f-v4h)*tconv          
-d/dt(PKB308p473p)       = (v4c+v4e-v4f)*tconv           
-d/dt(mTORC1)            = (v5b-v5a)*tconv                       
-d/dt(mTORC1a)           = (v5a-v5b)*tconv               
-d/dt(mTORC2)            = (-v5c+v5d)*tconv             
-d/dt(mTORC2a)           = (v5c-v5d)*tconv               
-d/dt(AS160)             = (v6b1-v6f1)*tconv             
-d/dt(AS160p)            = (v6f1-v6b1)*tconv             
-d/dt(GLUT4m)            = (v7f-v7b-vGLUTdeg)*tconv              
-d/dt(GLUT4)             = (-v7f+v7b+vGLUT)*tconv             
-d/dt(S6K)               = (v9b1-v9f1)*tconv             
-d/dt(S6Kp)              = (v9f1-v9b1)*tconv             
+d/dt(IRip)              = (v1d-v1e)*tconv             
+d/dt(IRi)               = (v1e-v1r-vIRdeg)*tconv  % 
+d/dt(IRS1)              = (v2b+v2g-v2a-v2basal)*tconv
+d/dt(IRS1p)             = (v2a+v2d-v2b-v2c)*tconv  
+d/dt(IRS1p307)          = (v2c-v2d-v2f)*tconv    
+d/dt(IRS1307)           = (v2basal+v2f-v2g)*tconv    
+d/dt(X)                 = (v3b-v3a)*tconv          
+d/dt(Xp)                = (v3a-v3b)*tconv          
+d/dt(PKB)               = (-v4a+v4b+v4h)*tconv    
+d/dt(PKB308p)           = (v4a-v4b-v4c)*tconv  
+d/dt(PKB473p)           = (-v4e+v4f-v4h)*tconv   
+d/dt(PKB308p473p)       = (v4c+v4e-v4f)*tconv  
+d/dt(mTORC1)            = (v5b-v5a)*tconv            
+d/dt(mTORC1a)           = (v5a-v5b)*tconv  
+d/dt(mTORC2)            = (-v5c+v5d)*tconv  
+d/dt(mTORC2a)           = (v5c-v5d)*tconv  
+d/dt(AS160)             = (v6b1-v6f1)*tconv 
+d/dt(AS160p)            = (v6f1-v6b1)*tconv       
+d/dt(GLUT4m)            = (v7f-v7b-vGLUTdeg)*tconv  %          
+d/dt(GLUT4)             = (-v7f+v7b+vGLUT)*tconv    %            
+d/dt(S6K)               = (v9b1-v9f1)*tconv           
+d/dt(S6Kp)              = (v9f1-v9b1)*tconv           
 d/dt(S6)                = (v9b2-v9f2)*tconv             
 d/dt(S6p)               = (v9f2-v9b2)*tconv              
 
 d/dt(Glu_in) = (p1*(V_in-V_out)-V_G6P)*tconv 
-d/dt(G6P) = (V_G6P-V_met)*tconv     
-             
-%% inits from overeating
+d/dt(G6P) = (V_G6P-V_met)*tconv
+
+betamass(0) = 1
+     
+%% inits from Fast Food study
 Gly(0) = 1.85
-ECF(0) = 14.805
-F(0) = 23.4
-L(0) = 44.95
-AT(0) = 1.596334932737839e-28
+ECF(0) = 11.120199999999997
+F(0) = 12.7000 
+L(0) = 36.9348
+AT(0) = 0.1
 dosage(0) = 0 
 
-RE(0) = 0                           
-G_p(0) = 178                                                                   
+A(0) = 0
+C(0) = 0
+C2(0) = 0
+                         
+G_p(0) = 159.2072                                                                   
 G_t(0) = 130                                                                     
 I_l(0) = 4.5                                                                 
-I_p(0) = 1.25                                                                 
-Q_sto1(0) = 78000                                                                
+I_p(0) = 1.4950                                                                 
+Q_sto1(0) = 78000                                                               
 Q_sto2(0) = 0                                                                    
 Q_gut(0) = 0                                                                     
 I_1(0) = 25                                                                      
 I_d(0) = 25                                                                      
 I_po(0) = 3.6                                                  
-Y(0) = 0
+Y(0) = 0                                               
+Y2(0) = 0
 INS_f(0) = 0
 INS(0) = 0
+RE(0) = 0 
+% U(0) = 0
 
-betamass(0) = 1
-
-IR(0)               = 98.950794548537430
+IRm(0)              = 98.950794548537430
 IRp(0)              = 0.002065056368513
 IRins(0)            = 0.912543186088141       
 IRip(0)             = 0.017519537787953
@@ -120,43 +134,94 @@ Glu_in(0) = 2.470962100570481
 G6P(0) = 0.004273753196181
 
 ********** MODEL PARAMETERS 
-                                                                
-k1a = 0.633141                                                               
-k1basal = 0.0331338                                                           
-k1c = 0.876805                                                                
-k1d = 31.012                                                                 
-k1f = 1839.58                                                               
-k1g = 1944.11                                                                 
-k1r = 0.547061                                                               
-k2a = 3.22728                                                                
-k2c = 5758.78                                                              
-k2basal = 0.0422768                                                       
+
+%% organs
+V_G = 1.88  %%47                                                                 
+k_1 = 0.065  %%48                                                                
+k_2 = 0.079  %%49                                                                
+G_b = 95  %%50                                                                   
+V_I = 0.05  %%51                                                                 
+m_1 = 0.19  %%52                                                                 
+m_2 = 0.484    %% 53                                                                  
+m_4 = 0.194    %% 54                                                                  
+m_5 = 0.0304  %%55                                                               
+m_6 = 0.6471   %% 56                                                                  
+HE_b = 0.6  %%57                                                                 
+I_b = 25  %%58                                                                   
+S_b = 1.8  %%59                                                                  
+k_max = 0.0558  %%60                                                             
+k_min = 0.008  %%61                                                              
+k_abs = 0.057  %%62                                                              
+k_gri = 0.0558  %%63                                                             
+f = 0.9  %%64                                                                    
+b = 0.82  %%65                                                                   
+dd = 0.01  %%66                                                                   
+k_p1 = 2.7  %%67                                                                 
+k_p2 = 0.0021  %%68                                                              
+k_p3 = 0.009  %%69                                                               
+k_p4 = 0.0618  %%70                                                              
+k_i = 0.0079  %%71                                                      
+p_2U = 0.0331  %%72                                                               
+K = 2.3  %%73                                                                    
+alpha = 0.05  %%74                                                               
+beta = 0.11 %%75                                                     
+gamma = 0.5  %%76                                                                
+k_e1 = 0.0005  %%77                                                              
+k_e2 = 339  %%78    
+INS_offset = 7 
+be = 3          
+bradykinin = 1  
+pf = 34
+bf_b = 3 
+INS_b = 0                                                               
+p_bf = 1                                                                                              
+U_ii = 0.830871862015361  
+kI2 = 0.042883597145619
+kI1 = 0.047611502708533
+V_m = 0.881325333507003
+V_mx = 0.040935870268503
+K_m = 476.3512108268108
+V_l = 2.004669019320863 
+K_l = 354.8519629537153
+V_lx = 0.043932686418002
+
+%% cell                                                                        
+k1a = 0.633         %%2
+k1basal = 0.0368    %%3
+k1c = 0.877         %%4
+k1d = 31.0      	%%5                   
+k1f = 0.368 	 	%%6                   
+k1g = 1940      	%%7                   
+k1r = 0.547      	%%8                                                            
+k2a = 3.22728                                                                 
+k2c = 5758.78                                                                
+k2basal = 0.0422768                                                         
 k2b = 3424.35                                                              
 k2d = 280.753                                                               
-k2f = 2.9131                                                                
-k2g = 0.267089                                                              
-k3a = 0.00137731                                                             
-k3b = 0.0987558                                                              
-k4a = 5790.17                                                                
+k2f = 2.9131                                                                 
+k2g = 0.267089                                                               
+k3a = 0.00137731                                                            
+k3b = 0.0987558                                                            
+k4a = 5790.17                                                               
 k4b = 34.7965                                                               
 k4c = 4.45581                                                               
-k4e = 42.8395                                                                
-k4f = 143.597                                                             
+k4e = 42.8395                                                               
+k4f = 143.597                                                               
 k4h = 0.536145                                                              
-k5a1 = 1.8423                                                                
-k5a2 = 0.055064                                                             
-k5b = 24.826                                                               
-k5d = 1.06013                                                                
-km5 = 2.64988                                                               
-k5c = 0.0857515                                                              
-k6f1 = 2.65168                                                               
-k6f2 = 36.9348                                                               
-km6 = 30.5424                                                               
-n6 = 2.13707                                                               
-k6b = 65.1841                                                               
-k7f = 50.9829                                                                
-k7b = 2285.97                                                               
-k8 = 724.242                                                                
+k5a1 = 1.8423                                                              
+k5a2 = 0.055064                                                              
+k5b = 24.826                                                                
+k5d = 1.06013                                                              
+km5 = 2.64988                                                                
+k5c = 0.0857515                                                            
+k6f1 = 2.65168                                                              
+k6f2 = 36.9348                                                              
+km6 = 30.5424                                                                
+n6 = 2.13707                                                                
+k6b = 65.1841                                                                
+k7f = 51.0                                                                
+k7b = 2290                                                                
+k8 = 724.242                                                                 
 glut1 = 7042.19                                                             
 k9f1 = 0.12981                                                               
 k9b1 = 0.0444092                                                            
@@ -164,8 +229,8 @@ k9f2 = 3.3289
 k9b2 = 30.9967                                                               
 km9 = 5872.68                                                               
 n9 = 0.985466                                                               
-kbf = 0.01                                                         
-nC = 2.1e-06  
+kbf = 0.01                                                          
+nC = 2.1e-06   
                         
 p1 = 0.178910658618042
 p2 = 4.478155215098602 
@@ -174,66 +239,15 @@ p4 = 2.627135664357424
 k_gluin = 2.136098648464447
 k_G6P = 11495.60694632059
 V_G6Pmax = 410.2032883752426   
-
-%% organs
-V_G = 1.88                                                                  
-k_1 = 0.065                                                                  
-k_2 = 0.079                                                                
-G_b = 95                                                                     
-V_I = 0.05                                                                
-m_1 = 0.19                                                                  
-m_2 = 0.484                                                                  
-m_4 = 0.194                                                                  
-m_5 = 0.0304                                                                 
-m_6 = 0.6471                                                                 
-HE_b = 0.6                                                                  
-I_b = 25                                                                    
-S_b = 1.8                                                                  
-k_max = 0.0558                                                              
-k_min = 0.008                                                                
-k_abs = 0.057                                                               
-k_gri = 0.0558                                                            
-f = 0.9                                                                      
-b = 0.82                                                                    
-dd = 0.01                                                                    
-k_p1 = 2.7                                                                   
-k_p2 = 0.0021                                                                
-k_p3 = 0.009                                                                
-k_p4 = 0.0618                                                                
-k_i = 0.0079                                                       
-p_2U = 0.0331                                                               
-K = 2.3                                                                    
-alpha = 0.05                                                                
-beta = 0.11                                                             
-gamma = 0.5                                                                  
-k_e1 = 0.0005                                                              
-k_e2 = 339  
-D = 78000        
-
-INS_offset = 7 
-be = 3          
-bradykinin = 1  
-pf = 34
-bf_b = 3 
-INS_b = 0                                                               
-p_bf = 1                                                     
-                                            
-U_ii = 0.830871862015361  
-kI2 = 0.042883597145619
-kI1 = 0.047611502708533
-V_m = 0.881325333507003
-V_mx = 0.040935870268503
-K_m = 476.3512108268108
-V_l = 2.004669019320863 
-V_lx = 0.043932686418002
-K_l = 354.8519629537153
+                  
+D = 78000  %%79 
 
 %% Body composition
-RMRinit = 7.1025492e+06
+joules = 4183 % = 1 % kcal
+RMRinit = 7.1025492e+06 
 Ginit = 1.85
-ATinit = 0.1
-
-alfa = 1
+ECFinit = 11.120199999999997
+ATinit = 0.1  
 
 fCIn = 0.4
 PAE = 1.5
@@ -251,35 +265,71 @@ deltaNaDiet = 0
 bTEF = 0.1
 bAT = 0.14
 tAT = 14
-delta = 1
 
-k = 1
-m = 1 
-lmax = 0
-IC_50 = 1
-h2 = 1
-
-h1 = 4.999973082721017
-dEI_ss = 1.226464396357887e+03
-t_half = 1.424047740519107
-
-r1 = 0.91e-3
-r2 = 0.22e-4 
- 
-
-scale           = 2.35
+scale           = 2.35 %651
 b_CLGI          = 0.605258205407204
-b_EGP           = 1.142839561915420
+b_EGP           = 1.142839561915420 % 3 %
 b_Ins           = 0.749598731223457 
-b_IR            = 0.13696
-b_GLUT          = 0.15865
-b_diabetes      = 0.08962
+
+% b_CLGI          = 0.2
+% b_EGP           = 1.14 % 3 %
+% b_Ins           = 0.25
+
+b_IR            = 0.13696 % 1.3696
+b_GLUT          = 0.15865 % 1.5865
+b_diabetes      = 0.08962 % 0.8962
 
 kIR = 0.0323845 
 kIRdeg = 1 
 kGLUT = 62.81266 
 kGLUTdeg = 1
 
+ss_x            = 1
+
+delta = 30
+
+CL=1.21 %L/h
+V=4.61 % L
+k10=0.2625% CL/V %1/h
+Ka=0.105 %1/h
+K23=0.577 %1/h
+K32=0.0586 %1/h  
+
+d1=0
+d2=0
+d3=0
+d4=0
+d5=0
+d6=0
+d7=0
+d8=0
+d9=0
+d10=0
+d11=0
+d12=0
+d13=0
+d14=0
+d15=0
+d16=0
+d17=0
+d18=0
+d19=0
+d20=0
+d21=0
+d22=0
+d23=0
+d24=0
+d25=0
+d26=0
+
+lmax = 0
+IC_50 = 1  
+h2 = 1
+
+h1 = 4.999973082721017
+dEI_ss = 1.226464396357887e+03
+t_half = 1.424047740519107
+ 
 ********** MODEL VARIABLES
 
 %% Insulin resistance
@@ -296,7 +346,6 @@ f_IR_EGP  = (f_IR_diabetes < 1.0046) ? (1 + (b_EGP*log(xF))*scale)  :   0.860830
 f_IR_Ins  = (f_IR_diabetes < 1.0046) ? (1 + (b_Ins*log(xF))*scale)  :   0.908717502534490 
 
 %% body composition
-BWinit =  weight
 CC = 10.4*rhol/rhof
 p = CC/(CC+F) 
 EEinit = PAE*RMRinit 
@@ -307,7 +356,10 @@ dEI_init = EIchange*joules
 
 IC = (1-lmax*power(C,h2)/(power(C,h2)+power(IC_50,h2))) 
 
-EI_vehicle = EIninit + dEI_init 
+% undereating
+% EI_vehicle = EIninit - dEI_init + ss_x*(dEI_init - dEI_ss*joules)*(power(time,h1)/(power(time,h1) + power(t_half,h1)))
+% overeating
+EI_vehicle = EIninit + dEI_init % - ss_x*(dEI_init - dEI_ss*joules)*(power(time,h1)/(power(time,h1) + power(t_half,h1))) % (dEI_init/abs(dEI_init))*
 EIn = (1-ss_x)*EIninit+ss_x*EI_vehicle*IC
 
 CInvalue = fCIn*EI_vehicle
@@ -365,6 +417,7 @@ tconvD = 24
 Food_glucose=EIn/4184/4*0.45
 nutrition=Food_glucose*1000
 
+weight = BW
 insulin = I
 
 FM = F
@@ -387,6 +440,7 @@ GLUT4tot = GLUT4 + GLUT4m
 INSf = INS_f
  
 diabetes_def = (252 - 126*(1-meal))
+% betamass = (G > diabetes_def) ? 0.3 : 1 
 BMI = BW/height^2
 
 ********** MODEL REACTIONS 
@@ -443,12 +497,15 @@ v9b2     = S6p*k9b2
 V_G6P = V_G6Pmax*Glu_in/(k_gluin+Glu_in)*1/(k_G6P+G6P)
 V_met = p2*G6P
 
+
 ********** MODEL FUNCTIONS
 
 ********** MODEL EVENTS
 eventMeal1 = gt(time,0), Q_sto1, meal_amount
 eventMeal2 = gt(time,0), D, meal_amount
 event3 = gt(G_p,k_e2), RE, E
+eventY = lt(beta*(G-G_b),-S_b),Y, Y2 
+eventY2 = gt(beta*(G-G_b),-S_b),Y2, 0 
 eventDiabetes = gt(BMI,29), betamass, 0.3
 
 ########## OUTPUTS
@@ -460,7 +517,6 @@ Linit = Linit               @ 44.95
 ECFinit = ECFinit           @ 14.804999999999998
 weight = weight             @ 90
 height = height             @ 185
-age = age                   @ 40
 meal = meal                 @ 0           % 1 meal 0 no meal
 meal_amount = meal_amount   @ 78000
 
