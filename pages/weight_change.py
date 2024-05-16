@@ -39,7 +39,7 @@ def setup_model(model_name):
     features = model.featurenames
     return model, features
 
-model, model_features = setup_model('insres_model')
+model, model_features = setup_model('alcohol_model')
 
 # Define functions needed
 
