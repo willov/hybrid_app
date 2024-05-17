@@ -5,8 +5,6 @@ import numpy as np
 import streamlit as st
 import math 
 
-# testing testing
-
 # Install sund in a custom location
 import subprocess
 import sys
@@ -39,8 +37,8 @@ def setup_model(model_name):
     features = model.featurenames
     return model, features
 
-model, model_features = setup_model('insresss_model')
-
+model, model_features = setup_model('insres_model')
+cvxcvx
 # Define functions needed
 
 def flatten(list):
