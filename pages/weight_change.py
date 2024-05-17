@@ -82,12 +82,32 @@ Below, you can specify how big change in energy intake you want to simulate and 
 """)
    
 # Anthropometrics
+
+if 'sex' not in st.session_state:
+    st.session_state['sex'] = 'Man'
+if 'weight' not in st.session_state:
+    st.session_state['weight'] = 90.0
+if 'height' not in st.session_state:
+    st.session_state['height'] = 185
+if 'age' not in st.session_state:
+    st.session_state['age'] = 40
+st.session_state['Ginit'] = (1 + 2.7)*0.5
+st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']  
+if 'Finit' not in st.session_state:
+    if st.session_state['sex']== 'Woman':
+        st.session_state['Finit'] = (st.session_state['weight']/100)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((0.01*st.session_state['height'])**2)) - 102.01)
+    elif st.session_state['sex']== 'Man': 
+        st.session_state['Finit'] = (st.session_state['weight']/100)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((0.01*st.session_state['height'])**2)) - 103.95) 
+if 'Linit' not in st.session_state:
+    st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
+
 anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['weight'], 
                    "height": st.session_state['height'], "age": st.session_state['age'], 
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
                    "Ginit": st.session_state['Ginit'], "ECFinit": st.session_state['ECFinit']}
 
 # Specifying diet
+st.divider()
 st.subheader("Diet")
 
 #diet_time = []
@@ -95,7 +115,6 @@ EIchange = []
 diet_length = []
 t_long = []
 
-st.divider()
 start_time = st.session_state['age']
 
 # diet_time(st.number_input("Start of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time"))
@@ -103,9 +122,9 @@ diet_length(st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, key=
 EIchange(st.number_input("Change in kcal of diet (kcal): ", 0.0, 1000.0, 400, 1.0, key=f"EIchange"))
 t_long(st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long"))
 t_long = t_long+anthropometrics.age
-st.divider()
 
-st.subheader(f"Meals")
+st.divider()
+st.subheader("Meals")
 
 meal_times = []
 meal_kcals = []
