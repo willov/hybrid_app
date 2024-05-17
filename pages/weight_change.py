@@ -39,7 +39,7 @@ def setup_model(model_name):
     features = model.featurenames
     return model, features
 
-model, model_features = setup_model('alcohol_model')
+model, model_features = setup_model('insresss_model')
 
 # Define functions needed
 
@@ -59,8 +59,8 @@ def simulate(m, anthropometrics, stim):
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
     
     sim.ResetStatesDerivatives()
-    t_start = anthropometrics.age
-    # steady state first
+    t_start = min(stim["EIchange"]["t"])
+    # TODO steady state 
     sim.Simulate(timevector = np.linspace(t_start, max(stim["EIchange"]["t"]), 10000))
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
