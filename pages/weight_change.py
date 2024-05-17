@@ -38,7 +38,7 @@ def setup_model(model_name):
     return model, features
 
 model, model_features = setup_model('insres_model')
-cvxcvx
+
 # Define functions needed
 
 def flatten(list):
