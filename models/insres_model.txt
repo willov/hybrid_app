@@ -243,7 +243,6 @@ D = 78000  //79
 // Body composition
 joules = 4183 
 RMRinit = 7.1025492e+06 
-Ginit = 1.85
 ATinit = 0.1  
 
 fCIn = 0.4
@@ -497,6 +496,7 @@ eventDiabetes = gt(BMI,29), betamass, 0.3
 EIchange = EIchange         @ 0
 Finit = Finit               @ 23.4
 Linit = Linit               @ 44.95
+Ginit = Ginit               @ 1.85
 ECFinit = ECFinit           @ 14.804999999999998
 BWinit = weight             @ 90
 height = height             @ 185
