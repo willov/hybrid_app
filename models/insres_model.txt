@@ -244,7 +244,6 @@ D = 78000  //79
 joules = 4183 
 RMRinit = 7.1025492e+06 
 Ginit = 1.85
-ECFinit = 11.120199999999997
 ATinit = 0.1  
 
 fCIn = 0.4
@@ -346,7 +345,7 @@ CIninit = fCIn*EIninit
 kg = CIninit/(Ginit*Ginit)
 dEI_init = EIchange*joules
 
-IC = (1-lmax*power(C,h2)/(power(C,h2)+power(IC_50,h2))) 
+IC = (1-(lmax*C**h2)/(C**h2+IC_50**h2)) 
 
 EI_vehicle = EIninit + dEI_init 
 EIn = (1-ss_x)*EIninit+ss_x*EI_vehicle*IC
@@ -405,7 +404,6 @@ tconvD = 24
 Food_glucose=EIn/4184/4*0.45
 nutrition=Food_glucose*1000
 
-weight = BW
 insulin = I
 
 FM = F
@@ -500,7 +498,7 @@ EIchange = EIchange         @ 0
 Finit = Finit               @ 23.4
 Linit = Linit               @ 44.95
 ECFinit = ECFinit           @ 14.804999999999998
-weight = weight             @ 90
+weight = BWinit             @ 90
 height = height             @ 185
 meal = meal                 @ 0           // 1 meal 0 no meal
 meal_amount = meal_amount   @ 78000
