@@ -77,6 +77,8 @@ Below, you can specify for how long you want to simulate and if you want to take
 
 """)
 
+if 'age' not in st.session_state:
+    st.session_state['age'] = 40
 anthropometrics = {st.session_state['age']}
 
 # Specifying blood pressure medication
