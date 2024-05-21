@@ -57,9 +57,9 @@ def simulate(m, anthropometrics, stim):
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
     
     sim.ResetStatesDerivatives()
-    t_start = anthropometrics.age # min(stim["EIchange"]["t"])
+    t_start = min(stim["EIchange"]["t"])
     # TODO steady state 
-    sim.Simulate(timevector = np.linspace(t_start, stim["diet_length"]["f"], 10000)) # max(stim["EIchange"]["t"]
+    sim.Simulate(timevector = np.linspace(t_start, max(stim["EIchange"]["t"]), 10000))
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
@@ -118,8 +118,9 @@ start_time = st.session_state['age']
 # diet_time(st.number_input("Start of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time"))
 diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length")
 EIchange = st.number_input("Change in kcal of diet (kcal): ", 0.0, 1000.0, 400, 1.0, key=f"EIchange")
+EIchange = [EIchange] + [0]
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
-t_long = anthropometrics.age 
+t_long = [anthropometrics.age] + [diet_length] 
 
 st.divider()
 st.subheader("Meals")
@@ -149,7 +150,6 @@ meal_amount = meal_kcals/4*1000 # converting from kcal to mg glucose
 stim_long = {
     "EIchange": {"t": t_long, "f": EIchange},
     "meal": {"t": t_long, "f": 0},
-    "diet_length": {"t": t_long, "f": diet_length}
     }
 
 # Plotting weight change and meals
