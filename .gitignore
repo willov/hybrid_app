@@ -5,3 +5,4 @@
 *.asv
 Pipfile
 custom_package/
+packages/peth.py

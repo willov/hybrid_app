@@ -94,7 +94,7 @@ if 'age' not in st.session_state:
 start_time = st.session_state['age']
 
 BPmed_time = st.number_input("Start of blood pressure medication (age): ", 40.0, 100.0, key="BPmed_time")
-t_long = st.number_input("How long to simulate (years): ", 0.0, 200.0, key="t_long")
+t_long = st.number_input("How long to simulate (years): ", 0.0, 200.0, 40.0, key="t_long")
 t_long = t_long + start_time
 st.divider()
 
