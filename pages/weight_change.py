@@ -57,9 +57,9 @@ def simulate(m, anthropometrics, stim):
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
     
     sim.ResetStatesDerivatives()
-    t_start = min(stim["EIchange"]["t"])
+    t_start = anthropometrics.age # min(stim["EIchange"]["t"])
     # TODO steady state 
-    sim.Simulate(timevector = np.linspace(t_start, max(stim["EIchange"]["t"]), 10000))
+    sim.Simulate(timevector = np.linspace(t_start, stim["diet_length"]["f"], 10000)) # max(stim["EIchange"]["t"]
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
@@ -116,10 +116,10 @@ t_long = []
 start_time = st.session_state['age']
 
 # diet_time(st.number_input("Start of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time"))
-diet_length(st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length"))
-EIchange(st.number_input("Change in kcal of diet (kcal): ", 0.0, 1000.0, 400, 1.0, key=f"EIchange"))
-t_long(st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long"))
-t_long = t_long+anthropometrics.age
+diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length")
+EIchange = st.number_input("Change in kcal of diet (kcal): ", 0.0, 1000.0, 400, 1.0, key=f"EIchange")
+# t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
+t_long = anthropometrics.age 
 
 st.divider()
 st.subheader("Meals")
@@ -139,27 +139,22 @@ if n_meals < 1.0:
     st.divider()
 
 meal_amount = meal_kcals/4*1000 # converting from kcal to mg glucose
-meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
-meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
+# meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
+# meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
 
-t_meal = [t_meal+(l/60)*on for t_meal,l in zip(meal_times, 0.3) for on in [0,1]]
+# t_meal = [t_meal+(l/60)*on for t_meal,l in zip(meal_times, 0.3) for on in [0,1]] # varje gång något ska ändras
 
 # Setup stimulation to the model
 
 stim_long = {
     "EIchange": {"t": t_long, "f": EIchange},
-    "meal": {"t": t_long, "f": 0}
-    }
-
-stim_meal = {
-    "meal_amount": {"t": t_meal, "f": meal_amount},
-    "meal": {"t": t_meal, "f": 1}
+    "meal": {"t": t_long, "f": 0},
+    "diet_length": {"t": t_long, "f": diet_length}
     }
 
 # Plotting weight change and meals
 
 sim_long = simulate(model, anthropometrics, stim_long)
-sim_meal = simulate(model, anthropometrics, stim_meal)
 
 st.subheader("Plotting long term simulation of weight change")
 
@@ -168,4 +163,11 @@ st.line_chart(sim_long, x="Time", y=feature)
 
 st.subheader("Plotting meal simulations based on time points chosen in long term simulation")
 feature = st.selectbox("Feature of the model to plot", model_features)
-st.line_chart(sim_meal, x="Time", y=feature)
+
+for i in range(n_meals):
+    stim_meal = {
+    "meal_amount": {"t": meal_times[i], "f": meal_amount},
+    "meal": {"t": meal_times[i], "f": 1}
+    }
+    sim_meal = simulate(model, anthropometrics, stim_meal)
+    st.line_chart(sim_meal, x="Time", y=feature)
