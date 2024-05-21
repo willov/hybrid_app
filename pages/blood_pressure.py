@@ -97,7 +97,7 @@ BPmed_time = st.number_input("Start of blood pressure medication (age): ", 40.0,
 t_long = st.number_input("How long to simulate (years): ", 0.0, 200.0, 40.0, key="t_long")
 
 BPmed_time = [0] + [BPmed_time] + [0]
-t_long = st.session_state['age'] + [BPmed_time] + [t_long]
+t_long = [st.session_state['age']] + [BPmed_time] + [t_long]
 
 st.divider()
 
