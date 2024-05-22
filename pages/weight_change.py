@@ -29,11 +29,11 @@ def setup_model(model_name):
             if model_name in name.split('(')[0] and "ignore" not in path:
                 fs.append(os.path.join(path, name))
     fs.sort()
-    with open(fs[0],'r') as f:
-        param_in = json.load(f)
-        params = param_in['x']
+    #with open(fs[0],'r') as f:
+    #    param_in = json.load(f)
+    #    params = param_in['x']
 
-    model.parametervalues = params
+    # model.parametervalues = params
     features = model.featurenames
     return model, features
 
