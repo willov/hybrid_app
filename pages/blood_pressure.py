@@ -87,7 +87,8 @@ st.subheader("Blood pressure")
 n_med = st.slider("Number of periods of blood pressure medication:", 1, 5, 1)
 extra_time = st.number_input("Additional time to simulate after medication (years):", 0.0, 100.0, 0.0, 0.1)
 
-BPmed_time = 0
+BPmed_time = []
+med_lengths = [] 
 t_long = []
 
 st.divider()
@@ -98,8 +99,8 @@ start_time = st.session_state['age']
 
 for i in range(n_med):
     st.markdown(f"**Medication {i+1}**")
-    BPmed_time = st.number_input("Start of blood pressure medication (age): ", 40.0, 100.0, key="BPmed_time")
-    med_lengths = st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key="t_long")
+    BPmed_time.append(st.number_input("Start of blood pressure medication (age): ", 40.0, 100.0, key="BPmed_time{i}"))
+    med_lengths.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key="t_long{i}"))
 
 # BPmed =  #[0] + [BPmed_time] + [0]
 # t_long = [st.session_state['age']] + [BPmed_time] + [t_long]
