@@ -133,13 +133,13 @@ n_meals = st.slider("Number of (solid) meals:", 0, 5, 1)
 for i in range(n_meals):
     st.markdown(f"**Meal {i+1}**")
     meal_times.append(st.number_input("Time of meal (years): ", 0.0, diet_length, 0.1, key=f"meal_times{i}"))
-    meal_kcals.append(st.number_input("Size of meal (kcal): ",0, 10000, 312, key=f"diet_kcals{i}"))
+    meal_kcals.append(st.number_input("Size of meal (kcal): ",0, 10000, 312, key=f"diet_kcals{i}")/4*1000)
     start_time += 0.1
     st.divider()
 if n_meals < 1.0:
     st.divider()
 
-meal_amount = meal_kcals/4*1000 # converting from kcal to mg glucose
+meal_amount = meal_kcals #/4*1000 # converting from kcal to mg glucose
 # meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
 # meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
 
