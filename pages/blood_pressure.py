@@ -53,8 +53,8 @@ def simulate(m, anthropometrics, stim, extra_time = 10):
 
     for key,val in stim.items():
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
-    # for key,val in anthropometrics.items():
-    #     act.AddOutput(name = key, type=const, fvalues = val) 
+    for key,val in anthropometrics.items():
+        act.AddOutput(name = key, type=const, fvalues = val) 
     
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
     
