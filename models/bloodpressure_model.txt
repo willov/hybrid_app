@@ -29,7 +29,7 @@ IC_DBP = 70
 t_drug = 2 
 effect_drugS = 20
 effect_drugD = 5
-drug_on = 0 //set to 1 at time of treatment
+// drug_on = 0 //set to 1 at time of treatment
 
 ########## VARIABLES
 PP = SBP-DBP
@@ -44,12 +44,13 @@ drugD = (effect_drugD/t_drug)*drug_on
 ########## FUNCTIONS
 
 ########## EVENTS
-event = gt(time,BPmed_time), drug_on, 1
+// event = gt(time,BPmed_time), drug_on, 1
 
 ########## OUTPUTS
 
 ########## INPUTS
-BPmed_time = BPmed_time        @ 0
+// BPmed_time = BPmed_time        @ 0
+drug_on = drug_on                 @ 0
 
 ########## FEATURES
 
