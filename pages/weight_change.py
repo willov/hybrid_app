@@ -109,10 +109,6 @@ anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['w
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
                    "Ginit": st.session_state['Ginit'], "ECFinit": st.session_state['ECFinit']}
 
-anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
-
-np.disp(anthropometrics["sex"])
-
 # Specifying diet
 st.divider()
 st.subheader("Diet")
@@ -132,6 +128,9 @@ EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 4
 EIchange = [0.0] + [0.0] + [EIchange] + [0.0]
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']] + [diet_start] + [st.session_state['age']+diet_length] 
+anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
+
+np.disp(anthropometrics["sex"])
 
 st.divider()
 st.subheader("Meals")
