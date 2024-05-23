@@ -50,13 +50,16 @@ def simulate(m, anthropometrics, stim):
     const = sund.CONSTANT # space saving only
 
     for key,val in stim.items():
+        np.disp(val["t"])
+        np.disp(val["f"])
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
     for key,val in anthropometrics.items():
-        #np.disp(val)
         act.AddOutput(name = key, type=const, fvalues = val) 
     
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
-
+    
+    disp(model.initialvalues)
+    disp(model)
     sim.ResetStatesDerivatives()
     t_start = min(stim["EIchange"]["t"])
     # TODO steady state 
@@ -98,14 +101,12 @@ if 'Finit' not in st.session_state:
     elif st.session_state['sex']== 'Man': 
         st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((0.01*st.session_state['height'])**2.0)) - 103.95) 
 if 'Linit' not in st.session_state:
-    st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
+    st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
 anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['weight'], 
                    "height": st.session_state['height'], "age": st.session_state['age'], 
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
                    "Ginit": st.session_state['Ginit'], "ECFinit": st.session_state['ECFinit']}
-
-anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
 
 # Specifying diet
 st.divider()
@@ -159,6 +160,9 @@ stim_long = {
     }
 
 # Plotting weight change and meals
+np.disp(meal)
+np.disp(t_long)
+np.disp(EIchange)
 
 sim_long = simulate(model, anthropometrics, stim_long)
 
@@ -171,6 +175,8 @@ st.subheader("Plotting meal simulations based on time points chosen in long term
 feature = st.selectbox("Feature of the model to plot", model_features)
 
 for i in range(n_meals):
+    np.disp(meal_amount[i])
+    np.disp(meal_times[i])
     stim_meal = {
     "meal_amount": {"t": meal_times[i], "f": meal_amount[i]},
     "meal": {"t": meal_times[i], "f": 1.0}
