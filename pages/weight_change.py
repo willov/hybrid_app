@@ -57,9 +57,7 @@ def simulate(m, anthropometrics, stim):
         act.AddOutput(name = key, type=const, fvalues = val) 
     
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
-    
-    disp(model.initialvalues)
-    disp(model)
+
     sim.ResetStatesDerivatives()
     t_start = min(stim["EIchange"]["t"])
     # TODO steady state 
@@ -101,12 +99,14 @@ if 'Finit' not in st.session_state:
     elif st.session_state['sex']== 'Man': 
         st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((0.01*st.session_state['height'])**2.0)) - 103.95) 
 if 'Linit' not in st.session_state:
-    st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
+    st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
 anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['weight'], 
                    "height": st.session_state['height'], "age": st.session_state['age'], 
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
                    "Ginit": st.session_state['Ginit'], "ECFinit": st.session_state['ECFinit']}
+
+anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
 
 # Specifying diet
 st.divider()
@@ -160,9 +160,6 @@ stim_long = {
     }
 
 # Plotting weight change and meals
-np.disp(meal)
-np.disp(t_long)
-np.disp(EIchange)
 
 sim_long = simulate(model, anthropometrics, stim_long)
 
