@@ -20,7 +20,7 @@ if 'weight' not in st.session_state:
 if 'height' not in st.session_state:
     st.session_state['height'] = 1.85
 if 'age' not in st.session_state:
-    st.session_state['age'] = 40
+    st.session_state['age'] = 40.0
 st.session_state['Ginit'] = (1 + 2.7)*0.5
 st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']  
 if 'Finit' not in st.session_state:
@@ -38,9 +38,9 @@ anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['w
                    "Ginit": st.session_state['Ginit'], "ECFinit": st.session_state['ECFinit']}
 
 anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
-anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, key="weight") # max, min 
-anthropometrics["age"] = st.number_input("Age (years):", 0.0, 100.0, key="age") # max, min 
-anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, key="height") # st.session_state['height'], 0.1, 
+anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state['weight'], key="weight") # max, min 
+anthropometrics["age"] = st.number_input("Age (years):", 0.0, 100.0, st.session_state['age'], key="age") # max, min 
+anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_state['height'],  key="height") # st.session_state['height'], 0.1, 
 
 fat_known = st.checkbox("Do you know your fat mass?")
 if fat_known:
