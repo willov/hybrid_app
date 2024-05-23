@@ -144,7 +144,7 @@ if n_meals < 1.0:
     st.divider()
 
 meal_amount = meal_kcals #/4*1000 # converting from kcal to mg glucose
-meal = [0.0] + [0.0] + [0.0] + [0.0]
+meal = [0.0] + [0.0] + [0.0] 
 # meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
 # meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
 
