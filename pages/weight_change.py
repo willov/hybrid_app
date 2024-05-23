@@ -59,8 +59,8 @@ def simulate(m, anthropometrics, stim):
     
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
     
-    disp(model.initialvalues)
-    disp(model)
+    np.disp(model.initialvalues)
+    np.disp(model)
     sim.ResetStatesDerivatives()
     t_start = min(stim["EIchange"]["t"])
     # TODO steady state 
@@ -110,6 +110,8 @@ anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['w
                    "Ginit": st.session_state['Ginit'], "ECFinit": st.session_state['ECFinit']}
 
 anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
+
+no.disp(anthropometrics["sex"])
 
 # Specifying diet
 st.divider()
