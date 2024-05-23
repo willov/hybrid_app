@@ -50,11 +50,9 @@ def simulate(m, anthropometrics, stim):
     const = sund.CONSTANT # space saving only
 
     for key,val in stim.items():
-        np.disp(val["t"])
-        np.disp(val["f"])
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
     for key,val in anthropometrics.items():
-        np.disp(val)
+        np.disp(type(val))
         act.AddOutput(name = key, type=const, fvalues = val) 
     
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
@@ -173,8 +171,6 @@ st.subheader("Plotting meal simulations based on time points chosen in long term
 feature = st.selectbox("Feature of the model to plot", model_features)
 
 for i in range(n_meals):
-    np.disp(meal_amount[i])
-    np.disp(meal_times[i])
     stim_meal = {
     "meal_amount": {"t": meal_times[i], "f": meal_amount[i]},
     "meal": {"t": meal_times[i], "f": 1.0}
