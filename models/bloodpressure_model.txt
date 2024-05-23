@@ -23,9 +23,6 @@ k2_DBP = 0.0183
 bSBP = 99.8670
 bDBP = 55.9788
 
-IC_SBP = 120
-IC_DBP = 70
-
 t_drug = 2 
 effect_drugS = 20
 effect_drugD = 5
@@ -51,6 +48,8 @@ drugD = (effect_drugD/t_drug)*drug_on
 ########## INPUTS
 // BPmed_time = BPmed_time        @ 0
 drug_on = drug_on                 @ 0
+IC_SBP = IC_SBP                   @ 120
+IC_DBP = IC_DBP                   @ 70
 
 ########## FEATURES
 
