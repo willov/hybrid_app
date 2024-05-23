@@ -56,6 +56,8 @@ def simulate(m, anthropometrics, stim):
     
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
     
+    disp(model.initialvalues)
+    disp(model)
     sim.ResetStatesDerivatives()
     t_start = min(stim["EIchange"]["t"])
     # TODO steady state 
@@ -86,16 +88,16 @@ if 'sex' not in st.session_state:
 if 'weight' not in st.session_state:
     st.session_state['weight'] = 90.0
 if 'height' not in st.session_state:
-    st.session_state['height'] = 185
+    st.session_state['height'] = 185.0
 if 'age' not in st.session_state:
-    st.session_state['age'] = 40
-st.session_state['Ginit'] = (1 + 2.7)*0.5
+    st.session_state['age'] = 40.0
+st.session_state['Ginit'] = (1.0 + 2.7)*0.5
 st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']  
 if 'Finit' not in st.session_state:
     if st.session_state['sex']== 'Woman':
-        st.session_state['Finit'] = (st.session_state['weight']/100)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((0.01*st.session_state['height'])**2)) - 102.01)
+        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((0.01*st.session_state['height'])**2.0)) - 102.01)
     elif st.session_state['sex']== 'Man': 
-        st.session_state['Finit'] = (st.session_state['weight']/100)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((0.01*st.session_state['height'])**2)) - 103.95) 
+        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((0.01*st.session_state['height'])**2.0)) - 103.95) 
 if 'Linit' not in st.session_state:
     st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
@@ -118,7 +120,7 @@ start_time = st.session_state['age']
 # diet_time(st.number_input("Start of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time"))
 diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length")
 EIchange = st.number_input("Change in kcal of diet (kcal): ", 0.0, 1000.0, 400.0, 1.0, key=f"EIchange")
-EIchange = [EIchange] + [0]
+EIchange = [EIchange] + [0.0]
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']] + [diet_length] 
 
@@ -140,21 +142,23 @@ if n_meals < 1.0:
     st.divider()
 
 meal_amount = meal_kcals #/4*1000 # converting from kcal to mg glucose
+meal = [0.0] + [0.0]
 # meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
 # meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
 
 # t_meal = [t_meal+(l/60)*on for t_meal,l in zip(meal_times, 0.3) for on in [0,1]] # varje gång något ska ändras
 
 # Setup stimulation to the model
-np.disp(t_long)
-np.disp(EIchange)
 
 stim_long = {
     "EIchange": {"t": t_long, "f": EIchange},
-    "meal": {"t": t_long, "f": 0},
+    "meal": {"t": t_long, "f": meal},
     }
 
 # Plotting weight change and meals
+np.disp(EIchange)
+np.disp(meal)
+np.disp(t_long)
 
 sim_long = simulate(model, anthropometrics, stim_long)
 
@@ -171,7 +175,7 @@ for i in range(n_meals):
     np.disp(meal_times[i])
     stim_meal = {
     "meal_amount": {"t": meal_times[i], "f": meal_amount[i]},
-    "meal": {"t": meal_times[i], "f": 1}
+    "meal": {"t": meal_times[i], "f": 1.0}
     }
     sim_meal = simulate(model, anthropometrics, stim_meal)
     st.line_chart(sim_meal, x="Time", y=feature)
