@@ -122,7 +122,7 @@ diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, ke
 EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
 EIchange = [EIchange] + [0.0]
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
-t_long = [st.session_state['age']] + [diet_length] 
+t_long = [st.session_state['age']] + [st.session_state['age']+diet_length] 
 
 st.divider()
 st.subheader("Meals")
