@@ -478,13 +478,14 @@ eventDiabetes = gt(BMI,29), betamass, 0.3
 
 ########## INPUTS
 EIchange = EIchange         @ 0
+meal = meal                 @ 0           // 1 meal 0 no meal
+
 Finit = Finit               @ 23.4
 Linit = Linit               @ 44.95
 Ginit = Ginit               @ 1.85
 ECFinit = ECFinit           @ 14.804999999999998
 BWinit = weight             @ 90
 height = height             @ 185
-meal = meal                 @ 0           // 1 meal 0 no meal
 meal_amount = meal_amount   @ 78000
 
 ########## FEATURES

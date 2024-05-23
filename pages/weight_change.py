@@ -50,6 +50,8 @@ def simulate(m, anthropometrics, stim):
     const = sund.CONSTANT # space saving only
 
     for key,val in stim.items():
+        np.disp(val["t"])
+        np.disp(val["f"])
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
     for key,val in anthropometrics.items():
         act.AddOutput(name = key, type=const, fvalues = val) 
@@ -122,7 +124,7 @@ start_time = st.session_state['age']
 diet_start = st.number_input("Diet start (years): ", st.session_state['age'], 100.0, 40.0, 0.1, key=f"diet_start")
 diet_length = st.number_input("Diet length (age): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length")
 EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
-EIchange = [0.0] + [EIchange] + [0.0]
+EIchange = [0.0] + [0.0] + [EIchange] + [0.0]
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']] + [diet_start] + [st.session_state['age']+diet_length] 
 
@@ -144,7 +146,7 @@ if n_meals < 1.0:
     st.divider()
 
 meal_amount = meal_kcals #/4*1000 # converting from kcal to mg glucose
-meal = [0.0] + [0.0] + [0.0] 
+meal = [0.0] + [0.0] + [0.0] + [0.0] 
 # meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
 # meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
 
