@@ -146,6 +146,8 @@ meal_amount = meal_kcals #/4*1000 # converting from kcal to mg glucose
 # t_meal = [t_meal+(l/60)*on for t_meal,l in zip(meal_times, 0.3) for on in [0,1]] # varje gång något ska ändras
 
 # Setup stimulation to the model
+np.disp(t_long)
+np.disp(EIchange)
 
 stim_long = {
     "EIchange": {"t": t_long, "f": EIchange},
@@ -165,8 +167,10 @@ st.subheader("Plotting meal simulations based on time points chosen in long term
 feature = st.selectbox("Feature of the model to plot", model_features)
 
 for i in range(n_meals):
+    np.disp(meal_amount[i])
+    np.disp(meal_times[i])
     stim_meal = {
-    "meal_amount": {"t": meal_times[i], "f": meal_amount},
+    "meal_amount": {"t": meal_times[i], "f": meal_amount[i]},
     "meal": {"t": meal_times[i], "f": 1}
     }
     sim_meal = simulate(model, anthropometrics, stim_meal)
