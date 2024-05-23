@@ -91,7 +91,7 @@ if 'sex' not in st.session_state:
 if 'weight' not in st.session_state:
     st.session_state['weight'] = 90.0
 if 'height' not in st.session_state:
-    st.session_state['height'] = 185.0
+    st.session_state['height'] = 1.85
 if 'age' not in st.session_state:
     st.session_state['age'] = 40.0
 st.session_state['Ginit'] = (1.0 + 2.7)*0.5
