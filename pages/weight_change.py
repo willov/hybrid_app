@@ -52,9 +52,9 @@ def simulate(m, anthropometrics, stim):
     for key,val in stim.items():
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
     for key,val in anthropometrics.items():
-        np.disp(key)
-        np.disp(val)
-        np.disp(type(val))
+        #np.disp(key)
+        #np.disp(val)
+        #np.disp(type(val))
         act.AddOutput(name = key, type=const, fvalues = val) 
     
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
@@ -111,7 +111,7 @@ anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['w
 
 anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
 
-no.disp(anthropometrics["sex"])
+np.disp(anthropometrics["sex"])
 
 # Specifying diet
 st.divider()
