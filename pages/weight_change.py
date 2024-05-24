@@ -102,10 +102,10 @@ if 'Finit' not in st.session_state:
 if 'Linit' not in st.session_state:
     st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
-anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_state['ECFinit', 
+anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_state['ECFinit'], 
                    "height": st.session_state['height'], "age": st.session_state['age'], 
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
-                   "Ginit": st.session_state['Ginit']]} # , "sex": st.session_state['sex']
+                   "Ginit": st.session_state['Ginit']} # , "sex": st.session_state['sex']
 
 np.disp(anthropometrics)
 
