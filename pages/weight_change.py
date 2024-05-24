@@ -104,10 +104,10 @@ if 'Finit' not in st.session_state:
 if 'Linit' not in st.session_state:
     st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
-anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['weight'], 
+anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_state['ECFinit', 
                    "height": st.session_state['height'], "age": st.session_state['age'], 
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
-                   "Ginit": st.session_state['Ginit'], "ECFinit": st.session_state['ECFinit']}
+                   "Ginit": st.session_state['Ginit'], "sex": st.session_state['sex']]}
 
 anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
 
@@ -159,6 +159,9 @@ meal = [0.0] + [0.0] + [0.0] + [0.0]
 # t_meal = [t_meal+(l/60)*on for t_meal,l in zip(meal_times, 0.3) for on in [0,1]] # varje gång något ska ändras
 
 # Setup stimulation to the model
+
+np.dips(t_long)
+np.disp(meal)
 
 stim_long = {
     "EIchange": {"t": t_long, "f": EIchange},
