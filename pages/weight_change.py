@@ -107,7 +107,7 @@ anthropometrics = {"weight": st.session_state['weight'], "height": st.session_st
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit']
                    }
 
-anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
+# anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
 
 # Specifying diet
 st.divider()
