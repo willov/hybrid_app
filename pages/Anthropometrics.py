@@ -32,10 +32,9 @@ if 'Linit' not in st.session_state:
     st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
 
-anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['weight'], 
-                   "height": st.session_state['height'], "age": st.session_state['age'], 
-                   "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
-                   "Ginit": st.session_state['Ginit'], "ECFinit": st.session_state['ECFinit']}
+anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_state['ECFinit'],
+                   "height": st.session_state['height'], "Linit": st.session_state['Linit'],
+                   "Finit": st.session_state['Finit'], "Ginit": st.session_state['Ginit']}
 
 anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
 anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state['weight'], key="weight") # max, min 
