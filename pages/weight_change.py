@@ -52,9 +52,9 @@ def simulate(m, anthropometrics, stim):
     for key,val in stim.items():
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
     for key,val in anthropometrics.items():
-        #np.disp(key)
-        #np.disp(val)
-        #np.disp(type(val))
+        np.disp(key)
+        np.disp(val)
+        np.disp(type(val))
         act.AddOutput(name = key, type=const, fvalues = val) 
     
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
@@ -87,7 +87,7 @@ Below, you can specify how big change in energy intake you want to simulate and 
 # Anthropometrics
 
 if 'sex' not in st.session_state:
-    st.session_state['sex'] = 'Man'
+    st.session_state['sex'] = 1.0
 if 'weight' not in st.session_state:
     st.session_state['weight'] = 90.0
 if 'height' not in st.session_state:
@@ -112,6 +112,7 @@ anthropometrics = {"sex": st.session_state['sex'], "weight": st.session_state['w
 anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
 
 np.disp(anthropometrics["sex"])
+np.disp("test")
 
 # Specifying diet
 st.divider()
@@ -144,10 +145,10 @@ n_meals = st.slider("Number of (solid) meals:", 0, 5, 1)
 for i in range(n_meals):
     st.markdown(f"**Meal {i+1}**")
     meal_times.append(st.number_input("Time of meal (years): ", 0.0, diet_length, 0.1, key=f"meal_times{i}"))
-    meal_kcals.append(st.number_input("Size of meal (kcal): ",0, 10000, 312, key=f"diet_kcals{i}")/4*1000)
+    meal_kcals.append(st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals{i}")/4.0*1000.0)
     start_time += 0.1
     st.divider()
-if n_meals < 1.0:
+if n_meals < 1:
     st.divider()
 
 meal_amount = meal_kcals #/4*1000 # converting from kcal to mg glucose
