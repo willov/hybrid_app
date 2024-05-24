@@ -104,7 +104,7 @@ if 'Linit' not in st.session_state:
 
 
 anthropometrics = {"weight": st.session_state['weight'], "height": st.session_state['height'], 
-                   "sex": st.session_state['sex'], "age": st.session_state['age']
+                   "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit']
                    }
 
 anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation

@@ -33,9 +33,10 @@ if 'age' not in st.session_state:
 
 
 anthropometrics = {"weight": st.session_state['weight'], "height": st.session_state['height'], 
-                   "sex": st.session_state['sex']
+                   "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit']
                    }
-# "ECFinit": st.session_state['ECFinit'], "Finit": st.session_state['Finit'], "Ginit": st.session_state['Ginit'], "Linit": st.session_state['Linit'],
+# "ECFinit": st.session_state['ECFinit'], "Ginit": st.session_state['Ginit'], 
+#                   "sex": st.session_state['sex'], "age": st.session_state['age'],
                    
 
 anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
