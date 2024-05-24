@@ -49,7 +49,6 @@ def simulate(m, anthropometrics, stim):
     pwc = sund.PIECEWISE_CONSTANT # space saving only
     const = sund.CONSTANT # space saving only
 
-    np.disp(anthropometrics.items())
     for key,val in stim.items():
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
     for key,val in anthropometrics.items():
@@ -107,7 +106,6 @@ anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_s
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
                    "Ginit": st.session_state['Ginit']} # , "sex": st.session_state['sex']
 
-np.disp(anthropometrics)
 
 # Specifying diet
 st.divider()
@@ -126,10 +124,8 @@ diet_start = st.number_input("Diet start (years): ", st.session_state['age'], 10
 diet_length = st.number_input("Diet length (age): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length")
 EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
 EIchange = [0.0] + [0.0] + [EIchange] + [0.0]
-np.disp(EIchange)
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']] + [diet_start] + [st.session_state['age']+diet_length] 
-np.dips(t_long)
 
 st.divider()
 st.subheader("Meals")
