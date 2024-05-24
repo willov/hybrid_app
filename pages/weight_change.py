@@ -87,7 +87,7 @@ Below, you can specify how big change in energy intake you want to simulate and 
 # Anthropometrics
 
 if 'sex' not in st.session_state:
-    st.session_state['sex'] = 1.0
+    st.session_state['sex'] = 'Man'
 if 'weight' not in st.session_state:
     st.session_state['weight'] = 90.0
 if 'height' not in st.session_state:
@@ -107,12 +107,7 @@ if 'Linit' not in st.session_state:
 anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_state['ECFinit', 
                    "height": st.session_state['height'], "age": st.session_state['age'], 
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
-                   "Ginit": st.session_state['Ginit'], "sex": st.session_state['sex']]}
-
-anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
-
-np.disp(anthropometrics["sex"])
-np.disp("test")
+                   "Ginit": st.session_state['Ginit']]} # , "sex": st.session_state['sex']
 
 # Specifying diet
 st.divider()
