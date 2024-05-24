@@ -49,10 +49,11 @@ def simulate(m, anthropometrics, stim):
     pwc = sund.PIECEWISE_CONSTANT # space saving only
     const = sund.CONSTANT # space saving only
 
+    np.disp(anthropometrics.items())
     for key,val in stim.items():
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
     for key,val in anthropometrics.items():
-        np.disp(key)
+        #np.disp(key)
         np.disp(val)
         np.disp(type(val))
         act.AddOutput(name = key, type=const, fvalues = val) 
@@ -108,6 +109,8 @@ anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_s
                    "height": st.session_state['height'], "age": st.session_state['age'], 
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
                    "Ginit": st.session_state['Ginit']]} # , "sex": st.session_state['sex']
+
+np.disp(anthropometrics)
 
 # Specifying diet
 st.divider()

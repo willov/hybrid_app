@@ -52,6 +52,3 @@ if lean_known:
     anthropometrics["Linit"] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.Linit, 0.1, key="Linit")
     anthropometrics['Ginit'] = anthropometrics['weight'] - (anthropometrics['Finit'] + anthropometrics['Linit'] + anthropometrics['ECFinit'])
 
-anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
-
-np.disp(anthropometrics["sex"])
