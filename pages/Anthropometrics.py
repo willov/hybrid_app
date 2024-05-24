@@ -44,13 +44,11 @@ anthropometrics["age"] = st.number_input("Age (years):", 0.0, 100.0, st.session_
 anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_state['height'],  key="height") # st.session_state['height'], 0.1, 
 anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
 
-# fat_known = st.checkbox("Do you know your fat mass?")
-# if fat_known:
-#     anthropometrics["Finit"] = st.number_input("Fat mass (kg):", 0.0, 1000.0, st.session_state.Finit, 0.1, key="Finit")
+fat_known = st.checkbox("Do you know your fat mass?")
+if fat_known:
+    anthropometrics["Finit"] = st.number_input("Fat mass (kg):", 0.0, 1000.0, st.session_state.Finit, 0.1, key="Finit")
 
-# lean_known = st.checkbox("Do you know your lean mass?")
+lean_known = st.checkbox("Do you know your lean mass?")
 
-# if lean_known:
-#     anthropometrics["Linit"] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.Linit, 0.1, key="Linit")
-#    anthropometrics['Ginit'] = anthropometrics['weight'] - (anthropometrics['Finit'] + anthropometrics['Linit'] + anthropometrics['ECFinit'])
-
+if lean_known:
+   anthropometrics["Linit"] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.Linit, 0.1, key="Linit")
