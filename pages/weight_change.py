@@ -86,7 +86,7 @@ Below, you can specify how big change in energy intake you want to simulate and 
 if 'sex' not in st.session_state:
     st.session_state['sex'] = 'Man'
 if 'weight' not in st.session_state:
-    st.session_state['weight'] = 90.0
+    st.session_state['weight'] = 67.6
 if 'height' not in st.session_state:
     st.session_state['height'] = 1.85
 if 'age' not in st.session_state:

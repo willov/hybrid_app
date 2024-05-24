@@ -16,7 +16,7 @@ Here you can specify the anthropometrics of the person you want to make simulati
 if 'sex' not in st.session_state:
     st.session_state['sex'] = 'Man'
 if 'weight' not in st.session_state:
-    st.session_state['weight'] = 90.0
+    st.session_state['weight'] = 67.6
 if 'height' not in st.session_state:
     st.session_state['height'] = 1.85
 if 'age' not in st.session_state:

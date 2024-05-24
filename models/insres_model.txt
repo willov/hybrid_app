@@ -340,7 +340,7 @@ PAL = PAE
 BW = (F + L + (1 + 2.7)*Gly + ECF)
 
 TEF = bTEF*(EIn-EIninit)
-KK = EEinit-(gf*Finit+gl*Linit+delta*BWinit)
+KK = EEinit-(gf*Finit+gl*Linit+delta*weight)
 EE = (-BW*delta*rhof*rhol-KK*rhof*rhol-rhof*rhol*TEF-rhof*rhol*AT+etal*p*rhof*CIn+etaf*rhol*CIn-etaf*p*rhol*CIn-etal*p*rhof*EIn-etaf*rhol*EIn+etaf*p*rhol*EIn-gf*rhof*rhol*F-etal*kg*p*rhof*Gly*Gly-etaf*kg*rhol*Gly*Gly+etaf*kg*p*rhol*Gly*Gly-gl*rhof*rhol*L)/(-etal*p*rhof-etaf*rhol+etaf*p*rhol-rhof*rhol)
 k1 = EIn-EE
 
@@ -481,12 +481,12 @@ EIchange = EIchange         @ 0
 meal = meal                 @ 0           // 1 meal 0 no meal
 meal_amount = meal_amount   @ 0
 
-Finit = Finit               @ 23.4
-Linit = Linit               @ 44.95
+Finit = Finit               @ 12.7000
+Linit = Linit               @ 36.9348
 Ginit = Ginit               @ 1.85
-ECFinit = ECFinit           @ 14.804999999999998
-BWinit = weight             @ 90
-height = height             @ 185
+ECFinit = ECFinit           @ 11.1202
+weight = weight             @ 67.6
+height = height             @ 1.85
 
 ########## FEATURES
 
