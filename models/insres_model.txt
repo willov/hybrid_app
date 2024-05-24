@@ -307,13 +307,6 @@ dEI_ss = 1.226464396357887e+03
 t_half = 1.424047740519107
  
 ########## VARIABLES
-
-// Ginit = 1.85 // (1.0 + 2.7)*0.5 // 500
-// ECFinit = 0.7*0.235*BWinit
-
-// Finit           = (sex < 1)  ? (BWinit/100)*(0.14*age + 39.96*log(BWinit/(0.01*height)^2)-102.01) : (BWinit/100)*(0.14*age + 37.31*log(BWinit/(0.01*height)^2)-103.95) 
-// Linit           = BWinit - (Finit + (1.0 + 2.7)*Ginit + ECFinit)
-
 // Insulin resistance
 xF              = (ss_x > 0)  ? (F/Finit)    : 1
 xL              = (ss_x > 0)  ? (L/Linit)  : 1   
@@ -494,8 +487,6 @@ Ginit = Ginit               @ 1.85
 ECFinit = ECFinit           @ 14.804999999999998
 BWinit = weight             @ 90
 height = height             @ 185
-// sex = sex                   @ 1
-// age = age                   @ 40
 
 ########## FEATURES
 
