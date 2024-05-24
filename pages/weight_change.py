@@ -104,7 +104,7 @@ if 'age' not in st.session_state:
 
 
 anthropometrics = {"weight": st.session_state['weight'], "height": st.session_state['height'], 
-                   "sex": st.session_state['sex']
+                   "sex": st.session_state['sex'], "age": st.session_state['age']
                    }
 
 np.disp(anthropometrics)
