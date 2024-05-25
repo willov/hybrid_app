@@ -10,8 +10,8 @@ timeunit = y
 d/dt(SBP) = ((k1_SBP + k2_SBP*time) * SBP_vs_IC) - drugS  // ~ linear with time
 d/dt(DBP) = ((k1_DBP - k2_DBP*time) * DBP_vs_IC) - drugD  // ~ exponential with time 
 
-SBP(0) = IC_SBP
-DBP(0) = IC_DBP
+SBP(0) = 0 //IC_SBP
+DBP(0) = 0 //IC_DBP
 
 ########## PARAMETERS
 k1_SBP = 0.4081

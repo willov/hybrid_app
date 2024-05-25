@@ -57,7 +57,7 @@ def simulate(m, anthropometrics, stim):
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
     
     np.disp(model.initialvalues)
-    np.disp(model)
+
     sim.ResetStatesDerivatives()
     t_start = min(stim["EIchange"]["t"])
     # TODO steady state 
@@ -122,10 +122,12 @@ start_time = st.session_state['age']
 # diet_time(st.number_input("Start of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time"))
 diet_start = st.number_input("Diet start (years): ", st.session_state['age'], 100.0, 40.0, 0.1, key=f"diet_start")
 diet_length = st.number_input("Diet length (age): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length")
-EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
+EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 0.0, 1.0, key=f"EIchange")
 EIchange = [0.0] + [0.0] + [EIchange] + [0.0]
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']] + [diet_start] + [st.session_state['age']+diet_length] 
+np.disp(t_long)
+np.dips(t_long)
 
 st.divider()
 st.subheader("Meals")

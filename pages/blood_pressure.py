@@ -37,6 +37,7 @@ def setup_model(model_name):
 
     model.parametervalues = params
     features = model.featurenames
+    np.disp(model.initialvalues)
     return model, features
 
 model, model_features = setup_model('bloodpressure_model')
