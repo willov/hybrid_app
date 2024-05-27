@@ -10,8 +10,8 @@ timeunit = y
 d/dt(SBP) = ((k1_SBP + k2_SBP*time) * SBP_vs_IC) - drugS  // ~ linear with time
 d/dt(DBP) = ((k1_DBP - k2_DBP*time) * DBP_vs_IC) - drugD  // ~ exponential with time 
 
-SBP(0) = 0 //IC_SBP
-DBP(0) = 0 //IC_DBP
+SBP(0) = 0 
+DBP(0) = 0 
 
 ########## PARAMETERS
 k1_SBP = 0.4081
@@ -26,7 +26,6 @@ bDBP = 55.9788
 t_drug = 2 
 effect_drugS = 20
 effect_drugD = 5
-// drug_on = 0 //set to 1 at time of treatment
 
 ########## VARIABLES
 PP = SBP-DBP
@@ -41,15 +40,14 @@ drugD = (effect_drugD/t_drug)*drug_on
 ########## FUNCTIONS
 
 ########## EVENTS
-// event = gt(time,BPmed_time), drug_on, 1
 eventSBP = gt(time,0), SBP, IC_SBP
 eventDBP = gt(time,0), SBP, IC_DBP
 
 ########## OUTPUTS
 
 ########## INPUTS
-// BPmed_time = BPmed_time        @ 0
 drug_on = drug_on                 @ 0
+
 IC_SBP = IC_SBP                   @ 120
 IC_DBP = IC_DBP                   @ 70
 
@@ -57,3 +55,4 @@ IC_DBP = IC_DBP                   @ 70
 
 Systolic blood pressure (mmHg) = SBP
 Diastolic blood pressure (mmHg) = DBP
+Mean arterial pressure (mmHg) = MAP

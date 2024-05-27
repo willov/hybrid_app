@@ -57,12 +57,11 @@ def simulate(m, anthropometrics, stim, extra_time = 10):
     for key,val in anthropometrics.items():
         act.AddOutput(name = key, type=const, fvalues = val) 
     
-    np.disp(min(stim["drug_on"]["t"]))
-    np.disp(max(stim["drug_on"]["t"]))
     np.disp(act)
 
     sim = sund.Simulation(models = m, activities = act, timeunit = 'years')
-    
+    np.disp(max(stim["drug_on"]["t"]))
+
     sim.ResetStatesDerivatives()
     t_start = min(stim["drug_on"]["t"])
 
@@ -108,7 +107,7 @@ t_long = []
 st.divider()
 
 if 'age' not in st.session_state:
-    st.session_state['age'] = 40
+    st.session_state['age'] = 40.0
 start_time = st.session_state['age']
 
 for i in range(n_med):
@@ -118,8 +117,6 @@ for i in range(n_med):
 
 t_long = [t+on for t,l in zip(BP_med, med_lengths) for on in [0,1]]
 drug_on = [0] + [1, 0] * n_med
-np.disp(t_long)
-np.disp(drug_on)
 
 st.divider()
 
