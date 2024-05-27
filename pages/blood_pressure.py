@@ -86,7 +86,7 @@ if 'IC_DBP' not in st.session_state:
     st.session_state['IC_DBP'] = '70'
 
 
-anthropometrics = {"IC_SBP": st.session_state['IC_SBP'], "DBP": st.session_state['DBP']}
+anthropometrics = {"IC_SBP": st.session_state['IC_SBP'], "IC_DBP": st.session_state['IC_DBP']}
 
 # Specifying blood pressure medication
 st.subheader("Blood pressure")
@@ -97,7 +97,7 @@ extra_time = st.number_input("Additional time to simulate after medication (year
 BP_known = st.checkbox("Do you know your fat mass?")
 if BP_known:
     anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key="IC_SBP")
-    anthropometrics["DBP_IC"] = st.number_input("Diastolic blood pressure (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key="IC_DBP")
+    anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key="IC_DBP")
 
 BPmed_time = []
 med_lengths = [] 
