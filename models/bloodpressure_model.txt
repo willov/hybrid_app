@@ -42,6 +42,8 @@ drugD = (effect_drugD/t_drug)*drug_on
 
 ########## EVENTS
 // event = gt(time,BPmed_time), drug_on, 1
+eventSBP = gt(time,0), SBP, IC_SBP
+eventDBP = gt(time,0), SBP, IC_DBP
 
 ########## OUTPUTS
 

@@ -60,9 +60,11 @@ def simulate(m, anthropometrics, stim, extra_time = 10):
     sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
     
     sim.ResetStatesDerivatives()
-    t_start = min(stim["BPmed_time"]["t"])
+    np.disp(min(stim["drug_on"]["t"]))
+    np.disp(max(stim["drug_on"]["t"]))
+    t_start = min(stim["drug_on"]["t"])
 
-    sim.Simulate(timevector = np.linspace(t_start, max(stim["BPmed"]["t"])+extra_time, 10000))
+    sim.Simulate(timevector = np.linspace(t_start, max(stim["drug_on"]["t"])+extra_time, 10000))
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
@@ -97,7 +99,7 @@ extra_time = st.number_input("Additional time to simulate after medication (year
 anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key="IC_SBP")
 anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key="IC_DBP")
 
-BPmed_time = []
+BP_med = []
 med_lengths = [] 
 t_long = []
 
@@ -109,22 +111,20 @@ start_time = st.session_state['age']
 
 for i in range(n_med):
     st.markdown(f"**Medication {i+1}**")
-    BPmed_time.append(st.number_input("Start of blood pressure medication (age): ", 40.0, 100.0, key="BPmed_time{i}"))
+    BP_med.append(st.number_input("Start of blood pressure medication (age): ", 40.0, 100.0, key="BP_med{i}"))
     med_lengths.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key="t_long{i}"))
 
-# BPmed =  #[0] + [BPmed_time] + [0]
-# t_long = [st.session_state['age']] + [BPmed_time] + [t_long]
-t_long = [t+on for t,l in zip(BPmed_time, med_lengths) for on in [0,1]]
-#[st.session_state.age] + [BPmed_time] + [t_long]
-BPmed = [0] + [1, 0] * n_med
-
+t_long = [t+on for t,l in zip(BP_med, med_lengths) for on in [0,1]]
+drug_on = [0] + [1, 0] * n_med
+np.disp(t_long)
+np.disp(drug_on)
 
 st.divider()
 
 # Setup stimulation to the model
 
 stim = {
-    "BPmed": {"t": t_long, "f": BPmed}
+    "drug_on": {"t": t_long, "f": drug_on}
     }
 
 # Plotting blood pressure 
