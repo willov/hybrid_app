@@ -56,8 +56,6 @@ def simulate(m, anthropometrics, stim, extra_time = 10):
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
     for key,val in anthropometrics.items():
         act.AddOutput(name = key, type=const, fvalues = val) 
-    
-    np.disp(act)
 
     sim = sund.Simulation(models = m, activities = act, timeunit = 'years')
     np.disp(max(stim["drug_on"]["t"]))
@@ -117,6 +115,7 @@ for i in range(n_med):
 
 t_long = [t+on for t,l in zip(BP_med, med_lengths) for on in [0,1]]
 drug_on = [0] + [1, 0] * n_med
+np.disp(t_long)
 
 st.divider()
 
