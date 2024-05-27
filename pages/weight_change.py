@@ -126,7 +126,6 @@ EIchange = [0.0] + [0.0] + [EIchange] + [0.0]
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']] + [diet_start] + [st.session_state['age']+diet_length] 
 np.disp(t_long)
-np.dips(t_long)
 
 st.divider()
 st.subheader("Meals")

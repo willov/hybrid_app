@@ -58,12 +58,12 @@ def simulate(m, stim, anthropometrics, initials, extra_time = 10):
         act.AddOutput(name = key, type=const, fvalues = val) 
 
     np.disp(initials)
-    sim = sund.Simulation(models = m, activities = act, timeunit = 'y', statevalues = [100, 60])
+    sim = sund.Simulation(models = m, activities = act, timeunit = 'y')
 
     sim.ResetStatesDerivatives()
     t_start = min(stim["drug_on"]["t"])
 
-    sim.Simulate(timevector = np.linspace(t_start, max(stim["drug_on"]["t"])+extra_time, 10000))
+    sim.Simulate(timevector = np.linspace(t_start, max(stim["drug_on"]["t"])+extra_time, 10000), statevalues = [100, 60])
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
