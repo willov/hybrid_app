@@ -10,8 +10,8 @@ timeunit = y
 d/dt(SBP) = ((k1_SBP + k2_SBP*time) * SBP_vs_IC) - drugS  // ~ linear with time
 d/dt(DBP) = ((k1_DBP - k2_DBP*time) * DBP_vs_IC) - drugD  // ~ exponential with time 
 
-SBP(0) = 0 
-DBP(0) = 0 
+SBP(0) = 120 
+DBP(0) = 70 
 
 ########## PARAMETERS
 k1_SBP = 0.4081
@@ -40,8 +40,6 @@ drugD = (effect_drugD/t_drug)*drug_on
 ########## FUNCTIONS
 
 ########## EVENTS
-eventSBP = gt(time,0), SBP, IC_SBP
-eventDBP = gt(time,0), SBP, IC_DBP
 
 ########## OUTPUTS
 

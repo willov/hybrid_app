@@ -47,15 +47,18 @@ model, model_features = setup_model('bloodpressure_model')
 def flatten(list):
     return [item for sublist in list for item in sublist]
 
-def simulate(m, stim, initials, extra_time = 10):
+def simulate(m, stim, anthropometrics, initials, extra_time = 10):
     act = sund.Activity(timeunit = 'y')
     pwc = sund.PIECEWISE_CONSTANT # space saving only
     const = sund.CONSTANT # space saving only
 
     for key,val in stim.items():
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
+    for key,val in anthropometrics.items():
+        act.AddOutput(name = key, type=const, fvalues = val) 
 
-    sim = sund.Simulation(models = m, activities = act, timeunit = 'y', statevalues=initials)
+    np.disp(initials)
+    sim = sund.Simulation(models = m, activities = act, timeunit = 'y') #, statevalues=initials)
 
     sim.ResetStatesDerivatives()
     t_start = min(stim["drug_on"]["t"])
@@ -84,7 +87,8 @@ if 'IC_DBP' not in st.session_state:
     st.session_state['IC_DBP'] = 70.0
 
 
-initials = {"IC_SBP": st.session_state['IC_SBP'], "IC_DBP": st.session_state['IC_DBP']}
+anthropometrics = {"IC_SBP": st.session_state['IC_SBP'], "IC_DBP": st.session_state['IC_DBP']}
+initials = [st.session_state['IC_SBP'], st.session_state['IC_DBP']]
 
 # Specifying blood pressure medication
 st.subheader("Blood pressure")
@@ -124,7 +128,7 @@ stim = {
 
 # Plotting blood pressure 
 
-sim = simulate(model, stim, initials, extra_time=extra_time)
+sim = simulate(model, stim, anthropometrics, initials, extra_time=extra_time)
 
 st.subheader("Plotting blood pressure over time")
 

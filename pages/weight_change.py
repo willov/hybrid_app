@@ -55,8 +55,7 @@ def simulate(m, anthropometrics, stim):
         act.AddOutput(name = key, type=const, fvalues = val) 
     
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
-    
-    np.disp(model.initialvalues)
+
 
     sim.ResetStatesDerivatives()
     t_start = min(stim["EIchange"]["t"])
