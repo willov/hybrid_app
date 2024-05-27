@@ -45,7 +45,7 @@ def flatten(list):
     return [item for sublist in list for item in sublist]
 
 def simulate(m, anthropometrics, stim):
-    act = sund.Activity(timeunit = 'days')
+    act = sund.Activity(timeunit = 'd')
     pwc = sund.PIECEWISE_CONSTANT # space saving only
     const = sund.CONSTANT # space saving only
 
@@ -54,7 +54,7 @@ def simulate(m, anthropometrics, stim):
     for key,val in anthropometrics.items():
         act.AddOutput(name = key, type=const, fvalues = val) 
     
-    sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
+    sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
     
     np.disp(model.initialvalues)
 
