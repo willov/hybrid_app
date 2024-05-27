@@ -25,18 +25,18 @@ def setup_model(model_name):
     model_class = sund.importModel(model_name)
     model = model_class() 
 
-    fs = []
-    for path, subdirs, files in os.walk('./results'):
-        for name in files:
-            if model_name in name.split('(')[0] and "ignore" not in path:
-                fs.append(os.path.join(path, name))
-    fs.sort()
+    # fs = []
+    # for path, subdirs, files in os.walk('./results'):
+    #    for name in files:
+    #        if model_name in name.split('(')[0] and "ignore" not in path:
+    #            fs.append(os.path.join(path, name))
+    # fs.sort()
     #with open(fs[0],'r') as f:
     #    param_in = json.load(f)
     #    params = param_in['x']
 
     # model.parametervalues = params
-    np.disp(model)
+    # np.disp(model)
     features = model.featurenames
     return model, features
 
