@@ -58,7 +58,7 @@ def simulate(m, stim, anthropometrics, initials, extra_time = 10):
         act.AddOutput(name = key, type=const, fvalues = val) 
 
     np.disp(initials)
-    sim = sund.Simulation(models = m, activities = act, timeunit = 'y', statevalues = initials)
+    sim = sund.Simulation(models = m, activities = act, timeunit = 'y', statevalues = [100, 60])
 
     sim.ResetStatesDerivatives()
     t_start = min(stim["drug_on"]["t"])
@@ -84,7 +84,7 @@ if 'age' not in st.session_state:
 if 'IC_SBP' not in st.session_state:
     st.session_state['IC_SBP'] = 150.0
 if 'IC_DBP' not in st.session_state:
-    st.session_state['IC_DBP'] = 70.0
+    st.session_state['IC_DBP'] = 80.0
 
 
 anthropometrics = {"IC_SBP": st.session_state['IC_SBP'], "IC_DBP": st.session_state['IC_DBP']}
@@ -115,16 +115,17 @@ for i in range(n_med):
     st.markdown(f"**Medication {i+1}**")
     med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, 40.0, key=f"BP_med{i}"))
     med_lengths.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
-    start_time += 1
+    start_time += med_lengths[i]
+    st.divider()
 
 np.disp(med_times)
 np.disp(med_lengths)
 
-t_long = [time for t,l in zip(med_times, med_lengths) for time in (t,t+1)]
+t_long = [time for t,l in zip(med_times, med_lengths) for time in (t,t+l)]
 drug_on = [0] + [1, 0] * n_med
 np.disp(t_long)
 
-st.divider()
+
 
 # Setup stimulation to the model
 
