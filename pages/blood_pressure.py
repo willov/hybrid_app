@@ -94,10 +94,8 @@ st.subheader("Blood pressure")
 n_med = st.slider("Number of periods of blood pressure medication:", 1, 5, 1)
 extra_time = st.number_input("Additional time to simulate after medication (years):", 0.0, 100.0, 0.0, 0.1)
 
-BP_known = st.checkbox("Do you know your fat mass?")
-if BP_known:
-    anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key="IC_SBP")
-    anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key="IC_DBP")
+anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key="IC_SBP")
+anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key="IC_DBP")
 
 BPmed_time = []
 med_lengths = [] 
