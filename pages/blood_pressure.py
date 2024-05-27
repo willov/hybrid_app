@@ -36,6 +36,7 @@ def setup_model(model_name):
     #    params = param_in['x']
 
     # model.parametervalues = params
+    np.disp(model)
     features = model.featurenames
     return model, features
 
