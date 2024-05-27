@@ -88,7 +88,6 @@ if 'IC_DBP' not in st.session_state:
 
 
 anthropometrics = {"IC_SBP": st.session_state['IC_SBP'], "IC_DBP": st.session_state['IC_DBP']}
-initials = [st.session_state['IC_SBP'], st.session_state['IC_DBP']]
 
 # Specifying blood pressure medication
 st.subheader("Blood pressure")
@@ -96,8 +95,10 @@ st.subheader("Blood pressure")
 n_med = st.slider("Number of periods of blood pressure medication:", 1, 5, 1)
 extra_time = st.number_input("Additional time to simulate after medication (years):", 0.0, 100.0, 0.0, 0.1)
 
-initials["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key="IC_SBP")
-initials["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key="IC_DBP")
+anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key="IC_SBP")
+anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key="IC_DBP")
+
+initials = [st.session_state['IC_SBP'], st.session_state['IC_DBP']]
 
 med_times = []
 med_lengths = [] 
