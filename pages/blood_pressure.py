@@ -113,7 +113,7 @@ start_time = st.session_state['age']
 for i in range(n_med):
     st.markdown(f"**Medication {i+1}**")
     np.disp(start_time)
-    med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, 40.0, key=f"BP_med{i}"))
+    med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, start_time, key=f"BP_med{i}"))
     med_lengths.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
     start_time += med_lengths[i]
     np.disp(med_lengths[i])

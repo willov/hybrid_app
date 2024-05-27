@@ -121,7 +121,7 @@ start_time = st.session_state['age']
 # diet_time(st.number_input("Start of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time"))
 diet_start = st.number_input("Diet start (years): ", st.session_state['age'], 100.0, 40.0, 0.1, key=f"diet_start")
 diet_length = st.number_input("Diet length (age): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length")
-EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 0.0, 1.0, key=f"EIchange")
+EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 312.0, 1.0, key=f"EIchange")
 EIchange = [0.0] + [0.0] + [EIchange] + [0.0]
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']] + [diet_start] + [st.session_state['age']+diet_length] 
@@ -131,20 +131,19 @@ st.divider()
 st.subheader("Meals")
 
 meal_times = []
-meal_kcals = []
+meal_amount = []
 
 n_meals = st.slider("Number of (solid) meals:", 0, 5, 1)
 
 for i in range(n_meals):
     st.markdown(f"**Meal {i+1}**")
     meal_times.append(st.number_input("Time of meal (years): ", 0.0, diet_length, 0.1, key=f"meal_times{i}"))
-    meal_kcals.append(st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals{i}")/4.0*1000.0)
+    meal_amount.append(st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals{i}"))
     start_time += 0.1
     st.divider()
 if n_meals < 1:
     st.divider()
 
-meal_amount = meal_kcals #/4*1000 # converting from kcal to mg glucose
 meal = [0.0] + [0.0] + [0.0] + [0.0] 
 # meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
 # meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
