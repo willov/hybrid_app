@@ -58,7 +58,7 @@ def simulate(m, stim, anthropometrics, initials, extra_time = 10):
         act.AddOutput(name = key, type=const, fvalues = val) 
 
     np.disp(initials)
-    sim = sund.Simulation(models = m, activities = act, timeunit = 'y', statevalues=initials)
+    sim = sund.Simulation(models = m, activities = act, timeunit = 'y', statevalues = initials)
 
     sim.ResetStatesDerivatives()
     t_start = min(stim["drug_on"]["t"])
@@ -82,7 +82,7 @@ Below, you can specify for how long you want to simulate and if you want to take
 if 'age' not in st.session_state:
     st.session_state['age'] = 40.0
 if 'IC_SBP' not in st.session_state:
-    st.session_state['IC_SBP'] = 120.0
+    st.session_state['IC_SBP'] = 150.0
 if 'IC_DBP' not in st.session_state:
     st.session_state['IC_DBP'] = 70.0
 
@@ -93,7 +93,7 @@ anthropometrics = {"IC_SBP": st.session_state['IC_SBP'], "IC_DBP": st.session_st
 st.subheader("Blood pressure")
 
 n_med = st.slider("Number of periods of blood pressure medication:", 1, 5, 1)
-extra_time = st.number_input("Additional time to simulate after medication (years):", 0.0, 100.0, 0.0, 0.1)
+extra_time = st.number_input("Additional time to simulate after medication(s) (years):", 0.0, 100.0, 0.0, 0.1)
 
 anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key="IC_SBP")
 anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key="IC_DBP")
@@ -108,14 +108,19 @@ st.divider()
 
 if 'age' not in st.session_state:
     st.session_state['age'] = 40.0
+
 start_time = st.session_state['age']
 
 for i in range(n_med):
     st.markdown(f"**Medication {i+1}**")
-    med_times.append(st.number_input("Start of blood pressure medication (age): ", 40.0, 100.0, 40.0, key="BP_med{i}"))
-    med_lengths.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key="t_long{i}"))
+    med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, 40.0, key=f"BP_med{i}"))
+    med_lengths.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
+    start_time += 1
 
-t_long = [time for t,l in zip(med_times, med_lengths) for time in [t,t+1]]
+np.disp(med_times)
+np.disp(med_lengths)
+
+t_long = [time for t,l in zip(med_times, med_lengths) for time in (t,t+1)]
 drug_on = [0] + [1, 0] * n_med
 np.disp(t_long)
 
