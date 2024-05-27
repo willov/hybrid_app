@@ -57,11 +57,13 @@ def simulate(m, anthropometrics, stim, extra_time = 10):
     for key,val in anthropometrics.items():
         act.AddOutput(name = key, type=const, fvalues = val) 
     
-    sim = sund.Simulation(models = m, activities = act, timeunit = 'days')
-    
-    sim.ResetStatesDerivatives()
     np.disp(min(stim["drug_on"]["t"]))
     np.disp(max(stim["drug_on"]["t"]))
+    np.disp(act)
+
+    sim = sund.Simulation(models = m, activities = act, timeunit = 'years')
+    
+    sim.ResetStatesDerivatives()
     t_start = min(stim["drug_on"]["t"])
 
     sim.Simulate(timevector = np.linspace(t_start, max(stim["drug_on"]["t"])+extra_time, 10000))
@@ -111,7 +113,7 @@ start_time = st.session_state['age']
 
 for i in range(n_med):
     st.markdown(f"**Medication {i+1}**")
-    BP_med.append(st.number_input("Start of blood pressure medication (age): ", 40.0, 100.0, key="BP_med{i}"))
+    BP_med.append(st.number_input("Start of blood pressure medication (age): ", 40.0, 100.0, 40.0, key="BP_med{i}"))
     med_lengths.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key="t_long{i}"))
 
 t_long = [t+on for t,l in zip(BP_med, med_lengths) for on in [0,1]]
