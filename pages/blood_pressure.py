@@ -57,7 +57,7 @@ def simulate(m, anthropometrics, stim, extra_time = 10):
     for key,val in anthropometrics.items():
         act.AddOutput(name = key, type=const, fvalues = val) 
 
-    sim = sund.Simulation(models = m, activities = act, timeunit = 'years')
+    sim = sund.Simulation(models = m, activities = act, timeunit = 'y')
     np.disp(max(stim["drug_on"]["t"]))
 
     sim.ResetStatesDerivatives()
