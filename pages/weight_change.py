@@ -163,14 +163,14 @@ sim_long = simulate(model, anthropometrics, stim_long)
 
 st.subheader("Plotting long term simulation of weight change")
 
-feature = st.selectbox("Feature of the model to plot", model_features)
-st.line_chart(sim_long, x="Time", y=feature)
+feature_long = st.selectbox("Feature of the model to plot", model_features, key="long_plot")
+st.line_chart(sim_long, x="Time", y=feature_long)
 
 
 st.divider()
 
 st.subheader("Plotting meal simulations based on time points chosen in long term simulation")
-feature = st.selectbox("Feature of the model to plot", model_features)
+feature_meal = st.selectbox("Feature of the model to plot", model_features, key="meal_plot")
 
 for i in range(n_meals):
     stim_meal = {
@@ -178,4 +178,4 @@ for i in range(n_meals):
     "meal": {"t": meal_times[i], "f": 1.0}
     }
     sim_meal = simulate(model, anthropometrics, stim_meal)
-    st.line_chart(sim_meal, x="Time", y=feature)
+    st.line_chart(sim_meal, x="Time", y=feature_meal)

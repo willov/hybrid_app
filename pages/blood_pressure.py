@@ -66,7 +66,7 @@ def simulate(m, stim, anthropometrics, initials, extra_time = 10):
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
-
+    np.disp(sim_results)
     return sim_results
 
 # Start the app
@@ -112,16 +112,13 @@ start_time = st.session_state['age']
 
 for i in range(n_med):
     st.markdown(f"**Medication {i+1}**")
-    np.disp(start_time)
     med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, start_time, key=f"BP_med{i}"))
     med_lengths.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
     start_time += med_lengths[i]
-    np.disp(med_lengths[i])
     st.divider()
 
 t_long = [time for t,l in zip(med_times, med_lengths) for time in (t,t+l)]
 drug_on = [0] + [1, 0] * n_med
-np.disp(drug_on)
 
 # Setup stimulation to the model
 

@@ -467,8 +467,8 @@ V_met = p2*G6P
 ########## FUNCTIONS
 
 ########## EVENTS
-eventMeal1 = gt(time,0), Q_sto1, meal_amount
-eventMeal2 = gt(time,0), D, meal_amount
+eventMeal1 = gt(time,0), Q_sto1, meal_amount/4.0*1000.0
+eventMeal2 = gt(time,0), D, meal_amount/4.0*1000.0
 event3 = gt(G_p,k_e2), RE, E
 eventY = lt(beta*(G-G_b),-S_b),Y, Y2 
 eventY2 = gt(beta*(G-G_b),-S_b),Y2, 0 
@@ -498,3 +498,5 @@ Glucose uptake in muscle tissue (mg/kg/min) = U_idm
 IRS1 (% of max) = measuredIRS1
 PKB308 (% of max) = measuredPKB308
 Glucose uptake in fat tissue (mg/kg/min) = U_idf
+EGP = EGP
+G_p = G_p
