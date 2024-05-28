@@ -121,8 +121,8 @@ start_time = st.session_state['age']
 # diet_time(st.number_input("Start of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time"))
 diet_start = st.number_input("Diet start (years): ", st.session_state['age'], 100.0, 40.0, 0.1, key=f"diet_start")
 diet_length = st.number_input("Diet length (age): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length")
-EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 312.0, 1.0, key=f"EIchange")
-EIchange = [0.0] + [EIchange] + [0.0] + [0.0]
+EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
+EIchange = [0.0] + [0.0] + [EIchange] + [0.0] 
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']] + [diet_start] + [st.session_state['age']+diet_length] 
 
@@ -152,7 +152,7 @@ meal = [0.0] + [0.0] + [0.0] + [0.0]
 # Setup stimulation to the model
 
 stim_long = {
-    "EIchange": {"t": t_long, "f": EIchange},
+    #"EIchange": {"t": t_long, "f": EIchange},
     "meal": {"t": t_long, "f": meal},
     }
 np.disp(EIchange)

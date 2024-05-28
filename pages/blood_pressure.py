@@ -110,7 +110,7 @@ if 'age' not in st.session_state:
     st.session_state['age'] = 40.0
 
 start_time = st.session_state['age']
-med_times = start_time
+med_times = [start_time]
 
 #for i in range(n_med):
 st.markdown(f"**Blood pressure medication**")
