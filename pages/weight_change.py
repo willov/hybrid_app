@@ -178,7 +178,7 @@ for i in range(n_meals):
     np.disp(meal_times[i])
     stim_meal = {
     "meal_amount": {"t": meal_times[i], "f": meal_amount[i]},
-    "meal": {"t": meal_times[i], "f": [1.0]}
+    "meal": {"t": meal_times[i], "f": [0] + [1.0]}
     }
     sim_meal = simulate(model, anthropometrics, stim_meal)
     st.line_chart(sim_meal, x="Time", y=feature_meal)

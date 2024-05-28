@@ -123,8 +123,9 @@ st.divider()
 
 t_long = med_times # [time for t,l in zip(med_times, med_lengths) for time in (t,t+l)]
 np.disp(t_long)
-type(t_long)
-drug_on = [0] + [1] + [0] + [0] #[0] + [1, 0] * n_med
+np.disp(type(t_long))
+drug_on = [0] + [0] + [1] + [0] + [0] #[0] + [1, 0] * n_med
+np.disp(drug_on)
 
 # Setup stimulation to the model
 
