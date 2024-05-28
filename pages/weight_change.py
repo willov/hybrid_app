@@ -58,9 +58,9 @@ def simulate(m, anthropometrics, stim):
 
 
     sim.ResetStatesDerivatives()
-    t_start = min(stim["EIchange"]["t"])
+    t_start = min(stim["meal"]["t"])
     # TODO steady state 
-    sim.Simulate(timevector = np.linspace(t_start, max(stim["EIchange"]["t"]), 10000))
+    sim.Simulate(timevector = np.linspace(t_start, max(stim["meal"]["t"]), 10000))
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
