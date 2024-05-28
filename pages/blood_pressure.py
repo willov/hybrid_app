@@ -101,6 +101,7 @@ initials = [st.session_state['IC_SBP'], st.session_state['IC_DBP']]
 
 med_times = []
 med_lengths = [] 
+med_period = [] 
 t_long = []
 
 st.divider()
@@ -109,17 +110,19 @@ if 'age' not in st.session_state:
     st.session_state['age'] = 40.0
 
 start_time = st.session_state['age']
+med_times = start_time
 
-for i in range(n_med):
-    st.markdown(f"**Medication {i+1}**")
-    med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, start_time, key=f"BP_med{i}"))
-    med_lengths.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
-    start_time += med_lengths[i]
-    st.divider()
+#for i in range(n_med):
+st.markdown(f"**Blood pressure medication**")
+med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, start_time, key=f"BP_med"))
+med_times.append([start_time + 2])
+med_times.append(start_time + st.number_input("How long period do you want to simulate? (years): ", 0.0, 200.0, 40.0, key=f"t_long"))
+    #med_period.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
+    #start_time += med_period[i]
+st.divider()
 
-t_long = [time for t,l in zip(med_times, med_lengths) for time in (t,t+l)]
-drug_on = [0] + [0, 0] * n_med
-np.disp(drug_on)
+t_long = med_times # [time for t,l in zip(med_times, med_lengths) for time in (t,t+l)]
+drug_on = [0] + [1] + [0] + [0] #[0] + [1, 0] * n_med
 
 # Setup stimulation to the model
 
