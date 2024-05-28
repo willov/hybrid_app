@@ -91,7 +91,7 @@ anthropometrics = {"IC_SBP": st.session_state['IC_SBP'], "IC_DBP": st.session_st
 # Specifying blood pressure medication
 st.subheader("Blood pressure")
 
-n_med = st.slider("Number of periods of blood pressure medication:", 1, 5, 1)
+#n_med = st.slider("Number of periods of blood pressure medication:", 1, 5, 1)
 extra_time = st.number_input("Additional time to simulate after medication(s) (years):", 0.0, 100.0, 0.0, 0.1)
 
 anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key="IC_SBP")
@@ -115,7 +115,7 @@ med_times = [start_time]
 #for i in range(n_med):
 st.markdown(f"**Blood pressure medication**")
 med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, start_time, key=f"BP_med"))
-med_times.append([start_time + 2])
+med_times.append(start_time + 2)
 med_times.append(start_time + st.number_input("How long period do you want to simulate? (years): ", 0.0, 200.0, 40.0, key=f"t_long"))
     #med_period.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
     #start_time += med_period[i]
