@@ -166,6 +166,9 @@ st.subheader("Plotting long term simulation of weight change")
 feature = st.selectbox("Feature of the model to plot", model_features)
 st.line_chart(sim_long, x="Time", y=feature)
 
+
+st.divider()
+
 st.subheader("Plotting meal simulations based on time points chosen in long term simulation")
 feature = st.selectbox("Feature of the model to plot", model_features)
 
