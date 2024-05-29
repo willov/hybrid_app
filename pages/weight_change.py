@@ -176,8 +176,9 @@ feature_meal = st.selectbox("Feature of the model to plot", model_features, key=
 for i in range(n_meals):
     np.disp(meal_amount[i])
     np.disp(meal_times[i])
+    np.disp([0] + [1.0])
     stim_meal = {
-    "meal_amount": {"t": meal_times[i], "f": meal_amount[i]},
+    "meal_amount": {"t": meal_times[i], "f": [0] + meal_amount[i]},
     "meal": {"t": meal_times[i], "f": [0] + [1.0]}
     }
     sim_meal = simulate(model, anthropometrics, stim_meal)
