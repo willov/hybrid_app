@@ -140,5 +140,5 @@ sim = simulate(model, stim, anthropometrics, initials, extra_time=extra_time)
 st.subheader("Plotting blood pressure over time")
 
 feature = st.selectbox("Feature of the model to plot", model_features)
-st.line_chart(sim, x="Time", y=feature)
+st.line_chart(sim, x="Time", y=feature, use_container_width=True)
 
