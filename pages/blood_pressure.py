@@ -122,15 +122,17 @@ if take_BPmed:
     med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, start_time, key=f"BP_med"))
     med_times.append(start_time + 2)
     #extra_time = st.number_input("Additional time to simulate after medication(s) (years):", 0.0, 100.0, 0.0, 0.1)
-    drug_on = [0] + [0] + [1] + [0] + [0] #[0] + [1, 0] * n_med
+    drug_on = [0] + [1] + [0] + [0] #[0] + [1, 0] * n_med
 
     #med_period.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
     #start_time += med_period[i]
+
 extra_time = 3
 t_long = med_times # [time for t,l in zip(med_times, med_lengths) for time in (t,t+l)]
 st.divider()
 
-
+np.disp(drug_on)
+np.disp(t_long)
 
 # Setup stimulation to the model
 
