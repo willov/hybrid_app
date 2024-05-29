@@ -103,6 +103,7 @@ med_times = []
 med_lengths = [] 
 med_period = [] 
 t_long = []
+drug_on = []
 
 st.divider()
 
@@ -114,20 +115,22 @@ med_times = [start_time]
 
 #for i in range(n_med):
 st.markdown(f"**Blood pressure medication**")
-med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, start_time, key=f"BP_med"))
-med_times.append(start_time + 2)
-med_times.append(start_time + st.number_input("How long period do you want to simulate? (years): ", 0.0, 200.0, 40.0, key=f"t_long"))
-extra_time = st.number_input("Additional time to simulate after medication(s) (years):", 0.0, 100.0, 0.0, 0.1)
+
+
+take_BPmed = st.checkbox("Do you know want to add a blood pressure medication?")
+if take_BPmed:
+    med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, start_time, key=f"BP_med"))
+    med_times.append(start_time + 2)
+    #extra_time = st.number_input("Additional time to simulate after medication(s) (years):", 0.0, 100.0, 0.0, 0.1)
+    t_long = med_times # [time for t,l in zip(med_times, med_lengths) for time in (t,t+l)]
+    drug_on = [0] + [0] + [1] + [0] + [0] #[0] + [1, 0] * n_med
 
     #med_period.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
     #start_time += med_period[i]
+extra_time = 3
 st.divider()
 
-t_long = med_times # [time for t,l in zip(med_times, med_lengths) for time in (t,t+l)]
-np.disp(t_long)
-np.disp(type(t_long))
-drug_on = [0] + [0] + [1] + [0] + [0] #[0] + [1, 0] * n_med
-np.disp(drug_on)
+
 
 # Setup stimulation to the model
 
@@ -146,7 +149,7 @@ feature = st.selectbox("Feature of the model to plot", model_features)
 
 c = (
     alt.Chart(sim).mark_point().encode(
-    x = 'Time',
+    x = alt.X('Time').scale(zero=False),
     y = alt.Y(feature).scale(zero=False)
 ))
 
