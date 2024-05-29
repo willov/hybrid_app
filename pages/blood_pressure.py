@@ -144,8 +144,11 @@ st.subheader("Plotting blood pressure over time")
 feature = st.selectbox("Feature of the model to plot", model_features)
 # st.line_chart(sim, x="Time", y=feature, use_container_width=True)
 
-alt.Chart(sim).mark_point().encode(
+c = (
+    alt.Chart(sim).mark_point().encode(
     x = 'Time',
     y = alt.Y(feature).scale(zero=False)
-)
+))
+
+st.altair_chart(c, use_container_width=True)
 
