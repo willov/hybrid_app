@@ -96,6 +96,7 @@ st.subheader("Blood pressure")
 
 anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key="IC_SBP")
 anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key="IC_DBP")
+extra_time = st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"extra_time")
 
 initials = [st.session_state['IC_SBP'], st.session_state['IC_DBP']]
 
@@ -127,7 +128,6 @@ if take_BPmed:
     #med_period.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
     #start_time += med_period[i]
 
-extra_time = 3
 t_long = med_times # [time for t,l in zip(med_times, med_lengths) for time in (t,t+l)]
 st.divider()
 
