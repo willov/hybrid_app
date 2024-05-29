@@ -125,7 +125,7 @@ EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 4
 EIchange = [0.0] + [0.0] + [EIchange] + [0.0] 
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']] + [diet_start] + [st.session_state['age']+diet_length] 
-t_long = t_long*365.0
+t_long = t_long*365
 np.disp(t_longy)
 
 st.divider()
