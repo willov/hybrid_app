@@ -54,4 +54,3 @@ IC_DBP = IC_DBP                   @ 70
 Systolic blood pressure (mmHg) = SBP
 Diastolic blood pressure (mmHg) = DBP
 Mean arterial pressure (mmHg) = MAP
-SBP_vs_IC = SBP_vs_IC
