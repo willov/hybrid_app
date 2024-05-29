@@ -124,8 +124,7 @@ diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, ke
 EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
 EIchange = [0.0] + [0.0] + [EIchange] + [0.0] 
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
-t_long = [st.session_state['age']] + [diet_start] + [st.session_state['age']+diet_length] 
-t_long = t_long*365
+t_long = [st.session_state['age']*365.0] + [diet_start*365.0] + [(st.session_state['age']+diet_length)*365.0] 
 np.disp(t_long)
 
 st.divider()
@@ -144,15 +143,13 @@ for i in range(n_meals):
     st.divider()
 if n_meals < 1:
     st.divider()
-
-meal = [0.0] + [0.0] + [0.0] + [0.0] 
 # meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
 # meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
 
 # t_meal = [t_meal+(l/60)*on for t_meal,l in zip(meal_times, 0.3) for on in [0,1]] # varje gång något ska ändras
 
 # Setup stimulation to the model
-
+meal = [0.0] + [0.0] + [0.0] + [0.0] 
 stim_long = {
     #"EIchange": {"t": t_long, "f": EIchange},
     "meal": {"t": t_long, "f": meal},
@@ -167,8 +164,15 @@ sim_long = simulate(model, anthropometrics, stim_long)
 st.subheader("Plotting long term simulation of weight change")
 
 feature_long = st.selectbox("Feature of the model to plot", model_features, key="long_plot")
-st.line_chart(sim_long, x="Time", y=feature_long)
+# st.line_chart(sim_long, x="Time", y=feature_long)
 
+l = (
+    alt.Chart(sim_long).mark_point().encode(
+    x = alt.X('Time').scale(zero=False),
+    y = alt.Y(feature_long).scale(zero=False)
+))
+
+st.altair_chart(l, use_container_width=True)
 
 st.divider()
 
@@ -186,4 +190,9 @@ for i in range(n_meals):
     "meal": {"t": [meal_times[i]], "f": meal}
     }
     sim_meal = simulate(model, anthropometrics, stim_meal)
-    st.line_chart(sim_meal, x="Time", y=feature_meal)
+    # st.line_chart(sim_meal, x="Time", y=feature_meal)
+    m = (
+    alt.Chart(sim_meal).mark_point().encode(
+    x = alt.X('Time').scale(zero=False),
+    y = alt.Y(feature_meal).scale(zero=False)
+        ))
