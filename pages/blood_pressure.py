@@ -48,7 +48,7 @@ model, model_features = setup_model('bloodpressure_model')
 def flatten(list):
     return [item for sublist in list for item in sublist]
 
-def simulate(m, stim, anthropometrics, initials) #, extra_time = 10):
+def simulate(m, stim, anthropometrics, initials): #, extra_time = 10):
     act = sund.Activity(timeunit = 'y')
     pwc = sund.PIECEWISE_CONSTANT # space saving only
     const = sund.CONSTANT # space saving only
