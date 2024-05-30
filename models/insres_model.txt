@@ -493,6 +493,7 @@ Ginit = Ginit               @ 1.85
 ECFinit = ECFinit           @ 11.1202
 weight = weight             @ 67.6
 height = height             @ 1.85
+age = age                   @ 40.0
 
 ########## FEATURES
 

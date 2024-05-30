@@ -48,7 +48,7 @@ model, model_features = setup_model('bloodpressure_model')
 def flatten(list):
     return [item for sublist in list for item in sublist]
 
-def simulate(m, stim, anthropometrics, initials, extra_time = 10):
+def simulate(m, stim, anthropometrics, initials) #, extra_time = 10):
     act = sund.Activity(timeunit = 'y')
     pwc = sund.PIECEWISE_CONSTANT # space saving only
     const = sund.CONSTANT # space saving only
@@ -63,7 +63,7 @@ def simulate(m, stim, anthropometrics, initials, extra_time = 10):
     sim.ResetStatesDerivatives()
     t_start = min(stim["drug_on"]["t"])
 
-    sim.Simulate(timevector = np.linspace(t_start, max(stim["drug_on"]["t"])+extra_time, 10000), statevalues = initials)
+    sim.Simulate(timevector = np.linspace(t_start, max(stim["drug_on"]["t"]), 10000), statevalues = initials) # +extra_time
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
@@ -96,7 +96,7 @@ st.subheader("Blood pressure")
 
 anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key="IC_SBP")
 anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key="IC_DBP")
-extra_time = st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"extra_time")
+end_time = st.number_input("How long time do you want to simulate (years): ", 0.0, 200.0, 40.0, key=f"end_time")
 
 initials = [st.session_state['IC_SBP'], st.session_state['IC_DBP']]
 
@@ -122,8 +122,10 @@ take_BPmed = st.checkbox("Do you know want to add a blood pressure medication?")
 if take_BPmed:
     med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, start_time, key=f"BP_med"))
     med_times.append(med_times[1] + 2)
+    med_times.append([end_time])
+    np.disp(med_times)
     #extra_time = st.number_input("Additional time to simulate after medication(s) (years):", 0.0, 100.0, 0.0, 0.1)
-    drug_on = [0] + [0] + [1] + [0] #[0] + [1, 0] * n_med
+    drug_on = [0] + [0] + [1] + [0] + [0] #[0] + [1, 0] * n_med
 
     #med_period.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
     #start_time += med_period[i]
@@ -142,7 +144,7 @@ stim = {
 
 # Plotting blood pressure 
 
-sim = simulate(model, stim, anthropometrics, initials, extra_time=extra_time)
+sim = simulate(model, stim, anthropometrics, initials) #, extra_time=extra_time)
 
 st.subheader("Plotting blood pressure over time")
 
