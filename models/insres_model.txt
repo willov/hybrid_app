@@ -320,7 +320,6 @@ f_IR_EGP  = (f_IR_diabetes < 1.0046) ? (1 + (b_EGP*log(xF))*scale)  :   0.860830
 f_IR_Ins  = (f_IR_diabetes < 1.0046) ? (1 + (b_Ins*log(xF))*scale)  :   0.908717502534490 
 
 // body composition
-EIchange = 400
 CC = 10.4*rhol/rhof
 p = CC/(CC+F) 
 EEinit = PAE*RMRinit 

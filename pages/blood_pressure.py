@@ -96,7 +96,9 @@ st.subheader("Blood pressure")
 
 anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key="IC_SBP")
 anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key="IC_DBP")
-end_time = st.number_input("How long time do you want to simulate (years): ", 0.0, 200.0, 40.0, key=f"end_time")
+
+start_time = st.session_state['age']
+end_time = start_time + st.number_input("How long time do you want to simulate (years): ", 0.0, 200.0, 40.0, key=f"end_time")
 
 initials = [st.session_state['IC_SBP'], st.session_state['IC_DBP']]
 
@@ -104,14 +106,13 @@ med_times = []
 med_lengths = [] 
 med_period = [] 
 t_long = []
-drug_on = [0] + [0]
+drug_on = [0] + [0] + [0] 
 
 st.divider()
 
 if 'age' not in st.session_state:
     st.session_state['age'] = 40.0
 
-start_time = st.session_state['age']
 med_times = [start_time]
 
 #for i in range(n_med):
