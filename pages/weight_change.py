@@ -58,7 +58,9 @@ def simulate(m, anthropometrics, stim):
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
 
     sim.ResetStatesDerivatives()
-    t_start_diet = stim["ss_x"]["t"](1)
+    t_start_diet = anthropometrics['age']*365.0-10
+    np.disp(stim["ss_x"]["t"])
+    np.disp(type(stim["ss_x"]["t"]))
     # TODO steady state 
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000))
     
