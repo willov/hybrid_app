@@ -14,9 +14,9 @@ Here you can specify the anthropometrics of the person you want to make simulati
 
 
 if 'sex' not in st.session_state:
-    st.session_state['sex'] = 'Man'
+    st.session_state['sex'] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index('Man'), key="sex") # 'Man'
 if 'weight' not in st.session_state:
-    st.session_state['weight'] = 67.6
+    st.session_state['weight'] = st.number_input("Weight (kg):", 0.0, 1000.0, 67.6, key="weight") # 67.6
 if 'height' not in st.session_state:
     st.session_state['height'] = 1.85
 if 'age' not in st.session_state:
@@ -39,8 +39,8 @@ if 'Linit' not in st.session_state:
 #                   "sex": st.session_state['sex'], "age": st.session_state['age'],
                    
 
-st.session_state["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
-st.session_state["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state['weight'], key="weight") # max, min 
+# st.session_state["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
+# st.session_state["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state['weight'], key="weight") # max, min 
 st.session_state["age"] = st.number_input("Age (years):", 0.0, 100.0, st.session_state['age'], key="age") # max, min 
 st.session_state["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_state['height'],  key="height") # st.session_state['height'], 0.1, 
 # anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
