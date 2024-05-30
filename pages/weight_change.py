@@ -57,7 +57,6 @@ def simulate(m, anthropometrics, stim):
     
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
 
-
     sim.ResetStatesDerivatives()
     t_start = min(stim["meal"]["t"])
     # TODO steady state 

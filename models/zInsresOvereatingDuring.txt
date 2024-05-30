@@ -1,0 +1,473 @@
+########## NAME
+zInsresOvereatingDuring
+########## METADATA
+timeunit = d
+//Contact person: Tilda
+########## MACROS
+########## STATES
+////// Body composition
+d/dt(Gly) = v1/rhog  ////// rename to gly?
+d/dt(ECF) = v2
+d/dt(F) = (1 - v3)*(k1 - v1)/rhof
+d/dt(L) = v3*(k1 - v1)/rhol
+d/dt(AT) = v4
+
+////// glucose control organs 
+d/dt(G_p) = (EGP + Ra - E - U_ii - k_1*G_p + k_2*G_t)*tconv
+d/dt(G_t) = (- U_id + k_1*G_p - k_2*G_t)*tconv
+d/dt(I_l) = (- m_1*I_l - m_3*I_l + m_2*I_p + S)*tconv
+d/dt(I_p) = (- m_2*I_p - m_4*I_p + m_1*I_l)*tconv
+d/dt(Q_sto1) = (- k_gri*Q_sto1)*tconv
+d/dt(Q_sto2) = (- k_empt*Q_sto2 + k_gri*Q_sto1)*tconv
+d/dt(Q_gut) = (- k_abs*Q_gut + k_empt*Q_sto2)*tconv
+d/dt(I_1) = - k_i*(I_1 - I)*tconv
+d/dt(I_d) = -k_i*(I_d - I_1)*tconv
+d/dt(I_po) = (- gamma*I_po + S_po)*tconv
+d/dt(Y) = (- alpha * (Y - beta*(G - G_b)))*tconv  ///f_S
+d/dt(INS_f) = ((-p_2U*INS_f)+p_2U*(I-I_b))*tconv
+d/dt(INS) = (V_1-V_2)*tconv 
+
+////// beta cells
+//// d/dt(betamass) = (-d0 + r1*G -r2*G*G)*betamass/tconv //*beta
+//// d/dt(Beta_failure) = (Pstress < 1.5 ) ? 0 :0.25
+
+///// The adipocyte signalling
+d/dt(IR)                = (-v1a-v1basal+v1r+v1g)*tconv  //1 
+d/dt(IRp)               = (v1basal+v1c-v1d-v1g)*tconv   //2
+d/dt(IRins)             = (v1a-v1c)*tconv               //3
+d/dt(IRip)              = (v1d-v1e)*tconv               //4
+d/dt(IRi)               = (v1e-v1r)*tconv               //5
+d/dt(IRS1)              = (v2b+v2g-v2a-v2basal)*tconv   //6
+d/dt(IRS1p)             = (v2a+v2d-v2b-v2c)*tconv       //7
+d/dt(IRS1p307)          = (v2c-v2d-v2f)*tconv           //8
+d/dt(IRS1307)           = (v2basal+v2f-v2g)*tconv       //9
+d/dt(X)                 = (v3b-v3a)*tconv               //10
+d/dt(Xp)                = (v3a-v3b)*tconv               //11
+d/dt(PKB)               = (-v4a+v4b+v4h)*tconv          //12   
+d/dt(PKB308p)           = (v4a-v4b-v4c)*tconv           //13
+d/dt(PKB473p)           = (-v4e+v4f-v4h)*tconv          //14
+d/dt(PKB308p473p)       = (v4c+v4e-v4f)*tconv           //15
+d/dt(mTORC1)            = (v5b-v5a)*tconv               //16         
+d/dt(mTORC1a)           = (v5a-v5b)*tconv               //17
+d/dt(mTORC2)            = (-v5c+v5d)*tconv              //18
+d/dt(mTORC2a)           = (v5c-v5d)*tconv               //19
+d/dt(AS160)             = (v6b1-v6f1)*tconv             //20
+d/dt(AS160p)            = (v6f1-v6b1)*tconv             //21
+d/dt(GLUT4m)            = (v7f-v7b)*tconv               //22
+d/dt(GLUT4)             = (-v7f+v7b)*tconv              //23 -v7f/f_GLUT4
+d/dt(S6K)               = (v9b1-v9f1)*tconv             //24
+d/dt(S6Kp)              = (v9f1-v9b1)*tconv             //25
+d/dt(S6)                = (v9b2-v9f2)*tconv             //26
+d/dt(S6p)               = (v9f2-v9b2)*tconv             //27             
+d/dt(Glu_in) = (p1*(V_in-V_out)-V_G6P)*tconv 
+d/dt(G6P) = (V_G6P-V_met)*tconv
+
+
+////// Body composition
+Gly(0) =    1.85           // Ginit
+ECF(0) =    11.120199999999997
+F(0) =      12.7000          // Finit
+L(0) =      36.9348          // Linit
+AT(0) =     0.1
+
+////// glucose control organs 
+G_p(0) = 1.802628472874315e+02
+G_t(0) = 1.351164914823571e+02
+I_l(0) = 5.799846746833386
+I_p(0) = 1.625325779886319
+Q_sto1(0) = 0
+Q_sto2(0) = 0
+Q_gut(0) = 0
+I_1(0) = 32.506329993271150
+I_d(0) = 32.506307249250334
+I_po(0) = 3.794588320489091
+Y(0) = 0.097294131155095
+INS_f(0) = 7.506509253606121
+INS(0) = 8.334101632787734
+
+///// The adipocyte signalling
+IR(0)               = 98.967234970326760
+IRp(0)              = 0.002056997543613
+IRins(0)            = 0.893768320530424       
+IRip(0)             = 0.020324420987742
+IRi(0)              = 0.116607850653319 
+IRS1(0)             = 82.221937531904560
+IRS1p(0)            = 0.001223389172660
+IRS1p307(0)         = 0.413249708734096
+IRS1307(0)          = 17.363655209123888
+X(0)                = 99.998380912772020
+Xp(0)               = 0.001706187228193
+PKB(0)              = 66.405547983194700
+PKB308p(0)          = 13.240110678239320
+PKB473p(0)          = 18.060237370370010
+PKB308p473p(0)      = 2.293994368777834
+mTORC1(0)           = 83.361109962105050
+mTORC1a(0)          = 16.638910037894940
+mTORC2(0)           = 99.835881200968910
+mTORC2a(0)          = 0.164129799031001
+AS160(0)            = 81.141271702031960
+AS160p(0)           = 18.858728297968145
+GLUT4m(0)           = 29.607071153068627
+GLUT4(0)            = 70.392928846931820
+S6K(0)              = 99.108872505432560
+S6Kp(0)             = 0.891100494567397
+S6(0)               = 91.265774653220690
+S6p(0)              = 8.734135346779420
+Glu_in(0) = 3.157026534727669
+G6P(0) = 0.004752622918204
+
+########## PARAMETERS
+// Adipocyte parameters
+kdiab = 0.155  //////1                                                                
+k1a = 0.633141  //////2                                                              
+k1basal = 0.0331338  //////3                                                         
+k1c = 0.876805  //////4                                                              
+k1d = 31.012  //////5                                                                
+k1f = 1839.58  //////6                                                               
+k1g = 1944.11  //////7                                                               
+k1r = 0.547061  //////8                                                              
+k2a = 3.22728  //////9                                                               
+k2c = 5758.78  //////10                                                              
+k2basal = 0.0422768  //////11                                                        
+k2b = 3424.35  //////12                                                              
+k2d = 280.753  //////13                                                              
+k2f = 2.9131  //////14                                                               
+k2g = 0.267089  //////15                                                             
+k3a = 0.00137731  //////16                                                           
+k3b = 0.0987558  //////17                                                            
+k4a = 5790.17  //////18                                                              
+k4b = 34.7965  //////19                                                              
+k4c = 4.45581  //////20                                                              
+k4e = 42.8395  //////21                                                              
+k4f = 143.597  //////22                                                              
+k4h = 0.536145  //////23                                                             
+k5a1 = 1.8423  //////24                                                              
+k5a2 = 0.055064  //////25                                                            
+k5b = 24.826  //////26                                                               
+k5d = 1.06013  //////27                                                              
+km5 = 2.64988  //////28                                                              
+k5c = 0.0857515  //////29                                                            
+k6f1 = 2.65168  //////30                                                             
+k6f2 = 36.9348  //////31                                                             
+km6 = 30.5424  //////32                                                              
+n6 = 2.13707  //////33                                                               
+k6b = 65.1841  //////34                                                              
+k7f = 50.9829  //////35                                                              
+k7b = 2285.97  //////36                                                              
+k8 = 724.242  //////37                                                               
+glut1 = 7042.19  //////38                                                            
+k9f1 = 0.12981  //////39                                                             
+k9b1 = 0.0444092  //////40                                                           
+k9f2 = 3.3289  //////41                                                              
+k9b2 = 30.9967  //////42                                                             
+km9 = 5872.68  //////43                                                              
+n9 = 0.985466  //////44                                                              
+kbf = 0.01 //////45                                                            
+nC = 2.1e-06  //////46  
+p1 = 0.178910658618042
+p2 = 4.478155215098602 
+p3 = 0.160881469168138
+p4 = 2.627135664357424  
+k_gluin = 2.136098648464447
+k_G6P = 11495.60694632059
+V_G6Pmax = 410.2032883752426   
+
+////// organs
+V_G = 1.88  //////47
+
+k_1 = 0.065  //////48
+k_2 = 0.079  //////49
+G_b = 95  //////50
+V_I = 0.05  //////51
+
+m_1 = 0.19  //////52   
+m_2 = 0.484    ////// 53
+m_4 = 0.194    ////// 54
+m_5 = 0.0304  //////55 
+m_6 = 0.6471   ////// 56
+S_b = 1.8  //////59   
+HE_b = 0.6  //////57   
+I_b = 25  //////58     
+
+k_max = 0.0558  //////60
+k_min = 0.008  //////61
+k_abs = 0.057  //////62
+k_gri = 0.0558  //////63
+f = 0.9  //////64
+b = 0.82  //////65
+dd = 0.01  //////66
+
+k_p1 = 2.7  //////67   
+k_p2 = 0.0021  //////68
+k_p3 = 0.009  //////69 
+k_p4 = 0.0618  //////70
+
+k_i = 0.0079  //////71
+p_2U = 0.0331  //////72
+
+K = 2.3  //////73 
+alpha = 0.05  //////74
+beta = 0.11 //// 2.7273e+03 //  ////75  //pmol/kg/min per (mg/dl)
+gamma = 0.5  //////76
+k_e1 = 0.0005  //////77
+k_e2 = 339  //////78
+
+D = 78000 // ////79
+
+INS_offset = 7 
+be = 3
+bradykinin = 1
+pf = 34
+bf_b = 3 
+INS_b = 0
+p_bf = 1
+
+//
+U_ii = 0.830871862015361
+kI2 = 0.042883597145619
+kI1 = 0.047611502708533
+
+V_m = 0.881325333507003
+V_mx = 0.040935870268503
+K_m = 476.3512108268108
+
+V_l = 2.004669019320863 
+V_lx = 0.043932686418002
+K_l = 354.8519629537153
+
+////// Body composition
+joules = 4183 // kcal
+
+BWinit = 67.6  
+Height = 175.6917      //45  
+Age = 27
+
+RMRinit = 7.1025492e+06 //// 
+Ginit = 1.85
+ECFinit = 14.804999999999998
+Finit = 12.7000 
+Linit = 36.9348 
+ATinit = 0.1
+
+alfa = 1
+fCIn = 0.4
+PAE = 1.5
+rhol = 7.6e6
+rhof = 39.5e6
+gf = 13000
+gl = 92000
+etal = 960000
+etaf = 750000
+rhog = 17.6e6
+Na = 3.22
+epNa = 3000
+epCI = 4000
+deltaNaDiet = 0
+bTEF = 0.1
+bAT = 0.14
+tAT = 14
+
+k = 1
+m = 1 
+lmax = 0
+IC_50 = 1
+h2 = 1
+
+b_CLGI          = 0.605258205407204
+b_EGP           = 1.142839561915420
+b_Ins           = 0.749598731223457 
+b_IRS           = 0 ////0.814941417536258
+b_PMA           = 0 ////7.383302287188164
+
+cf              = 0
+ss_x            = 1
+
+scale = 1
+
+
+h1 = 1
+dEI_ss = 200 
+t_half = 60
+
+dummy = 0
+
+########## VARIABLES
+tconv = 24*60
+BW = (F + L + (1 + 2.7)*Gly + ECF)
+
+////// Insulin resistance
+xF              = (ss_x > 0)  ? (F/Finit)    : 1
+xFFM            = (ss_x > 0)  ? (L/Linit)  : 1     
+
+f_IR_CLGI            = 1 + (b_CLGI*xF)*scale //// xx_lin // (scale*xx/(1+xx))/0.5 //
+f_IR_EGP             = 1 + (b_EGP*log(xF))*scale //// (scale*xx/(1+xx))/0.5 //
+f_IR_Ins             = 1 + (b_Ins*log(xF))*scale //// (scale*xx/(1+xx))/0.5 //
+f_IR_PMA             = 1 //+ (b_PMA*log(xF))*scale
+f_IR_IRS_tot_prot    = 1 //+ (b_IRS*log(xF))*scale
+
+
+////// body composition
+CC = 10.4*rhol/rhof
+p = CC/(CC+F) //// => fat mass gar ner konstant
+EEinit = PAE*RMRinit 
+EIninit = EEinit
+CIninit = fCIn*EIninit
+kg = CIninit/(Ginit*Ginit)
+dEI_init = energy_intake_change*joules
+
+EI_vehicle = EIninit + dEI_init - alfa*(dEI_init - dEI_ss*4183)*(pow(time,h1)/(pow(time,h1) + pow(t_half,h1)))
+EIn = (1-alfa)*EIninit+alfa*EI_vehicle // //*IC
+
+CInvalue = fCIn*EI_vehicle
+CIn = (1-alfa)*CIninit+alfa*CInvalue
+PAL = PAE
+////delta = ((1-bTEF)*PAL-1)*RMRinit/BW
+
+
+TEF = bTEF*(EIn-EIninit)
+KK = EEinit-(gf*Finit+gl*Linit+delta*BWinit)
+EE = (-BW*delta*rhof*rhol-KK*rhof*rhol-rhof*rhol*TEF-rhof*rhol*AT+etal*p*rhof*CIn+etaf*rhol*CIn-etaf*p*rhol*CIn-etal*p*rhof*EIn-etaf*rhol*EIn+etaf*p*rhol*EIn-gf*rhof*rhol*F-etal*kg*p*rhof*Gly*Gly-etaf*kg*rhol*Gly*Gly+etaf*kg*p*rhol*Gly*Gly-gl*rhof*rhol*L)/(-etal*p*rhof-etaf*rhol+etaf*p*rhol-rhof*rhol)
+k1 = EIn-EE
+
+
+
+////// organs
+I = I_p/V_I
+G = G_p/V_G
+aa = 5/2/(1-b)/D
+cc = 5/2/dd/D
+
+
+EGP = (k_p1 -(k_p2*G_p+k_p3*I_d+k_p4*I_po))*f_IR_EGP
+
+E = k_e1*(G_p-k_e2)
+
+S = gamma*I_po*f_IR_Ins
+HE = (-m_5*S) + m_6  // /f_S
+m_3 = HE*m_1/(1-HE)
+Q_sto = Q_sto1 + Q_sto2
+Ra = f*k_abs*Q_gut/BW
+k_empt = k_min+(k_max-k_min)/2*(tanh(aa*(Q_sto-b*D))-tanh(cc*(Q_sto-dd*D))+2)
+
+bf_f = bradykinin*(be+kbf*(INS_f+INS_offset))
+bfe_f = bf_f //(bf_f-bf_b)*(INS_f-INS_b)*p_bf
+
+S_po = (Y+K*(EGP+Ra-E-U_ii-k_1*G_p+k_2*G_t)/V_G + S_b)
+
+//
+V_mmax = V_m+V_mx*INS
+V_lmax = V_l+V_lx*INS
+
+INS_fe = nC*(k8*GLUT4m/pf + glut1/pf + bfe_f)
+V_in = p4*G_t*INS_fe
+V_out = p3*Glu_in
+
+//
+U_idm = xFFM*(V_mmax*G_t/(K_m+G_t))/f_IR_CLGI 
+U_idf = xF*(V_in-V_out)///f_IR_CLGI 
+U_idl = V_lmax*(G_t/(K_l+G_t))/f_IR_CLGI 
+
+//
+U_id = U_idf + U_idm + U_idl
+U = U_id + U_ii
+
+////// merge stuff
+Food_glucose=EIn/4184/4*0.45
+nutrition=Food_glucose*1000
+FM = F
+bodyfat = 100*FM/BW
+FFM = L + (1 + 2.7)*Gly + ECF
+glucose = G*0.0555 // mg/dl -> mmol/l
+metabolicRate = 0.8569*(EE/PAE)/joules
+
+///////**** MODEL REACTIONS 
+////// body composition
+v1 = (CIn - kg*(Gly)^2)
+v2 = 0 //(1/Na)*(deltaNaDiet - epNa*(ECF - ECFinit) - epCI*(1 - CIn/CIninit)) 
+v3 = p
+v4 = (bAT*(EIn - EIninit) - AT)/tAT
+
+////// organs
+V_1 = kI1*(I-I_b)
+V_2 = kI2*INS 
+                                                                                                                               
+////// fat cell
+diab_effect = (1-diabetes)+(diabetes*kdiab)
+v1a      = IR*k1a*(INS_f+5)*1e-3
+v1basal  = k1basal*IR
+v1c      = IRins*k1c
+v1d      = IRp*k1d
+v1e      = IRip*k1f*Xp
+v1g      = IRp*k1g
+v1r      = IRi*k1r
+v2a      = IRS1*k2a*IRip
+v2b      = IRS1p*k2b
+v2c      = IRS1p*k2c*mTORC1a*diab_effect
+v2d      = IRS1p307*k2d
+v2f 	 = IRS1p307*k2f
+v2basal  = (IRS1-1/f_IR_IRS_tot_prot)*k2basal
+v2g 	 = IRS1307*k2g
+v3a      = X*k3a*IRS1p
+v3b      = Xp*k3b
+v5a      = mTORC1*(k5a1*PKB308p473p+k5a2*PKB308p)
+v5b      = mTORC1a*k5b
+v5c      = mTORC2*k5c*IRip/f_IR_PMA
+v5d      = k5d*mTORC2a
+v4a      = k4a*PKB*IRS1p
+v4b      = k4b*PKB308p
+v4c      = k4c*PKB308p*mTORC2a
+v4e      = k4e*PKB473p*IRS1p307
+v4f      = k4f*PKB308p473p
+v4h      = k4h*PKB473p
+v6f1     = AS160*(k6f1*PKB308p473p+k6f2*PKB473p^n6/(km6^n6+PKB473p^n6))
+v6b1     = AS160p*k6b
+v7f      = GLUT4*k7f*AS160p
+v7b      = GLUT4m*k7b
+v9f1     = S6K*k9f1*mTORC1a^n9/(km9^n9+mTORC1a^n9)
+v9b1     = S6Kp*k9b1
+v9f2     = S6*k9f2*S6Kp
+v9b2     = S6p*k9b2
+V_G6P = V_G6Pmax*Glu_in/(k_gluin+Glu_in)*1/(k_G6P+G6P)
+V_met = p2*G6P
+
+
+
+
+########## FUNCTIONS
+########## EVENTS
+
+event1 = gt(D_in,0), Q_sto1, Q_sto1+(nutrition*D_in)
+event12 = gt(D_in,0), D, 1+nutrition*D_in 
+event13 = le(D_in,0), dummy, 0
+
+event2 = gt(energy_intake_change,0), Finit, F
+event3 = gt(energy_intake_change,0), Ginit, Gly
+event4 = gt(energy_intake_change,0), Linit, L
+
+event5 = lt(energy_intake_change,0), Finit, F
+event6 = lt(energy_intake_change,0), Ginit, Gly
+event7 = lt(energy_intake_change,0), Linit, L
+
+########## OUTPUTS
+########## INPUTS
+diabetes = diabetes @ 0
+delta = delta @30
+D_in = D_in @0
+energy_intake_change = energy_intake_change @0
+
+########## FEATURES
+
+Muscle glucose uptake = U_idm
+Adipose glucose uptake = U_idf
+Liver glucose uptake = U_idl
+Other glucose uptake = U_ii
+Total glucose uptake = U
+Plasma glucose = G
+Plasma insulin = I
+Glucose production = EGP
+Glucose rate of appearance = Ra
+Insulin secretion = S
+Weight = BW
+Fattissues = F
+Leantissue = L
+Glycogen mass = Gly
