@@ -483,7 +483,7 @@ eventECF = gt(time,0), ECF, ECFinit
 ########## OUTPUTS
 
 ########## INPUTS
-//EIchange = EIchange         @ 400
+EIchange = EIchange         @ 400
 meal = meal                 @ 0           // 1 meal 0 no meal
 meal_amount = meal_amount   @ 0
 
