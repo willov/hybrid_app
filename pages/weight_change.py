@@ -58,18 +58,16 @@ def simulate(m, anthropometrics, stim):
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
 
     sim.ResetStatesDerivatives()
-    t_start = min(stim["meal"]["t"])
+    t_start_diet = stim["ss_x"]["t"](1)
     # TODO steady state 
-    sim.Simulate(timevector = np.linspace(t_start, max(stim["meal"]["t"]), 10000))
+    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000))
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
 
-    #t_start_diet = 
-
-    # sim_diet_results = sim_results[(sim_results['Time']>=t_start_diet)]
+    sim_diet_results = sim_results[(sim_results['Time']>=t_start_diet)]
     #return sim_diet_results
-    return sim_results
+    return sim_diet_results
 
 # Start the app
 
@@ -126,8 +124,7 @@ EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 4
 EIchange = [0.0] + [0.0] + [0.0] + [EIchange] + [0.0] 
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']*365.0-10] + [st.session_state['age']*365.0] + [diet_start*365.0] + [(st.session_state['age']+diet_length)*365.0] 
-ss_x = [1] + [1] + [0] + [0] + [0] 
-np.disp(t_long)
+ss_x = [0] + [0] + [1] + [1] + [0] 
 
 st.divider()
 st.subheader("Meals")
@@ -182,14 +179,15 @@ st.subheader("Plotting meal simulations based on time points chosen in long term
 feature_meal = st.selectbox("Feature of the model to plot", model_features, key="meal_plot")
 
 for i in range(n_meals):
-    meal_amount = [0.0] + [meal_amounts[i]]
-    meal = [0.0] + [1.0]
-    np.disp(meal_times[i])
-    np.disp(type(meal_times[i]))
-    np.disp(type([meal_times[i]]))
+    meal_amount = [0.0] + [meal_amounts[i]] + [meal_amounts[i]] + [0]
+    meal = [0.0] + [1.0] + [1.0] + [0.0]
+    ss_x = [0.0] + [1.0] + [1.0] + [0.0]
+
+    meal_time = [meal_times[i]-10] + [meal_times[i]] + [meal_times[i] + 0.3]
     stim_meal = {
-    "meal_amount": {"t": [meal_times[i]], "f": meal_amount},
-    "meal": {"t": [meal_times[i]], "f": meal}
+    "meal_amount": {"t": meal_time, "f": meal_amount},
+    "meal": {"t": meal_time, "f": meal},
+    "ss_x": {"t": meal_time, "f": ss_x}
     }
     sim_meal = simulate(model, anthropometrics, stim_meal)
     # st.line_chart(sim_meal, x="Time", y=feature_meal)

@@ -130,7 +130,7 @@ if take_BPmed:
     #med_period.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
     #start_time += med_period[i]
 
-med_times.append([end_time])
+med_times.append(end_time)
 t_long = med_times # [time for t,l in zip(med_times, med_lengths) for time in (t,t+l)]
 st.divider()
 
