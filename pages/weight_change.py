@@ -62,7 +62,9 @@ def simulate(m, anthropometrics, stim):
     with open(fs[0],'r') as f:
         inits_in = json.load(f)
         inits = inits_in['x']
-    inits[1:4] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
+    inits[0:3] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
+    np.disp(len(inits))
+    np.disp(len(inits_in))
 
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
     
