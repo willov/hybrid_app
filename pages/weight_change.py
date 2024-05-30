@@ -105,6 +105,7 @@ anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_s
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
                    "Ginit": st.session_state['Ginit']} # , "sex": st.session_state['sex']
 
+np.disp(anthropometrics)
 
 # Specifying diet
 st.divider()
