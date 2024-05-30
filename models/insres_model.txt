@@ -476,7 +476,7 @@ eventY2 = gt(beta*(G-G_b),-S_b),Y2, 0
 eventDiabetes = gt(BMI,29), betamass, 0.3
 
 eventF = gt(time,0), F, Finit
-eventG = gt(time,0), G, Ginit
+eventG = gt(time,0), Gly, Ginit
 eventL = gt(time,0), L, Linit
 eventECF = gt(time,0), ECF, ECFinit
 
