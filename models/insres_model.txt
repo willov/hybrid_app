@@ -265,7 +265,6 @@ kIR = 0.0323845
 kIRdeg = 1 
 kGLUT = 62.81266 
 kGLUTdeg = 1
-ss_x            = 1
 delta = 30
 CL=1.21 //L/h
 V=4.61 // L
@@ -474,17 +473,13 @@ eventY = lt(beta*(G-G_b),-S_b),Y, Y2
 eventY2 = gt(beta*(G-G_b),-S_b),Y2, 0 
 eventDiabetes = gt(BMI,29), betamass, 0.3
 
-eventF = gt(time,0), F, Finit
-eventG = gt(time,0), Gly, Ginit
-eventL = gt(time,0), L, Linit
-eventECF = gt(time,0), ECF, ECFinit
-
 ########## OUTPUTS
 
 ########## INPUTS
 EIchange = EIchange         @ 400
 meal = meal                 @ 0           // 1 meal 0 no meal
 meal_amount = meal_amount   @ 0
+ss_x = ss_x                 @ 1
 
 Finit = Finit               @ 12.7000
 Linit = Linit               @ 36.9348

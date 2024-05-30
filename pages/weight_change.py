@@ -24,16 +24,6 @@ def setup_model(model_name):
     model_class = sund.importModel(model_name)
     model = model_class() 
 
-    fs = []
-    for path, subdirs, files in os.walk('./results'):
-        for name in files:
-            if model_name in name.split('(')[0] and "ignore" not in path:
-                fs.append(os.path.join(path, name))
-    fs.sort()
-    #with open(fs[0],'r') as f:
-    #    param_in = json.load(f)
-    #    params = param_in['x']
-
     # model.parametervalues = params
     features = model.featurenames
     return model, features
@@ -54,7 +44,7 @@ def simulate(m, anthropometrics, stim):
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
     for key,val in anthropometrics.items():
         act.AddOutput(name = key, type=const, fvalues = val) 
-    
+
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
 
     sim.ResetStatesDerivatives()
@@ -62,7 +52,19 @@ def simulate(m, anthropometrics, stim):
     np.disp(stim["ss_x"]["t"])
     np.disp(type(stim["ss_x"]["t"]))
     # TODO steady state 
-    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000))
+
+    fs = []
+    for path, subdirs, files in os.walk('./results'):
+        for name in files:
+            if 'inits' in name.split('(')[0] and "ignore" not in path:
+                fs.append(os.path.join(path, name))
+    fs.sort()
+    with open(fs[0],'r') as f:
+        inits_in = json.load(f)
+        inits = inits_in['x']
+    inits[1:4] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
+
+    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
@@ -82,23 +84,23 @@ Below, you can specify how big change in energy intake you want to simulate and 
    
 # Anthropometrics
 
-if 'sex' not in st.session_state:
-    st.session_state['sex'] = 'Man'
-if 'weight' not in st.session_state:
-    st.session_state['weight'] = 67.6
-if 'height' not in st.session_state:
-    st.session_state['height'] = 1.85
-if 'age' not in st.session_state:
-    st.session_state['age'] = 40.0
-st.session_state['Ginit'] = (1.0 + 2.7)*0.5
-st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']  
-if 'Finit' not in st.session_state:
-    if st.session_state['sex']== 'Woman':
-        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 102.01)
-    elif st.session_state['sex']== 'Man': 
-        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 103.95) 
-if 'Linit' not in st.session_state:
-    st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
+#if 'sex' not in st.session_state:
+#    st.session_state['sex'] = 'Man'
+#if 'weight' not in st.session_state:
+#    st.session_state['weight'] = 67.6
+#if 'height' not in st.session_state:
+#    st.session_state['height'] = 1.85
+#if 'age' not in st.session_state:
+#    st.session_state['age'] = 40.0
+# st.session_state['Ginit'] = (1.0 + 2.7)*0.5
+#st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']  
+# if 'Finit' not in st.session_state:
+#    if st.session_state['sex']== 'Woman':
+#        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 102.01)
+#    elif st.session_state['sex']== 'Man': 
+#        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 103.95) 
+#if 'Linit' not in st.session_state:
+#    st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
 anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_state['ECFinit'], 
                    "height": st.session_state['height'], "age": st.session_state['age'], 
