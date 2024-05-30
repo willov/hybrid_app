@@ -13,23 +13,23 @@ Here you can specify the anthropometrics of the person you want to make simulati
 """)
 
 
-# if 'sex' not in st.session_state:
-#     st.session_state['sex'] = 'Man'
-# if 'weight' not in st.session_state:
-#     st.session_state['weight'] = 67.6
-# if 'height' not in st.session_state:
-#     st.session_state['height'] = 1.85
-# if 'age' not in st.session_state:
-#     st.session_state['age'] = 30.0
-# st.session_state['Ginit'] = (1.0 + 2.7)*0.5
-# st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']  
-# if 'Finit' not in st.session_state:
-#     if st.session_state['sex']== 'Woman':
-#         st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 102.01)
-#     elif st.session_state['sex']== 'Man': 
-#         st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 103.95) 
-# if 'Linit' not in st.session_state:
-#     st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
+if 'sex' not in st.session_state:
+    st.session_state['sex'] = 'Man'
+if 'weight' not in st.session_state:
+    st.session_state['weight'] = 67.6
+if 'height' not in st.session_state:
+    st.session_state['height'] = 1.85
+if 'age' not in st.session_state:
+    st.session_state['age'] = 30.0
+st.session_state['Ginit'] = (1.0 + 2.7)*0.5
+st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']  
+if 'Finit' not in st.session_state:
+    if st.session_state['sex']== 'Woman':
+        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 102.01)
+    elif st.session_state['sex']== 'Man': 
+        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 103.95) 
+if 'Linit' not in st.session_state:
+    st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
 #anthropometrics = {"weight": st.session_state['weight'], "height": st.session_state['height'], 
 #                   "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
