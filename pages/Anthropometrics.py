@@ -14,9 +14,9 @@ Here you can specify the anthropometrics of the person you want to make simulati
 
 
 if 'sex' not in st.session_state:
-    st.session_state['sex'] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index('Man'), key="sex") # 'Man'
+    st.session_state['sex'] = 'Man'
 if 'weight' not in st.session_state:
-    st.session_state['weight'] = st.number_input("Weight (kg):", 0.0, 1000.0, 67.6, key="weight") # 67.6
+    st.session_state['weight'] = 67.6
 if 'height' not in st.session_state:
     st.session_state['height'] = 1.85
 if 'age' not in st.session_state:
