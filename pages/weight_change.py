@@ -6,6 +6,9 @@ import streamlit as st
 import math 
 import altair as alt
 
+if 'sex' not in st.session_state:
+    st.write("Before you can simulate, y ou have toset your twins anthropometrics values on the page 'Anthropometrics'.")
+
 st.session_state.sex = st.session_state.sex
 st.session_state.weight = st.session_state.weight
 st.session_state.height = st.session_state.height
