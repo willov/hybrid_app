@@ -6,17 +6,14 @@ import streamlit as st
 import math 
 import altair as alt
 
-if 'sex' not in st.session_state:
-    st.write("Before you can simulate, you have to set your twins anthropometrics values on the page 'Anthropometrics'.")
-
-st.session_state.weight = st.session_state.weight
-st.session_state.height = st.session_state.height
 st.session_state.age = st.session_state.age
 st.session_state.Ginit = st.session_state.Ginit
 st.session_state.ECFinit = st.session_state.ECFinit
 st.session_state.Finit = st.session_state.Finit
 st.session_state.Linit = st.session_state.Linit
 st.session_state.sex = st.session_state.sex
+st.session_state.weight = st.session_state.weight
+st.session_state.height = st.session_state.height
 
 # Install sund in a custom location
 import subprocess
