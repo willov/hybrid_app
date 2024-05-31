@@ -5,6 +5,15 @@ import numpy as np
 import streamlit as st
 import math 
 
+st.session_state.sex = st.session_state.sex
+st.session_state.weight = st.session_state.weight
+st.session_state.height = st.session_state.height
+st.session_state.age = st.session_state.age
+st.session_state.Ginit = st.session_state.Ginit
+st.session_state.ECFinit = st.session_state.ECFinit
+st.session_state.Finit = st.session_state.Finit
+st.session_state.Linit = st.session_state.Linit
+
 # Start the app
 
 st.title("Anthropometrics")

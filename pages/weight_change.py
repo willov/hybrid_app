@@ -6,6 +6,15 @@ import streamlit as st
 import math 
 import altair as alt
 
+st.session_state.sex = st.session_state.sex
+st.session_state.weight = st.session_state.weight
+st.session_state.height = st.session_state.height
+st.session_state.age = st.session_state.age
+st.session_state.Ginit = st.session_state.Ginit
+st.session_state.ECFinit = st.session_state.ECFinit
+st.session_state.Finit = st.session_state.Finit
+st.session_state.Linit = st.session_state.Linit
+
 # Install sund in a custom location
 import subprocess
 import sys
