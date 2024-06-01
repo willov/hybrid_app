@@ -102,7 +102,7 @@ anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (
 start_time = st.session_state['age']
 end_time = start_time + st.number_input("How long time do you want to simulate (years): ", 0.0, 200.0, 40.0, key=f"end_time")
 
-initials = [st.session_state['IC_SBP'], st.session_state['IC_DBP']]
+initials = [st.session_state['IC_SBP'], st.session_state['IC_DBP'], [5]]
 
 med_times = []
 med_lengths = [] 

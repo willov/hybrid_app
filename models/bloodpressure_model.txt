@@ -7,11 +7,13 @@ timeunit = y
 ########## MACROS
 
 ########## STATES
-d/dt(SBP) = ((k1_SBP + k2_SBP*time) * SBP_vs_IC) - drugS  // ~ linear with time
-d/dt(DBP) = ((k1_DBP - k2_DBP*time) * DBP_vs_IC) - drugD  // ~ exponential with time 
+d/dt(SBP) = ((k1_SBP + k2_SBP*(time-age0)) * SBP_vs_IC) - drugS  // ~ linear with time
+d/dt(DBP) = ((k1_DBP - k2_DBP*(time-age0)) * DBP_vs_IC) - drugD  // ~ exponential with time 
+d/dt(PWV) = (time-age0)*0.002 //%- 0.017
 
 SBP(0) = 120 
 DBP(0) = 70 
+PWV(0) = 5
 
 ########## PARAMETERS
 k1_SBP = 0.4081
@@ -23,7 +25,7 @@ k2_DBP = 0.0183
 bSBP = 99.8670
 bDBP = 55.9788
 
-t_drug = 10 // 2 
+t_drug = 2 
 effect_drugS = 20
 effect_drugD = 5
 
@@ -40,6 +42,8 @@ drugD = (effect_drugD/t_drug)*drug_on
 ########## FUNCTIONS
 
 ########## EVENTS
+// e = drug_on>0, dummy, 1   //This is only used to trigger the reset of the simulation when the treatment activity triggers
+// e2 = drug_on<1, dummy, 1   //This is only used to trigger the reset of the simulation when the treatment activity triggers
 
 ########## OUTPUTS
 

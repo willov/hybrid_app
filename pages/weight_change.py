@@ -6,15 +6,6 @@ import streamlit as st
 import math 
 import altair as alt
 
-st.session_state.age = st.session_state.age
-st.session_state.Ginit = st.session_state.Ginit
-st.session_state.ECFinit = st.session_state.ECFinit
-st.session_state.Finit = st.session_state.Finit
-st.session_state.Linit = st.session_state.Linit
-st.session_state.sex = st.session_state.sex
-st.session_state.weight = st.session_state.weight
-st.session_state.height = st.session_state.height
-
 # Install sund in a custom location
 import subprocess
 import sys
@@ -60,7 +51,6 @@ def simulate(m, anthropometrics, stim):
     t_start_diet = anthropometrics['age']*365.0-10
     np.disp(stim["ss_x"]["t"])
     np.disp(type(stim["ss_x"]["t"]))
-    # TODO steady state 
 
     fs = []
     for path, subdirs, files in os.walk('./results'):
@@ -74,6 +64,7 @@ def simulate(m, anthropometrics, stim):
     inits[0:3] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
     np.disp(len(inits))
     np.disp(len(inits_in))
+    np.disp(type(inits))
 
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
     
@@ -92,33 +83,52 @@ st.markdown("""Using the model for insulin resistance and blood pressure, you ca
 Below, you can specify how big change in energy intake you want to simulate and when/how big meals to simulate.
 
 """)
-   
-# Anthropometrics
 
-#if 'sex' not in st.session_state:
-#    st.session_state['sex'] = 'Man'
-#if 'weight' not in st.session_state:
-#    st.session_state['weight'] = 67.6
-#if 'height' not in st.session_state:
-#    st.session_state['height'] = 1.85
-#if 'age' not in st.session_state:
-#    st.session_state['age'] = 40.0
-# st.session_state['Ginit'] = (1.0 + 2.7)*0.5
-#st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']  
-# if 'Finit' not in st.session_state:
-#    if st.session_state['sex']== 'Woman':
-#        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 102.01)
-#    elif st.session_state['sex']== 'Man': 
-#        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 103.95) 
-#if 'Linit' not in st.session_state:
-#    st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
+# Setting anthropometrics
+st.divider()   
+st.subheader("Anthropometrics")
+st.markdown("""
+Here you can specify the anthropometrics of the person you want to make simulations for.
+""")
+
+if 'sex' not in st.session_state:
+    st.session_state['sex'] = 'Man'
+if 'weight' not in st.session_state:
+    st.session_state['weight'] = 67.6
+if 'height' not in st.session_state:
+    st.session_state['height'] = 1.85
+if 'age' not in st.session_state:
+    st.session_state['age'] = 30.0
+st.session_state['Ginit'] = (1.0 + 2.7)*0.5
+st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']  
+if 'Finit' not in st.session_state:
+    if st.session_state['sex']== 'Woman':
+        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 102.01)
+    elif st.session_state['sex']== 'Man': 
+        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 103.95) 
+if 'Linit' not in st.session_state:
+    st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
+
+fat_known = st.checkbox("Do you know your fat mass?")
+if fat_known:
+    st.session_state['Finit'] = st.number_input("Fat mass (kg):", 0.0, 1000.0, st.session_state.Finit, 0.1, key="Finit")
+
+lean_known = st.checkbox("Do you know your lean mass?")
+if lean_known:
+   st.session_state['Linit'] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.Linit, 0.1, key="Linit")
 
 anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_state['ECFinit'], 
                    "height": st.session_state['height'], "age": st.session_state['age'], 
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
-                   "Ginit": st.session_state['Ginit']} # , "sex": st.session_state['sex']
+                   "Ginit": st.session_state['Ginit']}  
 
-np.disp(anthropometrics)
+anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
+anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state['weight'], key="weight") # max, min 
+anthropometrics["age"] = st.number_input("Age (years):", 0.0, 100.0, st.session_state['age'], key="age") # max, min 
+anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_state['height'],  key="height") # st.session_state['height'], 0.1, 
+anthropometrics["ECFinit"] = st.session_state['ECFinit']
+anthropometrics["Finit"] = st.session_state['Finit']
+anthropometrics["Linit"] = st.session_state['Linit']
 
 # Specifying diet
 st.divider()
@@ -132,7 +142,6 @@ t_long = []
 
 start_time = st.session_state['age']
 
-# diet_time(st.number_input("Start of diet (age): ", 0.0, 100.0, start_time, 0.1, key=f"diet_time"))
 diet_start = st.number_input("Diet start (age): ", st.session_state['age'], 100.0, 40.0, 0.1, key=f"diet_start")
 diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length")
 EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
