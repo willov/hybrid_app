@@ -89,7 +89,7 @@ if 'IC_DBP' not in st.session_state:
     st.session_state['IC_DBP'] = 80.0
 
 
-anthropometrics = {"IC_SBP": st.session_state['IC_SBP'], "IC_DBP": st.session_state['IC_DBP']}
+anthropometrics = {"IC_SBP": st.session_state['IC_SBP'], "IC_DBP": st.session_state['IC_DBP'], "age": st.session_state['age']}
 
 # Specifying blood pressure medication
 st.subheader("Blood pressure")

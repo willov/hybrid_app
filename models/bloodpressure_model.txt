@@ -7,9 +7,9 @@ timeunit = y
 ########## MACROS
 
 ########## STATES
-d/dt(SBP) = ((k1_SBP + k2_SBP*(time-age0)) * SBP_vs_IC) - drugS  // ~ linear with time
-d/dt(DBP) = ((k1_DBP - k2_DBP*(time-age0)) * DBP_vs_IC) - drugD  // ~ exponential with time 
-d/dt(PWV) = (time-age0)*0.002 //%- 0.017
+d/dt(SBP) = ((k1_SBP + k2_SBP*(time-age)) * SBP_vs_IC) - drugS  // ~ linear with time
+d/dt(DBP) = ((k1_DBP - k2_DBP*(time-age)) * DBP_vs_IC) - drugD  // ~ exponential with time 
+d/dt(PWV) = (time-age)*0.002 //%- 0.017
 
 SBP(0) = 120 
 DBP(0) = 70 
@@ -52,6 +52,7 @@ drug_on = drug_on                 @ 0
 
 IC_SBP = IC_SBP                   @ 120
 IC_DBP = IC_DBP                   @ 70
+age = age                         @ 40
 
 ########## FEATURES
 

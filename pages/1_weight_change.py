@@ -109,6 +109,11 @@ if 'Finit' not in st.session_state:
 if 'Linit' not in st.session_state:
     st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
+anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_state['ECFinit'], 
+                   "height": st.session_state['height'], "age": st.session_state['age'], 
+                   "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
+                   "Ginit": st.session_state['Ginit']}  
+
 fat_known = st.checkbox("Do you know your fat mass?")
 if fat_known:
     st.session_state['Finit'] = st.number_input("Fat mass (kg):", 0.0, 1000.0, st.session_state.Finit, 0.1, key="Finit")
@@ -117,11 +122,6 @@ lean_known = st.checkbox("Do you know your lean mass?")
 if lean_known:
    st.session_state['Linit'] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.Linit, 0.1, key="Linit")
 
-anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_state['ECFinit'], 
-                   "height": st.session_state['height'], "age": st.session_state['age'], 
-                   "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
-                   "Ginit": st.session_state['Ginit']}  
-
 anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
 anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state['weight'], key="weight") # max, min 
 anthropometrics["age"] = st.number_input("Age (years):", 0.0, 100.0, st.session_state['age'], key="age") # max, min 
@@ -129,6 +129,9 @@ anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_
 anthropometrics["ECFinit"] = st.session_state['ECFinit']
 anthropometrics["Finit"] = st.session_state['Finit']
 anthropometrics["Linit"] = st.session_state['Linit']
+
+anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
+
 
 # Specifying diet
 st.divider()
