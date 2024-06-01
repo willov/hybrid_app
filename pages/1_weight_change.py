@@ -49,8 +49,6 @@ def simulate(m, anthropometrics, stim):
 
     sim.ResetStatesDerivatives()
     t_start_diet = anthropometrics['age']*365.0-10
-    np.disp(stim["ss_x"]["t"])
-    np.disp(type(stim["ss_x"]["t"]))
 
     fs = []
     for path, subdirs, files in os.walk('./results'):
@@ -65,6 +63,7 @@ def simulate(m, anthropometrics, stim):
     np.disp(len(inits))
     np.disp(len(inits_in))
     np.disp(type(inits))
+    np.disp(inits)
 
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
     
@@ -180,8 +179,6 @@ stim_long = {
     "EIchange": {"t": t_long, "f": EIchange},
     "ss_x": {"t": t_long, "f": ss_x},
     }
-np.disp(EIchange)
-np.disp(t_long)
 
 # Plotting weight change and meals
 

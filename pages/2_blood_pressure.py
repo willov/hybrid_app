@@ -6,8 +6,6 @@ import streamlit as st
 import math 
 import altair as alt
 
-st.session_state.age = st.session_state.age
-
 # testing testing
 
 # Install sund in a custom location
