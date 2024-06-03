@@ -175,7 +175,7 @@ if n_meals < 1:
 
 # Setup stimulation to the model
 
-np.disp(t_long/365.0)
+np.disp([x / 365.0 for x in t_long])
 stim_long = {
     "EIchange": {"t": t_long, "f": EIchange},
     "ss_x": {"t": t_long, "f": ss_x},
