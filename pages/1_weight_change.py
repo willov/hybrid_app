@@ -60,9 +60,11 @@ def simulate(m, anthropometrics, stim):
     with open(fs[0],'r') as f:
         inits_in = json.load(f)
         inits = inits_in['x']
-    inits[0:3] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
+    np.disp(inits[1:4])
+    inits[1:4] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
+    np.disp([anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']])
+    np.disp(type([anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]))
     np.disp(len(inits))
-    np.disp(len(inits_in))
     np.disp(type(inits))
     np.disp(inits)
     test = [1, 2, 3]

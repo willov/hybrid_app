@@ -28,6 +28,7 @@ bDBP = 55.9788
 t_drug = 2 
 effect_drugS = 20
 effect_drugD = 5
+dummy = 0
 
 ########## VARIABLES
 PP = SBP-DBP
@@ -36,14 +37,14 @@ MAP = DBP + (PP/3)
 SBP_vs_IC = (IC_SBP-bSBP)/(117.86-bSBP)
 DBP_vs_IC = (IC_DBP-bDBP)/(75.8451-bDBP)  
 
-drugS = (effect_drugS/t_drug)*drug_on
-drugD = (effect_drugD/t_drug)*drug_on
+drugS = (effect_drugS/t_drug)*sign(drug_on)
+drugD = (effect_drugD/t_drug)*sign(drug_on)
 
 ########## FUNCTIONS
 
 ########## EVENTS
-// e = drug_on>0, dummy, 1   //This is only used to trigger the reset of the simulation when the treatment activity triggers
-// e2 = drug_on<1, dummy, 1   //This is only used to trigger the reset of the simulation when the treatment activity triggers
+e = drug_on>0, dummy, 1   //This is only used to trigger the reset of the simulation when the treatment activity triggers
+e2 = drug_on<1, dummy, 1   //This is only used to trigger the reset of the simulation when the treatment activity triggers
 
 ########## OUTPUTS
 
