@@ -7,13 +7,11 @@ timeunit = y
 ########## MACROS
 
 ########## STATES
-d/dt(SBP) = ((k1_SBP + k2_SBP*(time-age)) * SBP_vs_IC) - drugS  // ~ linear with time
-d/dt(DBP) = ((k1_DBP - k2_DBP*(time-age)) * DBP_vs_IC) - drugD  // ~ exponential with time 
-d/dt(PWV) = (time-age)*0.002 //%- 0.017
+d/dt(SBP) = ((k1_SBP + k2_SBP*(time-age0)) * SBP_vs_IC) - drugS  // ~ linear with time
+d/dt(DBP) = ((k1_DBP - k2_DBP*(time-age0)) * DBP_vs_IC) - drugD  // ~ exponential with time 
 
 SBP(0) = 120 
 DBP(0) = 70 
-PWV(0) = 5
 
 ########## PARAMETERS
 k1_SBP = 0.4081
@@ -29,6 +27,7 @@ t_drug = 2
 effect_drugS = 20
 effect_drugD = 5
 dummy = 0
+age0 = 25
 
 ########## VARIABLES
 PP = SBP-DBP
@@ -63,3 +62,7 @@ Mean arterial pressure (mmHg) = MAP
 drugS = drugS
 drugD = drugD
 drug_on = drug_on
+dummy = dummy
+SBP_vs_IC = SBP_vs_IC
+DBP_vs_IC = DBP_vs_IC
+
