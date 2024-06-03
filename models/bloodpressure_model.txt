@@ -59,10 +59,4 @@ age = age                         @ 40
 Systolic blood pressure (mmHg) = SBP
 Diastolic blood pressure (mmHg) = DBP
 Mean arterial pressure (mmHg) = MAP
-drugS = drugS
-drugD = drugD
-drug_on = drug_on
-dummy = dummy
-SBP_vs_IC = SBP_vs_IC
-DBP_vs_IC = DBP_vs_IC
 

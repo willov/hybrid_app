@@ -50,7 +50,7 @@ def simulate(m, anthropometrics, stim):
 
     sim.ResetStatesDerivatives()
     t_start_sim = anthropometrics['age']*365.0-10.0
-    np.disp(t_start_sim)
+    np.disp(t_start_sim/365.0)
 
     fs = []
     for path, subdirs, files in os.walk('./results'):
@@ -70,9 +70,7 @@ def simulate(m, anthropometrics, stim):
     sim_results.insert(0, 'Time', sim.timevector)
 
     sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
-    sim_diet_results['Time'] = 365.0*sim_diet_results['Time']
-    np.disp(sim_diet_results['Time'])
-    #return sim_diet_results
+    sim_diet_results['Time'] = sim_diet_results['Time']/365.0
     return sim_diet_results
 
 # Start the app
@@ -177,7 +175,7 @@ if n_meals < 1:
 
 # Setup stimulation to the model
 
-np.disp(t_long)
+np.disp(t_long/365.0)
 stim_long = {
     "EIchange": {"t": t_long, "f": EIchange},
     "ss_x": {"t": t_long, "f": ss_x},
