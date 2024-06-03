@@ -472,6 +472,7 @@ event3 = gt(G_p,k_e2), RE, E
 eventY = lt(beta*(G-G_b),-S_b),Y, Y2 
 eventY2 = gt(beta*(G-G_b),-S_b),Y2, 0 
 eventDiabetes = gt(BMI,29), betamass, 0.3
+// eventDiabetes = gt(Glucose,diabetes_def), betamass, 0.3
 
 ########## OUTPUTS
 
