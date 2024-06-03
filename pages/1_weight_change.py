@@ -5,6 +5,7 @@ import numpy as np
 import streamlit as st
 import math 
 import altair as alt
+from array import array
 
 # Install sund in a custom location
 import subprocess
@@ -64,6 +65,9 @@ def simulate(m, anthropometrics, stim):
     np.disp(len(inits_in))
     np.disp(type(inits))
     np.disp(inits)
+    test = [1, 2, 3]
+    np.disp(type(test))
+    # inits = array("f", inits)
 
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
     
@@ -113,6 +117,12 @@ anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_s
                    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
                    "Ginit": st.session_state['Ginit']}  
 
+anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
+anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state['weight'], key="weight") # max, min 
+anthropometrics["age"] = st.number_input("Age (years):", 0.0, 100.0, st.session_state['age'], key="age") # max, min 
+anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_state['height'],  key="height") # st.session_state['height'], 0.1, 
+anthropometrics["ECFinit"] = st.session_state['ECFinit']
+
 fat_known = st.checkbox("Do you know your fat mass?")
 if fat_known:
     st.session_state['Finit'] = st.number_input("Fat mass (kg):", 0.0, 1000.0, st.session_state.Finit, 0.1, key="Finit")
@@ -121,11 +131,6 @@ lean_known = st.checkbox("Do you know your lean mass?")
 if lean_known:
    st.session_state['Linit'] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.Linit, 0.1, key="Linit")
 
-anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
-anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state['weight'], key="weight") # max, min 
-anthropometrics["age"] = st.number_input("Age (years):", 0.0, 100.0, st.session_state['age'], key="age") # max, min 
-anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_state['height'],  key="height") # st.session_state['height'], 0.1, 
-anthropometrics["ECFinit"] = st.session_state['ECFinit']
 anthropometrics["Finit"] = st.session_state['Finit']
 anthropometrics["Linit"] = st.session_state['Linit']
 
