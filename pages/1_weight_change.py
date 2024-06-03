@@ -149,7 +149,7 @@ meal_times = []
 
 # for i in range(n_meals):
 #     st.markdown(f"**Meal {i+1}**")
-meal_time.append(st.number_input("Time of meal (age): ", start_time, diet_length, 0.1, key=f"meal_times"))
+meal_time.append(st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times"))
 meal_amount.append(st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals"))
     # start_time += 0.1
     
