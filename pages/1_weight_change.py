@@ -63,7 +63,7 @@ def simulate(m, anthropometrics, stim):
     
     np.disp(len(inits))
     np.disp(inits[1:5])
-    inits[1:4] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
+    inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
     np.disp([anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']])
     np.disp(type([anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]))
     np.disp(len(inits))
