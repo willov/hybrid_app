@@ -36,7 +36,7 @@ model, model_features = setup_model('insres_model')
 def flatten(list):
     return [item for sublist in list for item in sublist]
 
-def simulate(m, anthropometrics, stim):
+def simulate(m, anthropometrics, stim, inits):
     act = sund.Activity(timeunit = 'd')
     pwc = sund.PIECEWISE_CONSTANT # space saving only
     const = sund.CONSTANT # space saving only
@@ -49,20 +49,7 @@ def simulate(m, anthropometrics, stim):
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
 
     sim.ResetStatesDerivatives()
-    t_start_sim = anthropometrics['age']*365.0-10.0
-    np.disp(t_start_sim/365.0)
-
-    fs = []
-    for path, subdirs, files in os.walk('./results'):
-        for name in files:
-            if 'inits' in name.split('(')[0] and "ignore" not in path:
-                fs.append(os.path.join(path, name))
-    fs.sort()
-    with open(fs[0],'r') as f:
-        inits_in = json.load(f)
-        inits = inits_in['x']
-    
-    inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
+    t_start_sim = min(stim["ss_x"]["t"])+10.0
 
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
     
@@ -149,25 +136,26 @@ diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, ke
 EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
 EIchange = [0.0] + [0.0] + [0.0] + [EIchange] + [0.0] 
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
-t_long = [st.session_state['age']*365.0-10] + [st.session_state['age']*365.0] + [diet_start*365.0] + [(st.session_state['age']+diet_length)*365.0] 
-ss_x = [0] + [0] + [1] + [1] + [0] 
+t_long = [st.session_state['age']*365.0-10.0] + [st.session_state['age']*365.0] + [diet_start*365.0] + [(st.session_state['age']+diet_length)*365.0] 
+ss_x = [0] + [1] + [1] + [1] + [0] 
 
 st.divider()
 st.subheader("Meals")
 
+meal_time = []
+meal_amount = []
 meal_times = []
-meal_amounts = []
+# n_meals = st.slider("Number of (solid) meals:", 0, 5, 1)
 
-n_meals = st.slider("Number of (solid) meals:", 0, 5, 1)
-
-for i in range(n_meals):
-    st.markdown(f"**Meal {i+1}**")
-    meal_times.append(st.number_input("Time of meal (years): ", 0.0, diet_length, 0.1, key=f"meal_times{i}"))
-    meal_amounts.append(st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals{i}"))
-    start_time += 0.1
-    st.divider()
-if n_meals < 1:
-    st.divider()
+# for i in range(n_meals):
+#     st.markdown(f"**Meal {i+1}**")
+meal_time.append(st.number_input("Time of meal (age): ", start_time, diet_length, 0.1, key=f"meal_times"))
+meal_amount.append(st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals"))
+    # start_time += 0.1
+    
+meal_times = [meal_time*365.0-10.0] + [meal_time*365.0] + [meal_time*365.0 + 0.3]  
+# if n_meals < 1:
+st.divider()
 # meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
 # meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
 
@@ -175,15 +163,27 @@ if n_meals < 1:
 
 # Setup stimulation to the model
 
-np.disp([x / 365.0 for x in t_long])
 stim_long = {
     "EIchange": {"t": t_long, "f": EIchange},
     "ss_x": {"t": t_long, "f": ss_x},
     }
 
+# Getting initial values
+fs = []
+for path, subdirs, files in os.walk('./results'):
+    for name in files:
+        if 'inits' in name.split('(')[0] and "ignore" not in path:
+            fs.append(os.path.join(path, name))
+fs.sort()
+with open(fs[0],'r') as f:
+    inits_in = json.load(f)
+    inits = inits_in['x']
+  
+inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
+
 # Plotting weight change and meals
 
-sim_long = simulate(model, anthropometrics, stim_long)
+sim_long = simulate(model, anthropometrics, stim_long, inits)
 
 st.subheader("Plotting long term simulation of weight change")
 
@@ -205,17 +205,24 @@ feature_meal = st.selectbox("Feature of the model to plot", model_features, key=
 
 #for i in range(n_meals):
 i=0
-meal_amount = [0.0] + [meal_amounts[i]] + [meal_amounts[i]] + [0]
+meal_amount = [0.0] + [meal_amount] + [meal_amount] + [0]
 meal = [0.0] + [1.0] + [1.0] + [0.0]
-ss_x = [0.0] + [1.0] + [1.0] + [0.0]
+ss_x = [0.0] + [0.0] + [0.0] + [0.0]
 
-meal_time = [meal_times[i]-10] + [meal_times[i]] + [meal_times[i] + 0.3]
+# meal_time = [meal_times[i]-10] + [meal_times[i]] + [meal_times[i] + 0.3]
+
+np.disp(meal_times)
+np.disp(meal_amount)
+
 stim_meal = {
 "meal_amount": {"t": meal_time, "f": meal_amount},
 "meal": {"t": meal_time, "f": meal},
 "ss_x": {"t": meal_time, "f": ss_x}
     }
-sim_meal = simulate(model, anthropometrics, stim_meal)
+
+np.disp(sim_long[(sim_long['Time']==meal_time)])
+inits = sim_long[(sim_long['Time']==meal_time)]
+sim_meal = simulate(model, anthropometrics, stim_meal, inits)
     # st.line_chart(sim_meal, x="Time", y=feature_meal)
 m = (
 alt.Chart(sim_meal).mark_point().encode(

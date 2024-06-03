@@ -466,13 +466,13 @@ V_met = p2*G6P
 ########## FUNCTIONS
 
 ########## EVENTS
-eventMeal1 = gt(time,0), Q_sto1, meal_amount/4.0*1000.0
+eventMeal1 = gt(time,0), Q_sto1, meal_amount/4.0*1000.0 // from kalories to grams glucose
 eventMeal2 = gt(time,0), D, meal_amount/4.0*1000.0
 event3 = gt(G_p,k_e2), RE, E
 eventY = lt(beta*(G-G_b),-S_b),Y, Y2 
 eventY2 = gt(beta*(G-G_b),-S_b),Y2, 0 
-eventDiabetes = gt(BMI,29), betamass, 0.3
-// eventDiabetes = gt(Glucose,diabetes_def), betamass, 0.3
+// eventDiabetes = gt(BMI,29), betamass, 0.3
+eventDiabetes = gt(Glucose,diabetes_def), betamass, 0.3
 
 ########## OUTPUTS
 
@@ -502,6 +502,7 @@ PKB308 (% of max) = measuredPKB308
 Glucose uptake in fat tissue (mg/kg/min) = U_idf
 Fat mass (kg) = F
 Lean mass (kg) = L
+betamass = betamass
 f_IR_CLGI = f_IR_CLGI
 f_IR_Ins = f_IR_Ins
 f_IR_EGP = f_IR_EGP
