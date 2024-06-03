@@ -61,17 +61,7 @@ def simulate(m, anthropometrics, stim):
         inits_in = json.load(f)
         inits = inits_in['x']
     
-    np.disp(len(inits))
-    np.disp(inits[1:5])
     inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
-    np.disp([anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']])
-    np.disp(type([anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]))
-    np.disp(len(inits))
-    np.disp(type(inits))
-    np.disp(inits)
-    test = [1, 2, 3]
-    np.disp(type(test))
-    # inits = array("f", inits)
 
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
     
@@ -229,3 +219,4 @@ for i in range(n_meals):
     x = alt.X('Time').scale(zero=False),
     y = alt.Y(feature_meal).scale(zero=False)
         ))
+    st.altair_chart(m, use_container_width=True)
