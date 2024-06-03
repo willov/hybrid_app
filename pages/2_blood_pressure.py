@@ -129,7 +129,7 @@ dataage = [30,
 75,
 80]
 
-[mindiff,chosenAgeIndex] = min(abs(dataage-start_time))
+[mindiff,chosenAgeIndex] = min(abs(dataage-[start_time]))
 chosenAge = dataage(chosenAgeIndex)
 dataSBP = v[chosenAgeIndex,:]
 [mindiff,chosenColumn] = min(abs(dataSBP-userSBP))
