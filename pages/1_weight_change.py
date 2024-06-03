@@ -149,12 +149,13 @@ meal_times = []
 
 # for i in range(n_meals):
 #     st.markdown(f"**Meal {i+1}**")
-meal_time.append(st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times"))
+meal_time.append(st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times")*365.0)
 meal_amount.append(st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals"))
     # start_time += 0.1
     
-np.disp(meal_time)    
-meal_times = [meal_time*365.0-10.0] + [meal_time*365.0] + [meal_time*365.0 + 0.3]  
+np.disp(meal_time)  
+np.disp(type(meal_time))  
+meal_times = [meal_time-10.0] + [meal_time] + [meal_time + 0.3]  
 # if n_meals < 1:
 st.divider()
 # meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
