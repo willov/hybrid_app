@@ -96,13 +96,49 @@ st.subheader("Blood pressure")
 
 #n_med = st.slider("Number of periods of blood pressure medication:", 1, 5, 1)
 
-anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key=f"IC_SBP")
-anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key=f"IC_DBP")
+userSBP = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key=f"IC_SBP")
+userDBP = st.number_input("Diastolic blood pressure at start (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key=f"IC_DBP")
 
 start_time = st.number_input("When do you want to start the simulation (age)?:", 0.0, 200.0, st.session_state['age'], key=f"age")
 end_time = start_time + st.number_input("How long time do you want to simulate (years): ", 0.0, 200.0, 40.0, key=f"end_time")
 
-initials = [st.session_state['IC_SBP'], st.session_state['IC_DBP']]
+v = [111.472772277228, 117.860744407774, 125.223689035570, 131.612577924459,
+112.666850018335, 119.611294462780, 124.055738907224, 133.362211221122,
+113.166483314998, 121.500733406674, 129.834066740007, 139.556288962229,
+114.221672167217, 124.084616795013, 133.390172350568, 142.557755775577,
+114.584250091676, 126.251833516685, 136.390722405574, 149.169416941694,
+117.724605793913, 128.419966996700, 139.669050238357, 153.558855885588,
+120.168683535020, 131.002933626696, 142.947378071140, 156.558489182251,
+121.361844517785, 133.585900256692, 144.697011367803, 157.475705903924,
+123.529977997800, 135.335533553355, 147.420700403374, 161.170700403373,
+124.170333700037, 135.837917125046, 148.476806013935, 167.644389438944,
+126.197744774477, 136.893105977264, 146.893105977264, 165.3671617161719]
+
+IC_DBPdata = [71.7975011786893,	75.8451202263084,	80.6667452459532, 83.4641678453560]
+IC_SBPdata = v[0,:]
+dataage = [30,
+35,
+40,
+45,
+50,
+55,
+60,
+65,
+70,
+75,
+80]
+
+[mindiff,chosenAgeIndex] = min(abs(dataage-start_time))
+chosenAge = dataage(chosenAgeIndex)
+dataSBP = v[chosenAgeIndex,:]
+[mindiff,chosenColumn] = min(abs(dataSBP-userSBP))
+
+anthropometrics["IC_DBP"] = IC_DBPdata(chosenColumn)
+anthropometrics["IC_SBP"] = IC_SBPdata(chosenColumn)
+
+np.disp(IC_DBPdata(chosenColumn))
+
+initials = [anthropometrics["IC_SBP"], anthropometrics["IC_DBP"]]
 
 med_times = []
 med_lengths = [] 

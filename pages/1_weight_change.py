@@ -153,6 +153,7 @@ meal_time.append(st.number_input("Time of meal (age): ", start_time, start_time+
 meal_amount.append(st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals"))
     # start_time += 0.1
     
+np.disp(meal_time)    
 meal_times = [meal_time*365.0-10.0] + [meal_time*365.0] + [meal_time*365.0 + 0.3]  
 # if n_meals < 1:
 st.divider()
