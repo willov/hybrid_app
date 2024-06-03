@@ -63,6 +63,8 @@ def simulate(m, stim, anthropometrics, initials): #, extra_time = 10):
     sim.ResetStatesDerivatives()
     t_start = min(stim["drug_on"]["t"])
 
+    np.disp(initials)
+    np.disp(type(initials))
     sim.Simulate(timevector = np.linspace(t_start, max(stim["drug_on"]["t"]), 10000), statevalues = initials) # +extra_time
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
