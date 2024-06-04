@@ -151,10 +151,6 @@ meal_times = []
 meal_time = st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times")*365.0
 meal_amount = st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals")
     # start_time += 0.1
-    
-np.disp(meal_time)  
-np.disp(type(meal_time))  
-meal_times = [meal_time-10.0] + [meal_time] + [meal_time + 0.3]  
 # if n_meals < 1:
 st.divider()
 # meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
@@ -206,6 +202,11 @@ feature_meal = st.selectbox("Feature of the model to plot", model_features, key=
 
 #for i in range(n_meals):
 i=0
+
+np.disp(meal_time)  
+np.disp(type(meal_time))  
+meal_times = [meal_time-10.0] + [meal_time] + [meal_time + 0.3]  
+np.disp(meal_times)
 meal_amount = [0.0] + [meal_amount] + [meal_amount] + [0]
 meal = [0.0] + [1.0] + [1.0] + [0.0]
 ss_x = [0.0] + [0.0] + [0.0] + [0.0]
@@ -216,9 +217,9 @@ np.disp(meal_times)
 np.disp(meal_amount)
 
 stim_meal = {
-"meal_amount": {"t": meal_time, "f": meal_amount},
-"meal": {"t": meal_time, "f": meal},
-"ss_x": {"t": meal_time, "f": ss_x}
+"meal_amount": {"t": meal_times, "f": meal_amount},
+"meal": {"t": meal_times, "f": meal},
+"ss_x": {"t": meal_times, "f": ss_x}
     }
 
 np.disp(sim_long[(sim_long['Time']==meal_time)])

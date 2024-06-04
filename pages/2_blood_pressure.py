@@ -129,10 +129,12 @@ dataage = [30,
 75,
 80]
 
-[mindiff,chosenAgeIndex] = min(abs([x-start_time for x in dataage]))
+diff_time = [x-start_time for x in dataage]
+[mindiff,chosenAgeIndex] = min([abs(x) for x in diff_time])
 chosenAge = dataage(chosenAgeIndex)
 dataSBP = v[chosenAgeIndex,:]
-[mindiff,chosenColumn] = min(abs(dataSBP-userSBP))
+diff_SBP = (dataSBP-userSBP)
+[mindiff,chosenColumn] = min([abs(x) for x in diff_SBP])
 
 anthropometrics["IC_DBP"] = IC_DBPdata(chosenColumn)
 anthropometrics["IC_SBP"] = IC_SBPdata(chosenColumn)
