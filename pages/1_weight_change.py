@@ -186,7 +186,7 @@ st.subheader("Plotting long term simulation of weight change")
 
 feature_long = st.selectbox("Feature of the model to plot", model_features, key="long_plot")
 # st.line_chart(sim_long, x="Time", y=feature_long)
-
+np.disp(sim_long['Weight'][0])
 l = (
     alt.Chart(sim_long).mark_point().encode(
     x = alt.X('Time').scale(zero=False),
@@ -200,8 +200,9 @@ st.divider()
 st.subheader("Plotting meal simulations based on time points chosen in long term simulation")
 feature_meal = st.selectbox("Feature of the model to plot", model_features, key="meal_plot")
   
+np.disp(meal_times)  
 meal_times = t_long[0:2] + [meal_time] + [meal_time + 0.3]  
-meal_amount = [0.0, 0.0, 0.0, 0.0, meal_amount, 0.0]
+meal_amount = [0.0] + [0.0] + [0.0] + [0.0] + [meal_amount] + [0.0]
 meal = [0.0] + [0.0] + [0.0] + [0.0] + [1.0] + [0.0]
 ss_x = [0.0] + [0.0] + [1.0] + [1.0] + [0.0] + [0.0]
 
