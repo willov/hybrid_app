@@ -202,19 +202,13 @@ feature_meal = st.selectbox("Feature of the model to plot", model_features, key=
 
 #for i in range(n_meals):
 i=0
-
-np.disp(meal_time)  
-np.disp(type(meal_time))  
+  
 meal_times = [meal_time-10.0] + [meal_time] + [meal_time + 0.3]  
-np.disp(meal_times)
 meal_amount = [0.0] + [meal_amount] + [meal_amount] + [0]
 meal = [0.0] + [1.0] + [1.0] + [0.0]
 ss_x = [0.0] + [0.0] + [0.0] + [0.0]
 
 # meal_time = [meal_times[i]-10] + [meal_times[i]] + [meal_times[i] + 0.3]
-
-np.disp(meal_times)
-np.disp(meal_amount)
 
 stim_meal = {
 "meal_amount": {"t": meal_times, "f": meal_amount},
@@ -222,8 +216,11 @@ stim_meal = {
 "ss_x": {"t": meal_times, "f": ss_x}
     }
 
-np.disp(sim_long[(sim_long['Time']==meal_time)])
-inits = sim_long[(sim_long['Time']==meal_time)]
+np.disp(sim_long['Time'])
+np.disp(meal_time)
+inits = sim_long[(sim_long['Time']==min(sim_long['Time'], key=lambda x:abs(x-meal_time)))]
+np.disp(inits)
+np.disp(type(inits))
 sim_meal = simulate(model, anthropometrics, stim_meal, inits)
     # st.line_chart(sim_meal, x="Time", y=feature_meal)
 m = (

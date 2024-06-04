@@ -130,11 +130,11 @@ dataage = [30,
 80]
 
 diff_time = [x-start_time for x in dataage]
-[mindiff,chosenAgeIndex] = min([abs(x) for x in diff_time])
+chosenAgeIndex = pd.Series([abs(x) for x in diff_time]).idxmin() 
 chosenAge = dataage(chosenAgeIndex)
 dataSBP = v[chosenAgeIndex,:]
 diff_SBP = (dataSBP-userSBP)
-[mindiff,chosenColumn] = min([abs(x) for x in diff_SBP])
+chosenColumn = pd.Series([abs(x) for x in diff_SBP])
 
 anthropometrics["IC_DBP"] = IC_DBPdata(chosenColumn)
 anthropometrics["IC_SBP"] = IC_SBPdata(chosenColumn)
