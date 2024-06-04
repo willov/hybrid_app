@@ -308,6 +308,7 @@ h2 = 1
 h1 = 4.999973082721017
 dEI_ss = 1.226464396357887e+03
 t_half = 1.424047740519107
+dummy = 0
  
 ########## VARIABLES
 // Insulin resistance
@@ -470,9 +471,10 @@ V_met = p2*G6P
 ########## FUNCTIONS
 
 ########## EVENTS
-eventMeal1 = gt(time,0.0), Q_sto1, meal_glucose
-eventMeal2 = gt(time,0.0), D, meal_glucose
-event3 = gt(G_p,k_e2), RE, E
+eventMeal1 = gt(meal_amount,0.0), Q_sto1, Q_sto1+meal_glucose
+eventMeal2 = gt(meal_amount,0.0), D, 1+meal_glucose
+eventD = le(meal_amount,0), dummy, 0
+eventE = gt(G_p,k_e2), RE, E
 eventY = lt(beta*(G-G_b),-S_b),Y, Y2 
 eventY2 = gt(beta*(G-G_b),-S_b),Y2, 0 
 eventBetamass = gt(G,diabetes_def), betamass, 0.3
