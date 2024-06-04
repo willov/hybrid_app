@@ -48,30 +48,29 @@ def simulate(m, anthropometrics, stim, t_start_sim, meal):
 
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
 
-    if not meal:
-        sim.ResetStatesDerivatives()
+    
+    sim.ResetStatesDerivatives()
     
     # Getting initial values
-    if not meal:
-        fs = []
-        for path, subdirs, files in os.walk('./results'):
-            for name in files:
-                if 'inits' in name.split('(')[0] and "ignore" not in path:
-                    fs.append(os.path.join(path, name))
-        fs.sort()
-        with open(fs[0],'r') as f:
-            inits_in = json.load(f)
-            inits = inits_in['x']
+    
+    fs = []
+    for path, subdirs, files in os.walk('./results'):
+        for name in files:
+            if 'inits' in name.split('(')[0] and "ignore" not in path:
+                fs.append(os.path.join(path, name))
+    fs.sort()
+    with open(fs[0],'r') as f:
+        inits_in = json.load(f)
+        inits = inits_in['x']
   
-        inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
-        sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
+    inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
+    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
    
-    else:
-        sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000))
-
-     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
+
+    np.disp(sim)
+    np.disp(sim.statevalues)
 
     sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
     return sim_diet_results
