@@ -384,11 +384,11 @@ measuredIRS1      = IRS1p + IRS1p307
 measuredPKB308    = PKB308p + PKB308p473p    
 measuredIR        = IRp + IRip 
 
-// merge stuff
 tconv = 24*60
 tconvD = 24
 Food_glucose=EIn/4184/4*0.45
 nutrition=Food_glucose*1000
+meal_glucose = meal_amount/4.0*1000.0 // from kalories to grams glucose
 
 insulin = I
 
@@ -470,8 +470,8 @@ V_met = p2*G6P
 ########## FUNCTIONS
 
 ########## EVENTS
-eventMeal1 = gt(time,0.01), Q_sto1, meal_amount/4.0*1000.0 // from kalories to grams glucose
-eventMeal2 = gt(time,0.01), D, meal_amount/4.0*1000.0
+eventMeal1 = gt(time,0.0), Q_sto1, meal_glucose
+eventMeal2 = gt(time,0.0), D, meal_glucose
 event3 = gt(G_p,k_e2), RE, E
 eventY = lt(beta*(G-G_b),-S_b),Y, Y2 
 eventY2 = gt(beta*(G-G_b),-S_b),Y2, 0 
@@ -508,6 +508,7 @@ Fat mass (kg) = F
 Lean mass (kg) = L
 Diabetes = diabetes
 Q_sto1 = Q_sto1
+meal_glucose = meal_glucose
 betamass = betamass
 f_IR_CLGI = f_IR_CLGI
 f_IR_Ins = f_IR_Ins
