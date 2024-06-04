@@ -70,7 +70,7 @@ def simulate(m, anthropometrics, stim, t_start_sim, meal):
     sim_results.insert(0, 'Time', sim.timevector)
 
     np.disp(sim)
-    np.disp(sim.statevalues)
+    np.disp(type(sim.statevalues))
 
     sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
     return sim_diet_results
@@ -226,7 +226,6 @@ stim_meal = {
 
 sim_meal = simulate(model, anthropometrics, stim_meal, 0.0, 1)
 sim_meal['Time'] = sim_meal['Time']*24.0*60.0 
-np.disp(sim_meal['Time'])
 
 m = (
 alt.Chart(sim_meal).mark_point().encode(
