@@ -17,6 +17,8 @@ d/dt(L) = ss_x*v3*(k1 - v1)/rhol
 d/dt(AT) = ss_x*v4
 d/dt(dosage) = 0
 
+d/dt(diabetes) = 0 
+
 // topiramate
 d/dt(A) = (-Ka*A)*tconvD                            // absorption
 d/dt(C) = (Ka*A/V-K23*C+K23*C2-k10*C)*tconvD        // plasma
@@ -80,6 +82,8 @@ F(0) = 12.7000
 L(0) = 36.9348
 AT(0) = 0.1
 dosage(0) = 0 
+
+diabetes(0) = 0
 
 A(0) = 0
 C(0) = 0
@@ -466,13 +470,13 @@ V_met = p2*G6P
 ########## FUNCTIONS
 
 ########## EVENTS
-eventMeal1 = gt(time,0), Q_sto1, meal_amount/4.0*1000.0 // from kalories to grams glucose
-eventMeal2 = gt(time,0), D, meal_amount/4.0*1000.0
+eventMeal1 = gt(time,0.01), Q_sto1, meal_amount/4.0*1000.0 // from kalories to grams glucose
+eventMeal2 = gt(time,0.01), D, meal_amount/4.0*1000.0
 event3 = gt(G_p,k_e2), RE, E
 eventY = lt(beta*(G-G_b),-S_b),Y, Y2 
 eventY2 = gt(beta*(G-G_b),-S_b),Y2, 0 
-// eventDiabetes = gt(BMI,29), betamass, 0.3
-eventDiabetes = gt(G,diabetes_def), betamass, 0.3
+eventBetamass = gt(G,diabetes_def), betamass, 0.3
+eventDiabetes = gt(G,diabetes_def), diabetes, 1
 
 ########## OUTPUTS
 
@@ -502,6 +506,7 @@ PKB308 (% of max) = measuredPKB308
 Glucose uptake in fat tissue (mg/kg/min) = U_idf
 Fat mass (kg) = F
 Lean mass (kg) = L
+Diabetes = diabetes
 Q_sto1 = Q_sto1
 betamass = betamass
 f_IR_CLGI = f_IR_CLGI
