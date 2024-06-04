@@ -36,7 +36,7 @@ model, model_features = setup_model('insres_model')
 def flatten(list):
     return [item for sublist in list for item in sublist]
 
-def simulate(m, anthropometrics, stim, t_start_sim):
+def simulate(m, anthropometrics, stim, t_start_sim, meal):
     act = sund.Activity(timeunit = 'd')
     pwc = sund.PIECEWISE_CONSTANT # space saving only
     const = sund.CONSTANT # space saving only
@@ -63,7 +63,9 @@ def simulate(m, anthropometrics, stim, t_start_sim):
   
     inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
 
-    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 100000), statevalues = inits)
+    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
+    if meal>0:
+        sim.Simulate(timevector = np.linspace(0, meal, 10000))
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
@@ -177,9 +179,8 @@ stim_long = {
     }
 
 # Plotting weight change and meals
-
 t_start_sim = min(stim_long["ss_x"]["t"])+10.0
-sim_long = simulate(model, anthropometrics, stim_long, t_start_sim)
+sim_long = simulate(model, anthropometrics, stim_long, t_start_sim, 0.0)
 sim_long['Time'] = sim_long['Time']/365.0
 
 st.subheader("Plotting long term simulation of weight change")
@@ -200,10 +201,10 @@ st.divider()
 st.subheader("Plotting meal simulations based on time points chosen in long term simulation")
 feature_meal = st.selectbox("Feature of the model to plot", model_features, key="meal_plot")
 
-meal_times = t_long[0:3] + [meal_time] + [meal_time + 0.3]  
-meal_amounts = [0.0] + [0.0] + [0.0] + [0.0] + [meal_amount] + [0.0]
-meal = [0.0] + [0.0] + [0.0] + [0.0] + [1.0] + [0.0]
-ss_x = [0.0] + [0.0] + [1.0] + [1.0] + [0.0] + [0.0]
+meal_times = t_long[0:3] + [meal_time] 
+meal_amounts = [0.0] + [0.0] + [0.0] + [0.0] + [meal_amount] 
+meal = [0.0] + [0.0] + [0.0] + [0.0] + [1.0] 
+ss_x = [0.0] + [0.0] + [1.0] + [1.0] + [0.0] 
 
 stim_meal = {
 "meal_amount": {"t": meal_times, "f": meal_amounts},
@@ -212,14 +213,13 @@ stim_meal = {
     }
 
 t_start_sim = meal_time
-sim_meal = simulate(model, anthropometrics, stim_meal, t_start_sim)
-sim_meal['Time'] = sim_meal['Time']*24.0*60.0 - meal_time*24.0*60.0
-np.disp(meal_time*24.0*60.0)
+sim_meal = simulate(model, anthropometrics, stim_meal, 0.0, 0.3)
+sim_meal['Time'] = sim_meal['Time']*24.0*60.0 
 np.disp(sim_meal['Time'])
 
 m = (
 alt.Chart(sim_meal).mark_point().encode(
 x = alt.X('Time').scale(zero=False).title('Time (minutes)'),
-y = alt.Y(feature_meal).scale(zero=False),
+y = alt.Y(feature_meal).scale(zero=False)
         ))
 st.altair_chart(m, use_container_width=True)
