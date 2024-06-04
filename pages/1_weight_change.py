@@ -63,7 +63,7 @@ def simulate(m, anthropometrics, stim, t_start_sim):
   
     inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
 
-    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
+    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000000), statevalues = inits)
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
@@ -213,8 +213,8 @@ stim_meal = {
 
 t_start_sim = meal_time
 sim_meal = simulate(model, anthropometrics, stim_meal, t_start_sim)
-sim_meal['Time'] = sim_meal['Time']*24.0*60.0
-np.disp(meal_time)
+sim_meal['Time'] = sim_meal['Time']*24.0*60.0 - meal_time*24.0*60.0
+np.disp(meal_time*24.0*60.0)
 np.disp(sim_meal['Time'])
 
 m = (
