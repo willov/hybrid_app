@@ -204,8 +204,6 @@ meal_times = t_long[0:3] + [meal_time] + [meal_time + 0.3]
 meal_amounts = [0.0] + [0.0] + [0.0] + [0.0] + [meal_amount] + [0.0]
 meal = [0.0] + [0.0] + [0.0] + [0.0] + [1.0] + [0.0]
 ss_x = [0.0] + [0.0] + [1.0] + [1.0] + [0.0] + [0.0]
-  
-np.disp(meal_times) 
 
 stim_meal = {
 "meal_amount": {"t": meal_times, "f": meal_amounts},
@@ -213,10 +211,10 @@ stim_meal = {
 "ss_x": {"t": meal_times, "f": ss_x}
     }
 
-np.disp(meal_time)
 t_start_sim = meal_time
 sim_meal = simulate(model, anthropometrics, stim_meal, t_start_sim)
 sim_meal['Time'] = sim_meal['Time']*24.0*60.0
+np.disp(meal_time)
 np.disp(sim_meal['Time'])
 
 m = (
