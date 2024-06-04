@@ -48,24 +48,26 @@ def simulate(m, anthropometrics, stim, t_start_sim, meal):
 
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
 
-    sim.ResetStatesDerivatives()
+    if not meal:
+        sim.ResetStatesDerivatives()
     
     # Getting initial values
-    fs = []
-    for path, subdirs, files in os.walk('./results'):
-        for name in files:
-            if 'inits' in name.split('(')[0] and "ignore" not in path:
-                fs.append(os.path.join(path, name))
-    fs.sort()
-    with open(fs[0],'r') as f:
-        inits_in = json.load(f)
-        inits = inits_in['x']
+    if not meal:
+        fs = []
+        for path, subdirs, files in os.walk('./results'):
+            for name in files:
+                if 'inits' in name.split('(')[0] and "ignore" not in path:
+                    fs.append(os.path.join(path, name))
+        fs.sort()
+        with open(fs[0],'r') as f:
+            inits_in = json.load(f)
+            inits = inits_in['x']
   
-    inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
+        inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
+    else:
+        inits=[]
 
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
-    if meal>0:
-        sim.Simulate(timevector = np.linspace(-1, meal, 10000))
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
@@ -178,11 +180,11 @@ stim_long = {
     "ss_x": {"t": t_long, "f": ss_x},
     }
 
-# Plotting weight change and meals
 t_start_sim = min(stim_long["ss_x"]["t"])+10.0
-sim_long = simulate(model, anthropometrics, stim_long, t_start_sim, 0.0)
+sim_long = simulate(model, anthropometrics, stim_long, t_start_sim, 0)
 sim_long['Time'] = sim_long['Time']/365.0
 
+# Plotting weight change and meals
 st.subheader("Plotting long term simulation of weight change")
 
 feature_long = st.selectbox("Feature of the model to plot", model_features, key="long_plot")
@@ -201,10 +203,19 @@ st.divider()
 st.subheader("Plotting meal simulations based on time points chosen in long term simulation")
 feature_meal = st.selectbox("Feature of the model to plot", model_features, key="meal_plot")
 
-meal_times = t_long[0:3] + [meal_time] 
-meal_amount = [0.0] + [0.0] + [0.0] + [0.0] + [meal_amount] 
-meal = [0.0] + [0.0] + [0.0] + [0.0] + [1.0] 
-ss_x = [0.0] + [0.0] + [1.0] + [1.0] + [0.0] 
+t_before_meal = t_long[0:3] + [meal_time*365.0] 
+stim_before_meal = {
+    "EIchange": {"t": t_before_meal, "f": EIchange},
+    "ss_x": {"t": t_before_meal, "f": ss_x},
+    }
+
+t_start_sim = min(stim_long["ss_x"]["t"])+10.0
+sim_before_meal = simulate(model, anthropometrics, stim_long, t_start_sim, 0)
+
+meal_times = [0.0] + [0.3]
+meal_amount = [0.0] + [meal_amount] + [0.0]
+meal = [0.0] + [1.0] + [0.0]
+ss_x = [0.0] + [0.0] + [0.0] 
 
 stim_meal = {
 "meal_amount": {"t": meal_times, "f": meal_amount},
@@ -213,8 +224,7 @@ stim_meal = {
 "ss_x": {"t": meal_times, "f": ss_x}
     }
 
-t_start_sim = meal_time
-sim_meal = simulate(model, anthropometrics, stim_meal, 0.0, 0.3)
+sim_meal = simulate(model, anthropometrics, stim_meal, 0.0, 1)
 sim_meal['Time'] = sim_meal['Time']*24.0*60.0 
 np.disp(sim_meal['Time'])
 
