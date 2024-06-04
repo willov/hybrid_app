@@ -155,7 +155,7 @@ feature = st.selectbox("Feature of the model to plot", model_features)
 
 c = (
     alt.Chart(sim).mark_point().encode(
-    x = alt.X('Time').scale(zero=False),
+    x = alt.X('Time').scale(zero=False).title('Time(age)'),
     y = alt.Y(feature).scale(zero=False)
 ))
 

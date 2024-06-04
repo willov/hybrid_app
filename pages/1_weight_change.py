@@ -216,11 +216,13 @@ stim_meal = {
 np.disp(meal_time)
 t_start_sim = meal_time
 sim_meal = simulate(model, anthropometrics, stim_meal, t_start_sim)
-sim_meal['Time'] = sim_meal['Time']*24*60.
+sim_meal['Time'] = sim_meal['Time']*24.0*60.0
+np.disp(sim_meal['Time'])
 
 m = (
 alt.Chart(sim_meal).mark_point().encode(
 x = alt.X('Time').scale(zero=False).title('Time (minutes)'),
-y = alt.Y(feature_meal).scale(zero=False)
+y = alt.Y(feature_meal).scale(zero=False),
+color=alt.Color('species').title(str(st.session_state['age']))
         ))
 st.altair_chart(m, use_container_width=True)
