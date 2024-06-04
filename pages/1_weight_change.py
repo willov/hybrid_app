@@ -201,6 +201,9 @@ st.subheader("Plotting meal simulations based on time points chosen in long term
 feature_meal = st.selectbox("Feature of the model to plot", model_features, key="meal_plot")
   
 np.disp(meal_times)  
+np.disp(meal_amount)
+np.disp(ss_x)
+
 meal_times = t_long[0:2] + [meal_time] + [meal_time + 0.3]  
 meal_amount = [0.0] + [0.0] + [0.0] + [0.0] + [meal_amount] + [0.0]
 meal = [0.0] + [0.0] + [0.0] + [0.0] + [1.0] + [0.0]
