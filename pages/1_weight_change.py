@@ -69,7 +69,8 @@ def simulate(m, anthropometrics, stim, t_start_sim, meal):
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
 
-    np.disp(sim.statevalues[-1])
+    np.disp(sim.statevalues[:,-1])
+    np.disp(sim.statevalues[-1,:])
 
     sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
     return sim_diet_results
