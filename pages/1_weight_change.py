@@ -69,7 +69,6 @@ def simulate(m, anthropometrics, stim, t_start_sim):
     sim_results.insert(0, 'Time', sim.timevector)
 
     sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
-    sim_diet_results['Time'] = sim_diet_results['Time']/365.0
     return sim_diet_results
 
 # Start the app
@@ -181,6 +180,7 @@ stim_long = {
 
 t_start_sim = min(stim_long["ss_x"]["t"])+10.0
 sim_long = simulate(model, anthropometrics, stim_long, t_start_sim)
+sim_long['Time'] = sim_long['Time']/365.0
 
 st.subheader("Plotting long term simulation of weight change")
 
@@ -189,7 +189,7 @@ feature_long = st.selectbox("Feature of the model to plot", model_features, key=
 
 l = (
     alt.Chart(sim_long).mark_point().encode(
-    x = alt.X('Time').scale(zero=False),
+    x = alt.X('Time').scale(zero=False).title('Time(age)'),
     y = alt.Y(feature_long).scale(zero=False)
 ))
 
@@ -205,9 +205,7 @@ meal_amounts = [0.0] + [0.0] + [0.0] + [0.0] + [meal_amount] + [0.0]
 meal = [0.0] + [0.0] + [0.0] + [0.0] + [1.0] + [0.0]
 ss_x = [0.0] + [0.0] + [1.0] + [1.0] + [0.0] + [0.0]
   
-np.disp(meal_times)  
-np.disp(meal_amounts)
-np.disp(ss_x)
+np.disp(meal_times) 
 
 stim_meal = {
 "meal_amount": {"t": meal_times, "f": meal_amounts},
@@ -215,12 +213,14 @@ stim_meal = {
 "ss_x": {"t": meal_times, "f": ss_x}
     }
 
-t_start_sim = meal_times[3]
+np.disp(meal_time)
+t_start_sim = meal_time
 sim_meal = simulate(model, anthropometrics, stim_meal, t_start_sim)
-    # st.line_chart(sim_meal, x="Time", y=feature_meal)
+sim_meal['Time'] = sim_meal['Time']*24*60.
+
 m = (
 alt.Chart(sim_meal).mark_point().encode(
-x = alt.X('Time').scale(zero=False),
+x = alt.X('Time').scale(zero=False).title('Time (minutes)'),
 y = alt.Y(feature_meal).scale(zero=False)
         ))
 st.altair_chart(m, use_container_width=True)
