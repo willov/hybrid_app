@@ -65,7 +65,7 @@ def simulate(m, anthropometrics, stim, t_start_sim, meal):
 
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
     if meal>0:
-        sim.Simulate(timevector = np.linspace(0, meal, 10000))
+        sim.Simulate(timevector = np.linspace(-1, meal, 10000))
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
