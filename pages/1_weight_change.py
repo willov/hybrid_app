@@ -221,6 +221,5 @@ m = (
 alt.Chart(sim_meal).mark_point().encode(
 x = alt.X('Time').scale(zero=False).title('Time (minutes)'),
 y = alt.Y(feature_meal).scale(zero=False),
-color=alt.Color('species').title(str(st.session_state['age']))
         ))
 st.altair_chart(m, use_container_width=True)
