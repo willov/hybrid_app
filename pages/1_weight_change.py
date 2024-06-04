@@ -62,9 +62,6 @@ def simulate(m, anthropometrics, stim, t_start_sim, meal):
         inits = inits_in['x']
   
     inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
-    np.disp(inits)
-    np.disp(len(inits))
-    np.disp(type(inits))
 
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
     if meal>0:
