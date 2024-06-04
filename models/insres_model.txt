@@ -509,6 +509,7 @@ Lean mass (kg) = L
 Diabetes = diabetes
 Q_sto1 = Q_sto1
 meal_glucose = meal_glucose
+meal_amount = meal_amount
 betamass = betamass
 f_IR_CLGI = f_IR_CLGI
 f_IR_Ins = f_IR_Ins
