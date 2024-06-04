@@ -63,7 +63,7 @@ def simulate(m, anthropometrics, stim, t_start_sim):
   
     inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
 
-    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000000), statevalues = inits)
+    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 100000), statevalues = inits)
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
