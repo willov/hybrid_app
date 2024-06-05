@@ -89,6 +89,8 @@ def simulate_meal(m, anthropometrics, stim, inits, t_start_sim):
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
     sim_meal_results = sim_results[(sim_results['Time']>=t_start_sim)]
+    sim_meal_results['Time'] = sim_meal_results['Time']*24.0*60.0 
+    np.disp(type(sim_meal_results))
 
     return sim_meal_results
 
@@ -177,14 +179,39 @@ st.subheader("Meals")
 
 meal_amount = []
 meal_times = []
-# n_meals = st.slider("Number of (solid) meals:", 0, 5, 1)
 
-# for i in range(n_meals):
-#     st.markdown(f"**Meal {i+1}**")
-meal_time = st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times")*365.0
-meal_amount = st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals")
+n_meals = st.slider("Number of (solid) meals:", 0, 5, 1)
+
+for i in range(n_meals):
+    st.markdown(f"**Meal {i+1}**")
+    meal_time = st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times")*365.0
+    meal_amount = st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals")
+    t_before_meal = t_long[0:3] + [meal_time*365.0] 
+    stim_before_meal = {
+    "EIchange": {"t": t_before_meal, "f": EIchange},
+    "ss_x": {"t": t_before_meal, "f": ss_x},
+        }
+
+    t_start_sim = min(stim_long["ss_x"]["t"])+10.0
+    sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_long, t_start_sim)
+
+    meal_times = [0.0] + [0.001] + [0.3]
+    meal_amount = [0.0] + [0.0] + [meal_amount] + [0.0]
+    meal = [0.0] + [0.0] + [1.0] + [0.0]
+    ss_x = [0.0] + [0.0] + [0.0] + [0.0] 
+
+    stim_meal = {
+    "meal_amount": {"t": meal_times, "f": meal_amount},
+    "meal": {"t": meal_times, "f": meal},
+    "meal_time": {"t": meal_times, "f": meal},
+    "ss_x": {"t": meal_times, "f": ss_x}
+        }
+
+    sim_meal = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0)
+    np.disp(type(sim_meal))
+    np.disp(np.size(sim_meal))
     # start_time += 0.1
-# if n_meals < 1:
+
 st.divider()
 # meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
 # meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
@@ -221,32 +248,8 @@ st.divider()
 st.subheader("Plotting meal simulations based on time points chosen in long term simulation")
 feature_meal = st.selectbox("Feature of the model to plot", model_features, key="meal_plot")
 
-t_before_meal = t_long[0:3] + [meal_time*365.0] 
-stim_before_meal = {
-    "EIchange": {"t": t_before_meal, "f": EIchange},
-    "ss_x": {"t": t_before_meal, "f": ss_x},
-    }
-
-t_start_sim = min(stim_long["ss_x"]["t"])+10.0
-sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_long, t_start_sim)
-
-meal_times = [-0.01] + [0.0] + [0.3]
-meal_amount = [0.0] + [0.0] + [meal_amount] + [0.0]
-meal = [0.0] + [0.0] + [1.0] + [0.0]
-ss_x = [0.0] + [0.0] + [0.0] + [0.0] 
-
-stim_meal = {
-"meal_amount": {"t": meal_times, "f": meal_amount},
-"meal": {"t": meal_times, "f": meal},
-"meal_time": {"t": meal_times, "f": meal},
-"ss_x": {"t": meal_times, "f": ss_x}
-    }
-
-sim_meal = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0)
-sim_meal['Time'] = sim_meal['Time']*24.0*60.0 
-
 m = (
-alt.Chart(sim_meal).mark_point().encode(
+alt.Chart(sim_meal).mark_line().encode(
 x = alt.X('Time').scale(zero=False).title('Time (minutes)'),
 y = alt.Y(feature_meal).scale(zero=False)
         ))
