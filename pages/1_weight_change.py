@@ -250,7 +250,7 @@ if n_meals > 0.0:
         sim_feature = sim_meal[i][feature_meal]
         sim_feature.index = to_plot.index
         to_plot = pd.concat([to_plot,sim_feature], axis=1)
-        meal_str = str(meal_kcal[i]) + 'kcal meal at age ' + str(meal_time[i]/365.0)
+        meal_str = str(meal_kcal[i]) + ' kcal meal at age ' + str(meal_time[i]/365.0)
         column_names.append(meal_str)
 
     to_plot.columns = column_names
