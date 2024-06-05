@@ -281,11 +281,12 @@ for i in range(n_meals):
     meal_str = 'Meal at age ' + str(meal_time[i]/365.0)
     column_names.append(meal_str)
 
-np.disp(column_names)
-np.disp(to_plot)
 to_plot.columns = column_names
+to_plot = to_plot.reset_index(drop=True)
+to_plot = to_plot.set_index('Time')
 np.disp(to_plot)
 plot_data = to_plot.reset_index().melt('Time')
+np.disp(plot_data)
 
 m = (
 alt.Chart(plot_data).mark_line().encode(
