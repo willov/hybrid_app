@@ -6,6 +6,8 @@ import streamlit as st
 import math 
 import altair as alt
 from array import array
+import plotly.express as px
+import plotly.graph_objects as go
 
 # Install sund in a custom location
 import subprocess
@@ -92,7 +94,6 @@ def simulate_meal(m, anthropometrics, stim, inits, t_start_sim):
     sim_results.insert(0, 'Time', sim.timevector)
     sim_meal_results = sim_results[(sim_results['Time']>=t_start_sim)]
     sim_meal_results['Time'] = sim_meal_results['Time']*24.0*60.0 
-    np.disp(type(sim_meal_results))
 
     return sim_meal_results
 
@@ -190,15 +191,16 @@ st.subheader("Meals")
 
 meal_amount = []
 meal_times = []
+meal_time = []
 
 n_meals = st.slider("Number of (solid) meals:", 0, 5, 1)
 sim_meal = list(range(n_meals))
 
 for i in range(n_meals):
     st.markdown(f"**Meal {i+1}**")
-    meal_time = st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times")*365.0
+    meal_time.append(st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times")*365.0)
     meal_amount = st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals")
-    t_before_meal = t_long[0:3] + [meal_time*365.0] 
+    t_before_meal = t_long[0:3] + [meal_time[i]*365.0] 
     stim_before_meal = {
     "EIchange": {"t": t_before_meal, "f": EIchange},
     "ss_x": {"t": t_before_meal, "f": ss_x},
@@ -250,9 +252,21 @@ st.divider()
 st.subheader("Plotting meal simulations based on time points chosen in long term simulation")
 feature_meal = st.selectbox("Feature of the model to plot", model_features, key="meal_plot")
 
-m = (
-alt.Chart(sim_meal).mark_line().encode(
-x = alt.X('Time').scale(zero=False).title('Time (minutes)'),
-y = alt.Y(feature_meal).scale(zero=False)
-        ))
-st.altair_chart(m, use_container_width=True)
+# m = (
+# alt.Chart(sim_meal).mark_line().encode(
+# x = alt.X('Time').scale(zero=False).title('Time (minutes)'),
+# y = alt.Y(feature_meal).scale(zero=False)
+#         ))
+# st.altair_chart(m, use_container_width=True)
+
+np.disp(sim_meal[i][feature_meal])
+np.disp(sim_meal[i])
+
+fig = go.Figure()
+for i in range(n_meals):
+    fig.add_trace(go.Scatter(name="Meal at age " + str(meal_time[i]), x = sim_meal[i], y=sim_meal[i][feature_meal], mode='lines', marker={"line": {"width":0}}))
+
+fig.update_layout(xaxis_title="Time (minutes)", yaxis_title=feature_meal, 
+                        legend=dict(orientation="h", xanchor="center", y=-0.2, x=0.5),
+                        margin=dict(l=0, r=0, t=0, b=0))
+st.plotly_chart(fig, use_container_width=True)
