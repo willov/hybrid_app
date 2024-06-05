@@ -190,9 +190,9 @@ st.subheader("Meals")
 
 meal_amount = []
 meal_times = []
-sim_meal = []
 
 n_meals = st.slider("Number of (solid) meals:", 0, 5, 1)
+sim_meal = list(range(n_meals))
 
 for i in range(n_meals):
     st.markdown(f"**Meal {i+1}**")
