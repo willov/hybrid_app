@@ -287,7 +287,11 @@ to_plot.columns = column_names
 np.disp(to_plot)
 plot_data = to_plot.reset_index().melt('Time')
 
+m = (
 alt.Chart(plot_data).mark_line().encode(
     x='Time',
-    y=feature_meal
-)
+    y=feature_meal,
+    color='variable'
+))
+
+st.altair_chart(m, use_container_width=True)
