@@ -69,7 +69,8 @@ def simulate(m, anthropometrics, stim, t_start_sim):
     sim_results.insert(0, 'Time', sim.timevector)
 
     sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
-    return sim_diet_results, sim.statevalues
+    inits = sim.statevalues
+    return sim_diet_results, inits
 
 def simulate_meal(m, anthropometrics, stim, inits):
     act = sund.Activity(timeunit = 'd')
@@ -197,7 +198,8 @@ stim_long = {
     }
 
 t_start_sim = min(stim_long["ss_x"]["t"])+10.0
-sim_long = simulate(model, anthropometrics, stim_long, t_start_sim)
+sim_long, inits = simulate(model, anthropometrics, stim_long, t_start_sim)
+np.disp(sim_long)
 sim_long['Time'] = sim_long['Time']/365.0
 
 # Plotting weight change and meals
