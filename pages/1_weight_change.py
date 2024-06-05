@@ -198,8 +198,8 @@ sim_meal = list(range(n_meals))
 
 for i in range(n_meals):
     st.markdown(f"**Meal {i+1}**")
-    meal_time.append(st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times")*365.0)
-    meal_amount = st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals")
+    meal_time.append(st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times{i}")*365.0)
+    meal_amount = st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals{i}")
     t_before_meal = t_long[0:3] + [meal_time[i]*365.0] 
     stim_before_meal = {
     "EIchange": {"t": t_before_meal, "f": EIchange},
@@ -259,8 +259,8 @@ feature_meal = st.selectbox("Feature of the model to plot", model_features, key=
 #         ))
 # st.altair_chart(m, use_container_width=True)
 
-np.disp(sim_meal[i][feature_meal])
-np.disp(sim_meal[i])
+np.disp(sim_meal[i]["Glucose"])
+np.disp(sim_meal[i]["Time"])
 
 fig = go.Figure()
 for i in range(n_meals):
