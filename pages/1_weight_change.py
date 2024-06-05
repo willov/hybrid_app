@@ -259,14 +259,24 @@ feature_meal = st.selectbox("Feature of the model to plot", model_features, key=
 #         ))
 # st.altair_chart(m, use_container_width=True)
 
-np.disp(sim_meal[i]['Plasma glucose (mg/dl)'])
-np.disp(sim_meal[i]['Time'])
+# fig = go.Figure()
+# for i in range(n_meals):
+#     fig.add_trace(go.Scatter(name="Meal at age " + str(meal_time[i]), x = sim_meal[i], y=sim_meal[i][feature_meal], mode='lines', marker={"line": {"width":0}}))
 
-fig = go.Figure()
+# fig.update_layout(xaxis_title="Time (minutes)", yaxis_title=feature_meal, 
+#                         legend=dict(orientation="h", xanchor="center", y=-0.2, x=0.5),
+#                         margin=dict(l=0, r=0, t=0, b=0))
+# st.plotly_chart(fig, use_container_width=True)
+
+to_plot = pd.DataFrame(sim_meal[0]['Time'])
 for i in range(n_meals):
-    fig.add_trace(go.Scatter(name="Meal at age " + str(meal_time[i]), x = sim_meal[i], y=sim_meal[i][feature_meal], mode='lines', marker={"line": {"width":0}}))
+    to_plot = to_plot.append(sim_meal[i][feature_meal])
+    columns_name = columns_name.append("Meal at age " + str(meal_time[i]))
 
-fig.update_layout(xaxis_title="Time (minutes)", yaxis_title=feature_meal, 
-                        legend=dict(orientation="h", xanchor="center", y=-0.2, x=0.5),
-                        margin=dict(l=0, r=0, t=0, b=0))
-st.plotly_chart(fig, use_container_width=True)
+to_plot.columns = columns_name
+plot_data = to_plot.reset_index().melt('Time')
+
+alt.Chart(plot_data).mark_line().encode(
+    x='Time',
+    y=feature_meal
+)
