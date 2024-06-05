@@ -271,14 +271,15 @@ feature_meal = st.selectbox("Feature of the model to plot", model_features, key=
 to_plot = pd.DataFrame(sim_meal[0]['Time'])
 column_names = ['Time']
 for i in range(n_meals):
-    np.disp(sim_meal[i][feature_meal])
-    to_plot = pd.concat([to_plot,sim_meal[i][feature_meal]])
+    sim_feature = sim_meal[i][feature_meal]
+    np.disp(type(sim_feature))
+    sim_feature.index = to_plot.index
+    to_plot = pd.concat([to_plot,sim_feature])
     column_names.append(['Meal at age ' + str(meal_time[i]/365.0)])
 
-
-np.disp(to_plot)
 np.disp(column_names)
 to_plot.columns = column_names
+np.disp(to_plot)
 plot_data = to_plot.reset_index().melt('Time')
 
 alt.Chart(plot_data).mark_line().encode(
