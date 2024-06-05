@@ -269,14 +269,13 @@ feature_meal = st.selectbox("Feature of the model to plot", model_features, key=
 # st.plotly_chart(fig, use_container_width=True)
 
 to_plot = pd.DataFrame(sim_meal[0]['Time'])
-column_name = []
+column_name = ['Time']
 for i in range(n_meals):
     pd.concat([to_plot,sim_meal[i][feature_meal]])
-    np.disp('Meal at age ' + str(meal_time[i]/365.0))
     column_name.append(['Meal at age ' + str(meal_time[i]/365.0)])
 
-np.disp(column_name)
 to_plot.columns = column_name
+np.disp(to_plot)
 plot_data = to_plot.reset_index().melt('Time')
 
 alt.Chart(plot_data).mark_line().encode(
