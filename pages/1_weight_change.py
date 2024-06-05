@@ -213,7 +213,6 @@ for i in range(n_meals):
     meal_amount = [0.0] + [0.0] + [meal_amount] + [0.0]
     meal = [0.0] + [0.0] + [1.0] + [0.0]
     ss_x_meal = [1.0] + [1.0] + [1.0] + [1.0] 
-    EIchanges_meal = [0.0] + [diet] + [diet] + [0.0] 
 
     np.disp(EIchanges_meal)
 
@@ -222,13 +221,14 @@ for i in range(n_meals):
     "meal": {"t": meal_times, "f": meal},
     "meal_time": {"t": meal_times, "f": meal},
     "ss_x": {"t": meal_times, "f": ss_x_meal},
-    "EIchange": {"t": meal_times, "f": EIchanges_meal},
         }
 
     sim_meal[i] = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0)
-    # start_time += 0.1
+    st.divider()
 
-st.divider()
+if n_meals < 1.0:
+    st.divider()
+
 # meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
 # meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
 
@@ -251,46 +251,32 @@ l = (
 
 st.altair_chart(l, use_container_width=True)
 
-st.divider()
+if n_meals > 0.0:
+    st.divider()
 
-st.subheader("Plotting meal simulations")
-feature_meal = st.selectbox("Feature of the model to plot", model_features, key="meal_plot")
+    st.subheader("Plotting meal simulations")
+    feature_meal = st.selectbox("Feature of the model to plot", model_features, key="meal_plot")
 
-# m = (
-# alt.Chart(sim_meal).mark_line().encode(
-# x = alt.X('Time').scale(zero=False).title('Time (minutes)'),
-# y = alt.Y(feature_meal).scale(zero=False)
-#         ))
-# st.altair_chart(m, use_container_width=True)
 
-# fig = go.Figure()
-# for i in range(n_meals):
-#     fig.add_trace(go.Scatter(name="Meal at age " + str(meal_time[i]), x = sim_meal[i], y=sim_meal[i][feature_meal], mode='lines', marker={"line": {"width":0}}))
+    to_plot = pd.DataFrame(sim_meal[0]['Time'])
+    column_names = ['Time']
+    for i in range(n_meals):
+        sim_feature = sim_meal[i][feature_meal]
+        sim_feature.index = to_plot.index
+        to_plot = pd.concat([to_plot,sim_feature], axis=1)
+        meal_str = 'Meal at age ' + str(meal_time[i]/365.0)
+        column_names.append(meal_str)
 
-# fig.update_layout(xaxis_title="Time (minutes)", yaxis_title=feature_meal, 
-#                         legend=dict(orientation="h", xanchor="center", y=-0.2, x=0.5),
-#                         margin=dict(l=0, r=0, t=0, b=0))
-# st.plotly_chart(fig, use_container_width=True)
+    to_plot.columns = column_names
+    to_plot = to_plot.reset_index(drop=True)
+    to_plot = to_plot.set_index('Time')
+    plot_data = to_plot.reset_index().melt('Time')
 
-to_plot = pd.DataFrame(sim_meal[0]['Time'])
-column_names = ['Time']
-for i in range(n_meals):
-    sim_feature = sim_meal[i][feature_meal]
-    sim_feature.index = to_plot.index
-    to_plot = pd.concat([to_plot,sim_feature], axis=1)
-    meal_str = 'Meal at age ' + str(meal_time[i]/365.0)
-    column_names.append(meal_str)
+    m = (
+    alt.Chart(plot_data).mark_line().encode(
+        x=alt.X('Time').scale(zero=False).title('Time (minutes)'),
+        y=alt.Y('value').scale(zero=False).title(feature_meal),
+        color='variable'
+    ))
 
-to_plot.columns = column_names
-to_plot = to_plot.reset_index(drop=True)
-to_plot = to_plot.set_index('Time')
-plot_data = to_plot.reset_index().melt('Time')
-
-m = (
-alt.Chart(plot_data).mark_line().encode(
-    x=alt.X('Time').scale(zero=False).title('Time (minutes)'),
-    y=alt.Y('value').scale(zero=False).title(feature_meal),
-    color='variable'
-))
-
-st.altair_chart(m, use_container_width=True)
+    st.altair_chart(m, use_container_width=True)
