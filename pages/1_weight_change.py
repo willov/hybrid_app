@@ -84,6 +84,8 @@ def simulate_meal(m, anthropometrics, stim, inits, t_start_sim):
 
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
 
+    sim.ResetStatesDerivatives()
+
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
    
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
@@ -218,7 +220,7 @@ for i in range(n_meals):
 
     sim_meal = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0)
     np.disp(type(sim_meal))
-    np.disp(np.size(sim_meal))
+    np.disp(sim_meal.shape)
     # start_time += 0.1
 
 st.divider()
