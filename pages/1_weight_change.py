@@ -27,7 +27,6 @@ def setup_model(model_name):
     model_class = sund.importModel(model_name)
     model = model_class() 
 
-    # model.parametervalues = params
     features = model.featurenames
     return model, features
 
@@ -86,8 +85,6 @@ def simulate_meal(m, anthropometrics, stim, inits, t_start_sim):
 
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
 
-    # sim.ResetStatesDerivatives()
-
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
    
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
@@ -140,7 +137,7 @@ anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_s
 anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
 anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state['weight'], key="weight") # max, min 
 anthropometrics["age"] = st.number_input("Age (years):", 0.0, 100.0, st.session_state['age'], key="age") # max, min 
-anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_state['height'],  key="height") # st.session_state['height'], 0.1, 
+anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_state['height'],  key="height") 
 anthropometrics["ECFinit"] = st.session_state['ECFinit']
 
 fat_known = st.checkbox("Do you know your fat mass?")
@@ -173,7 +170,6 @@ diet_start = st.number_input("Diet start (age): ", st.session_state['age'], 100.
 diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 40.0, 0.1, key=f"diet_length")
 diet = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
 EIchange = [0.0] + [0.0] + [0.0] + [diet] + [0.0] 
-# t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']*365.0-10.0] + [st.session_state['age']*365.0] + [diet_start*365.0] + [(st.session_state['age']+diet_length)*365.0] 
 ss_x = [0] + [0] + [1] + [1] + [0] 
 
@@ -228,19 +224,10 @@ for i in range(n_meals):
 if n_meals < 1.0:
     st.divider()
 
-# meal_amount = [0]+[k*on for k in meal_amount for on in [1 , 0]]
-# meal_times = [0]+[n*on for n in meal_times for on in [1 , 0]]
-
-# t_meal = [t_meal+(l/60)*on for t_meal,l in zip(meal_times, 0.3) for on in [0,1]] # varje gång något ska ändras
-
-# Setup stimulation to the model
-
-
 # Plotting weight change and meals
 st.subheader("Plotting long term simulation of weight change")
 
 feature_long = st.selectbox("Feature of the model to plot", model_features, key="long_plot")
-# st.line_chart(sim_long, x="Time", y=feature_long)
 
 l = (
     alt.Chart(sim_long).mark_point().encode(

@@ -6,7 +6,6 @@ import streamlit as st
 import math 
 import altair as alt
 
-# testing testing
 
 # Install sund in a custom location
 import subprocess
@@ -80,8 +79,6 @@ anthropometrics = {"IC_SBP": st.session_state['IC_SBP'], "IC_DBP": st.session_st
 # Specifying blood pressure medication
 st.subheader("Blood pressure")
 
-#n_med = st.slider("Number of periods of blood pressure medication:", 1, 5, 1)
-
 anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key=f"IC_SBP")
 anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, st.session_state.IC_SBP, st.session_state.IC_DBP, 0.1, key=f"IC_DBP")
 
@@ -111,14 +108,10 @@ take_BPmed = st.checkbox("Do you know want to add a blood pressure medication?")
 if take_BPmed:
     med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, start_time, key=f"BP_med"))
     med_times.append(med_times[1] + 5)
-    #extra_time = st.number_input("Additional time to simulate after medication(s) (years):", 0.0, 100.0, 0.0, 0.1)
-    drug_on = [0] + [0] + [1] + [0] + [0] #[0] + [1, 0] * n_med
-
-    #med_period.append(st.number_input("How long period of blood pressure medication (years): ", 0.0, 200.0, 40.0, key=f"t_long{i}"))
-    #start_time += med_period[i]
+    drug_on = [0] + [0] + [1] + [0] + [0] 
 
 med_times.append(end_time)
-t_long = med_times # [time for t,l in zip(med_times, med_lengths) for time in (t,t+l)]
+t_long = med_times 
 st.divider()
 
 # Setup stimulation to the model
@@ -129,12 +122,11 @@ stim = {
 
 # Plotting blood pressure 
 
-sim = simulate(model, stim, anthropometrics, initials) #, extra_time=extra_time)
+sim = simulate(model, stim, anthropometrics, initials) 
 
 st.subheader("Plotting blood pressure over time")
 
 feature = st.selectbox("Feature of the model to plot", model_features)
-# st.line_chart(sim, x="Time", y=feature, use_container_width=True)
 
 c = (
     alt.Chart(sim).mark_point().encode(
