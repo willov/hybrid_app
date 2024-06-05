@@ -174,6 +174,15 @@ EIchange = [0.0] + [0.0] + [0.0] + [EIchange] + [0.0]
 t_long = [st.session_state['age']*365.0-10.0] + [st.session_state['age']*365.0] + [diet_start*365.0] + [(st.session_state['age']+diet_length)*365.0] 
 ss_x = [0] + [0] + [1] + [1] + [0] 
 
+stim_long = {
+    "EIchange": {"t": t_long, "f": EIchange},
+    "ss_x": {"t": t_long, "f": ss_x},
+    }
+
+t_start_sim = min(stim_long["ss_x"]["t"])+10.0
+sim_long, inits = simulate(model, anthropometrics, stim_long, t_start_sim)
+sim_long['Time'] = sim_long['Time']/365.0
+
 st.divider()
 st.subheader("Meals")
 
@@ -220,14 +229,6 @@ st.divider()
 
 # Setup stimulation to the model
 
-stim_long = {
-    "EIchange": {"t": t_long, "f": EIchange},
-    "ss_x": {"t": t_long, "f": ss_x},
-    }
-
-t_start_sim = min(stim_long["ss_x"]["t"])+10.0
-sim_long, inits = simulate(model, anthropometrics, stim_long, t_start_sim)
-sim_long['Time'] = sim_long['Time']/365.0
 
 # Plotting weight change and meals
 st.subheader("Plotting long term simulation of weight change")
