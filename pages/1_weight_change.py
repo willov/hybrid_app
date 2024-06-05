@@ -181,7 +181,7 @@ meal_times = []
 
 # for i in range(n_meals):
 #     st.markdown(f"**Meal {i+1}**")
-meal_time = st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time+diet_length, key=f"meal_times")*365.0
+meal_time = st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times")*365.0
 meal_amount = st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals")
     # start_time += 0.1
 # if n_meals < 1:
@@ -230,7 +230,7 @@ stim_before_meal = {
 t_start_sim = min(stim_long["ss_x"]["t"])+10.0
 sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_long, t_start_sim)
 
-meal_times = [-1] + [0.0] + [0.3]
+meal_times = [-0.01] + [0.0] + [0.3]
 meal_amount = [0.0] + [0.0] + [meal_amount] + [0.0]
 meal = [0.0] + [0.0] + [1.0] + [0.0]
 ss_x = [0.0] + [0.0] + [0.0] + [0.0] 
