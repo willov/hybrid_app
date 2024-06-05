@@ -200,7 +200,7 @@ for i in range(n_meals):
     st.markdown(f"**Meal {i+1}**")
     meal_time.append(st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times{i}")*365.0)
     meal_amount = st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals{i}")
-    t_before_meal = t_long[0:3] + [meal_time[i]*365.0] 
+    t_before_meal = t_long[0:3] + [meal_time[i]] 
     stim_before_meal = {
     "EIchange": {"t": t_before_meal, "f": EIchange},
     "ss_x": {"t": t_before_meal, "f": ss_x},
@@ -272,8 +272,8 @@ to_plot = pd.DataFrame(sim_meal[0]['Time'])
 column_name = []
 for i in range(n_meals):
     pd.concat([to_plot,sim_meal[i][feature_meal]])
-    np.disp('Meal at age ' + str(meal_time[i]*365.0))
-    column_name = column_name.append(['Meal at age ' + str(meal_time[i]*365.0)])
+    np.disp('Meal at age ' + str(meal_time[i]/365.0))
+    column_name.append(['Meal at age ' + str(meal_time[i]/365.0)])
 
 np.disp(column_name)
 to_plot.columns = column_name
