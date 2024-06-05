@@ -36,7 +36,7 @@ model, model_features = setup_model('insres_model')
 def flatten(list):
     return [item for sublist in list for item in sublist]
 
-def simulate(m, anthropometrics, stim, t_start_sim, meal):
+def simulate(m, anthropometrics, stim, t_start_sim):
     act = sund.Activity(timeunit = 'd')
     pwc = sund.PIECEWISE_CONSTANT # space saving only
     const = sund.CONSTANT # space saving only
@@ -68,12 +68,28 @@ def simulate(m, anthropometrics, stim, t_start_sim, meal):
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
 
-    np.disp(sim)
-    np.disp(np.size(sim.statevalues))
-    np.disp(sim.statevalues)
-
     sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
-    return sim_diet_results
+    return sim_diet_results, sim.statevalues
+
+def simulate_meal(m, anthropometrics, stim, inits):
+    act = sund.Activity(timeunit = 'd')
+    pwc = sund.PIECEWISE_CONSTANT # space saving only
+    const = sund.CONSTANT # space saving only
+
+    for key,val in stim.items():
+        act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
+    for key,val in anthropometrics.items():
+        act.AddOutput(name = key, type=const, fvalues = val) 
+
+    sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
+
+    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
+   
+    sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
+    sim_results.insert(0, 'Time', sim.timevector)
+
+    return sim_results
+
 
 # Start the app
 
@@ -181,7 +197,7 @@ stim_long = {
     }
 
 t_start_sim = min(stim_long["ss_x"]["t"])+10.0
-sim_long = simulate(model, anthropometrics, stim_long, t_start_sim, 0)
+sim_long = simulate(model, anthropometrics, stim_long, t_start_sim)
 sim_long['Time'] = sim_long['Time']/365.0
 
 # Plotting weight change and meals
@@ -210,7 +226,7 @@ stim_before_meal = {
     }
 
 t_start_sim = min(stim_long["ss_x"]["t"])+10.0
-sim_before_meal = simulate(model, anthropometrics, stim_long, t_start_sim, 0)
+sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_long, t_start_sim)
 
 meal_times = [0.0] + [0.3]
 meal_amount = [0.0] + [meal_amount] + [0.0]
@@ -224,7 +240,7 @@ stim_meal = {
 "ss_x": {"t": meal_times, "f": ss_x}
     }
 
-sim_meal = simulate(model, anthropometrics, stim_meal, 0.0, 1)
+sim_meal = simulate_meal(model, anthropometrics, stim_meal, inits_meal)
 sim_meal['Time'] = sim_meal['Time']*24.0*60.0 
 
 m = (
