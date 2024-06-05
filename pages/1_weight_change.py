@@ -259,8 +259,8 @@ feature_meal = st.selectbox("Feature of the model to plot", model_features, key=
 #         ))
 # st.altair_chart(m, use_container_width=True)
 
-np.disp(sim_meal[i]["Glucose"])
-np.disp(sim_meal[i]["Time"])
+np.disp(sim_meal[i]['Glucose'])
+np.disp(sim_meal[i]['Time'])
 
 fig = go.Figure()
 for i in range(n_meals):
