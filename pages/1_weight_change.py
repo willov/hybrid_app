@@ -172,13 +172,13 @@ start_time = st.session_state['age']
 diet_start = st.number_input("Diet start (age): ", st.session_state['age'], 100.0, 40.0, 0.1, key=f"diet_start")
 diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length")
 EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
-EIchange = [0.0] + [0.0] + [0.0] + [EIchange] + [0.0] 
+EIchanges = [0.0] + [0.0] + [0.0] + [EIchange] + [0.0] 
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']*365.0-10.0] + [st.session_state['age']*365.0] + [diet_start*365.0] + [(st.session_state['age']+diet_length)*365.0] 
 ss_x = [0] + [0] + [1] + [1] + [0] 
 
 stim_long = {
-    "EIchange": {"t": t_long, "f": EIchange},
+    "EIchange": {"t": t_long, "f": EIchanges},
     "ss_x": {"t": t_long, "f": ss_x},
     }
 
@@ -202,12 +202,14 @@ for i in range(n_meals):
     meal_amount = st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals{i}")
     t_before_meal = t_long[0:3] + [meal_time[i]] 
     stim_before_meal = {
-    "EIchange": {"t": t_before_meal, "f": EIchange},
+    "EIchange": {"t": t_before_meal, "f": EIchanges},
     "ss_x": {"t": t_before_meal, "f": ss_x},
         }
 
     np.disp(t_before_meal)
-    np.disp(meal_time[i])
+    np.disp(ss_x)
+    np.disp(EIchanges)
+
     t_start_sim = min(stim_before_meal["ss_x"]["t"])+10.0
     sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_before_meal, t_start_sim)
 
@@ -215,12 +217,14 @@ for i in range(n_meals):
     meal_amount = [0.0] + [0.0] + [meal_amount] + [0.0]
     meal = [0.0] + [0.0] + [1.0] + [0.0]
     ss_x = [0.0] + [0.0] + [0.0] + [0.0] 
+    EIchanges = [0.0] + [EIchange] + [EIchange] + [0.0] 
 
     stim_meal = {
     "meal_amount": {"t": meal_times, "f": meal_amount},
     "meal": {"t": meal_times, "f": meal},
     "meal_time": {"t": meal_times, "f": meal},
-    "ss_x": {"t": meal_times, "f": ss_x}
+    "ss_x": {"t": meal_times, "f": ss_x},
+    "EIchange": {"t": meal_times, "f": EIchanges},
         }
 
     sim_meal[i] = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0)
@@ -274,10 +278,6 @@ to_plot = pd.DataFrame(sim_meal[0]['Time'])
 column_names = ['Time']
 for i in range(n_meals):
     sim_feature = sim_meal[i][feature_meal]
-    np.disp(sim_feature)
-    np.disp(sim_feature.index)
-    np.disp(to_plot.index)
-    np.disp(to_plot)
     sim_feature.index = to_plot.index
     to_plot = pd.concat([to_plot,sim_feature], axis=1)
     meal_str = 'Meal at age ' + str(meal_time[i]/365.0)
@@ -286,9 +286,7 @@ for i in range(n_meals):
 to_plot.columns = column_names
 to_plot = to_plot.reset_index(drop=True)
 to_plot = to_plot.set_index('Time')
-np.disp(to_plot)
 plot_data = to_plot.reset_index().melt('Time')
-np.disp(plot_data)
 
 m = (
 alt.Chart(plot_data).mark_line().encode(
