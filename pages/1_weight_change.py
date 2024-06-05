@@ -290,7 +290,7 @@ plot_data = to_plot.reset_index().melt('Time')
 m = (
 alt.Chart(plot_data).mark_line().encode(
     x='Time',
-    y=feature_meal,
+    y='value',
     color='variable'
 ))
 
