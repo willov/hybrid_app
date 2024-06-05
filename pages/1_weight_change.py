@@ -170,7 +170,7 @@ t_long = []
 start_time = st.session_state['age']
 
 diet_start = st.number_input("Diet start (age): ", st.session_state['age'], 100.0, 40.0, 0.1, key=f"diet_start")
-diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length")
+diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 40.0, 0.1, key=f"diet_length")
 diet = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
 EIchange = [0.0] + [0.0] + [0.0] + [diet] + [0.0] 
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
@@ -239,7 +239,7 @@ if n_meals < 1.0:
 # Plotting weight change and meals
 st.subheader("Plotting long term simulation of weight change")
 
-feature_long = st.selectbox("Feature of the model to plot", model_features[5:], key="long_plot")
+feature_long = st.selectbox("Feature of the model to plot", model_features, key="long_plot")
 # st.line_chart(sim_long, x="Time", y=feature_long)
 
 l = (
@@ -254,7 +254,7 @@ if n_meals > 0.0:
     st.divider()
 
     st.subheader("Plotting meal simulations")
-    feature_meal = st.selectbox("Feature of the model to plot", model_features, key="meal_plot")
+    feature_meal = st.selectbox("Feature of the model to plot", model_features[5:], key="meal_plot")
 
 
     to_plot = pd.DataFrame(sim_meal[0]['Time'])
