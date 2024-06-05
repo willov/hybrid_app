@@ -190,6 +190,7 @@ st.subheader("Meals")
 
 meal_amount = []
 meal_times = []
+sim_meal = []
 
 n_meals = st.slider("Number of (solid) meals:", 0, 5, 1)
 
@@ -218,9 +219,7 @@ for i in range(n_meals):
     "ss_x": {"t": meal_times, "f": ss_x}
         }
 
-    sim_meal = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0)
-    np.disp(type(sim_meal))
-    np.disp(sim_meal.shape)
+    sim_meal[i] = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0)
     # start_time += 0.1
 
 st.divider()
