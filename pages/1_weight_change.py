@@ -190,6 +190,7 @@ st.divider()
 st.subheader("Meals")
 
 meal_amount = []
+meal_kcal = []
 meal_times = []
 meal_time = []
 
@@ -199,7 +200,7 @@ sim_meal = list(range(n_meals))
 for i in range(n_meals):
     st.markdown(f"**Meal {i+1}**")
     meal_time.append(st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times{i}")*365.0)
-    meal_amount = st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals{i}")
+    meal_kcal.append(st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals{i}"))
     t_before_meal = t_long[0:3] + [meal_time[i]] 
     stim_before_meal = {
     "EIchange": {"t": t_before_meal, "f": EIchange},
@@ -210,7 +211,7 @@ for i in range(n_meals):
     sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_before_meal, t_start_sim)
 
     meal_times = [0.0] + [0.001] + [0.3]
-    meal_amount = [0.0] + [0.0] + [meal_amount] + [0.0]
+    meal_amount = [0.0] + [0.0] + [meal_kcal[i]] + [0.0]
     meal = [0.0] + [0.0] + [1.0] + [0.0]
     ss_x_meal = [1.0] + [1.0] + [1.0] + [1.0] 
 
@@ -238,7 +239,7 @@ if n_meals < 1.0:
 # Plotting weight change and meals
 st.subheader("Plotting long term simulation of weight change")
 
-feature_long = st.selectbox("Feature of the model to plot", model_features, key="long_plot")
+feature_long = st.selectbox("Feature of the model to plot", model_features[5:], key="long_plot")
 # st.line_chart(sim_long, x="Time", y=feature_long)
 
 l = (
@@ -262,7 +263,7 @@ if n_meals > 0.0:
         sim_feature = sim_meal[i][feature_meal]
         sim_feature.index = to_plot.index
         to_plot = pd.concat([to_plot,sim_feature], axis=1)
-        meal_str = 'Meal at age ' + str(meal_time[i]/365.0)
+        meal_str = str(meal_kcal[i]) + 'kcal meal at age ' + str(meal_time[i]/365.0)
         column_names.append(meal_str)
 
     to_plot.columns = column_names

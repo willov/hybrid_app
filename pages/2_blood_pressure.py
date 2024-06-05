@@ -26,18 +26,6 @@ def setup_model(model_name):
     model_class = sund.importModel(model_name)
     model = model_class() 
 
-    # fs = []
-    # for path, subdirs, files in os.walk('./results'):
-    #    for name in files:
-    #        if model_name in name.split('(')[0] and "ignore" not in path:
-    #            fs.append(os.path.join(path, name))
-    # fs.sort()
-    #with open(fs[0],'r') as f:
-    #    param_in = json.load(f)
-    #    params = param_in['x']
-
-    # model.parametervalues = params
-
     features = model.featurenames
     return model, features
 
@@ -63,8 +51,6 @@ def simulate(m, stim, anthropometrics, initials): #, extra_time = 10):
     sim.ResetStatesDerivatives()
     t_start = min(stim["drug_on"]["t"])
 
-    np.disp(initials)
-    np.disp(type(initials))
     sim.Simulate(timevector = np.linspace(t_start, max(stim["drug_on"]["t"]), 10000), statevalues = initials) # +extra_time
     
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
@@ -97,7 +83,7 @@ st.subheader("Blood pressure")
 #n_med = st.slider("Number of periods of blood pressure medication:", 1, 5, 1)
 
 anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key=f"IC_SBP")
-anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, 200.0, st.session_state.IC_DBP, 0.1, key=f"IC_DBP")
+anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, st.session_state.IC_SBP, st.session_state.IC_DBP, 0.1, key=f"IC_DBP")
 
 start_time = st.number_input("When do you want to start the simulation (age)?:", 0.0, 200.0, st.session_state['age'], key=f"age")
 end_time = start_time + st.number_input("How long time do you want to simulate (years): ", 0.0, 200.0, 40.0, key=f"end_time")
@@ -134,9 +120,6 @@ if take_BPmed:
 med_times.append(end_time)
 t_long = med_times # [time for t,l in zip(med_times, med_lengths) for time in (t,t+l)]
 st.divider()
-
-np.disp(drug_on)
-np.disp(t_long)
 
 # Setup stimulation to the model
 
