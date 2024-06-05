@@ -171,14 +171,14 @@ start_time = st.session_state['age']
 
 diet_start = st.number_input("Diet start (age): ", st.session_state['age'], 100.0, 40.0, 0.1, key=f"diet_start")
 diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 20.0, 0.1, key=f"diet_length")
-EIchange = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
-EIchanges = [0.0] + [0.0] + [0.0] + [EIchange] + [0.0] 
+diet = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
+EIchange = [0.0] + [0.0] + [0.0] + [diet] + [0.0] 
 # t_long = st.number_input("How long to simulate (years): ", 0.0, 100.0, 45.0, 1.0, key=f"t_long")
 t_long = [st.session_state['age']*365.0-10.0] + [st.session_state['age']*365.0] + [diet_start*365.0] + [(st.session_state['age']+diet_length)*365.0] 
 ss_x = [0] + [0] + [1] + [1] + [0] 
 
 stim_long = {
-    "EIchange": {"t": t_long, "f": EIchanges},
+    "EIchange": {"t": t_long, "f": EIchange},
     "ss_x": {"t": t_long, "f": ss_x},
     }
 
@@ -202,7 +202,7 @@ for i in range(n_meals):
     meal_amount = st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals{i}")
     t_before_meal = t_long[0:3] + [meal_time[i]] 
     stim_before_meal = {
-    "EIchange": {"t": t_before_meal, "f": EIchanges},
+    "EIchange": {"t": t_before_meal, "f": EIchange},
     "ss_x": {"t": t_before_meal, "f": ss_x},
         }
 
@@ -216,15 +216,17 @@ for i in range(n_meals):
     meal_times = [0.0] + [0.001] + [0.3]
     meal_amount = [0.0] + [0.0] + [meal_amount] + [0.0]
     meal = [0.0] + [0.0] + [1.0] + [0.0]
-    ss_x = [0.0] + [0.0] + [0.0] + [0.0] 
-    EIchanges = [0.0] + [EIchange] + [EIchange] + [0.0] 
+    ss_x_meal = [1.0] + [1.0] + [1.0] + [1.0] 
+    EIchanges_meal = [0.0] + [diet] + [diet] + [0.0] 
+
+    np.disp(EIchanges_meal)
 
     stim_meal = {
     "meal_amount": {"t": meal_times, "f": meal_amount},
     "meal": {"t": meal_times, "f": meal},
     "meal_time": {"t": meal_times, "f": meal},
-    "ss_x": {"t": meal_times, "f": ss_x},
-    "EIchange": {"t": meal_times, "f": EIchanges},
+    "ss_x": {"t": meal_times, "f": ss_x_meal},
+    "EIchange": {"t": meal_times, "f": EIchanges_meal},
         }
 
     sim_meal[i] = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0)
