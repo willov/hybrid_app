@@ -214,8 +214,6 @@ for i in range(n_meals):
     meal = [0.0] + [0.0] + [1.0] + [0.0]
     ss_x_meal = [1.0] + [1.0] + [1.0] + [1.0] 
 
-    np.disp(EIchanges_meal)
-
     stim_meal = {
     "meal_amount": {"t": meal_times, "f": meal_amount},
     "meal": {"t": meal_times, "f": meal},
