@@ -86,7 +86,7 @@ def simulate_meal(m, anthropometrics, stim, inits, t_start_sim):
 
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
 
-    sim.ResetStatesDerivatives()
+    # sim.ResetStatesDerivatives()
 
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
    
@@ -290,9 +290,9 @@ np.disp(plot_data)
 
 m = (
 alt.Chart(plot_data).mark_line().encode(
-    x='Time',
-    y='value',
-    color='variable'
+    x=alt.X('Time').scale(zero=False).title('Time (minutes)'),
+    y=alt.Y('value').scale(zero=False).title(feature_meal),
+    # color='variable'
 ))
 
 st.altair_chart(m, use_container_width=True)
