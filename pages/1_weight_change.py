@@ -206,8 +206,10 @@ for i in range(n_meals):
     "ss_x": {"t": t_before_meal, "f": ss_x},
         }
 
-    t_start_sim = min(stim_long["ss_x"]["t"])+10.0
-    sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_long, t_start_sim)
+    np.disp(t_before_meal)
+    np.disp(meal_time[i])
+    t_start_sim = min(stim_before_meal["ss_x"]["t"])+10.0
+    sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_before_meal, t_start_sim)
 
     meal_times = [0.0] + [0.001] + [0.3]
     meal_amount = [0.0] + [0.0] + [meal_amount] + [0.0]
@@ -249,7 +251,7 @@ st.altair_chart(l, use_container_width=True)
 
 st.divider()
 
-st.subheader("Plotting meal simulations based on time points chosen in long term simulation")
+st.subheader("Plotting meal simulations")
 feature_meal = st.selectbox("Feature of the model to plot", model_features, key="meal_plot")
 
 # m = (
@@ -292,7 +294,7 @@ m = (
 alt.Chart(plot_data).mark_line().encode(
     x=alt.X('Time').scale(zero=False).title('Time (minutes)'),
     y=alt.Y('value').scale(zero=False).title(feature_meal),
-    # color='variable'
+    color='variable'
 ))
 
 st.altair_chart(m, use_container_width=True)
