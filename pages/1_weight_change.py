@@ -272,8 +272,8 @@ to_plot = pd.DataFrame(sim_meal[0]['Time'])
 column_name = []
 for i in range(n_meals):
     pd.concat([to_plot,sim_meal[i][feature_meal]])
-    np.disp('Meal at age ' + str(meal_time[i]))
-    column_name = column_name.append('Meal at age ' + str(meal_time[i]))
+    np.disp('Meal at age ' + str(meal_time[i]*365.0))
+    column_name = column_name.append(['Meal at age ' + str(meal_time[i]*365.0)])
 
 np.disp(column_name)
 to_plot.columns = column_name
