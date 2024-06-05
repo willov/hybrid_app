@@ -271,6 +271,7 @@ feature_meal = st.selectbox("Feature of the model to plot", model_features, key=
 to_plot = pd.DataFrame(sim_meal[0]['Time'])
 column_names = ['Time']
 for i in range(n_meals):
+    np.disp(sim_meal[i][feature_meal])
     pd.concat([to_plot,sim_meal[i][feature_meal]])
     column_names.append(['Meal at age ' + str(meal_time[i]/365.0)])
 
