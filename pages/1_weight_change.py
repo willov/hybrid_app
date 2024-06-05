@@ -206,10 +206,6 @@ for i in range(n_meals):
     "ss_x": {"t": t_before_meal, "f": ss_x},
         }
 
-    np.disp(t_before_meal)
-    np.disp(ss_x)
-    np.disp(EIchanges)
-
     t_start_sim = min(stim_before_meal["ss_x"]["t"])+10.0
     sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_before_meal, t_start_sim)
 
