@@ -72,7 +72,7 @@ def simulate(m, anthropometrics, stim, t_start_sim):
     inits = sim.statevalues
     return sim_diet_results, inits
 
-def simulate_meal(m, anthropometrics, stim, inits):
+def simulate_meal(m, anthropometrics, stim, inits, t_start_sim):
     act = sund.Activity(timeunit = 'd')
     pwc = sund.PIECEWISE_CONSTANT # space saving only
     const = sund.CONSTANT # space saving only
@@ -88,8 +88,9 @@ def simulate_meal(m, anthropometrics, stim, inits):
    
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
+    sim_meal_results = sim_results[(sim_results['Time']>=t_start_sim)]
 
-    return sim_results
+    return sim_meal_results
 
 
 # Start the app
@@ -199,7 +200,6 @@ stim_long = {
 
 t_start_sim = min(stim_long["ss_x"]["t"])+10.0
 sim_long, inits = simulate(model, anthropometrics, stim_long, t_start_sim)
-np.disp(sim_long)
 sim_long['Time'] = sim_long['Time']/365.0
 
 # Plotting weight change and meals
@@ -230,10 +230,10 @@ stim_before_meal = {
 t_start_sim = min(stim_long["ss_x"]["t"])+10.0
 sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_long, t_start_sim)
 
-meal_times = [0.0] + [0.3]
-meal_amount = [0.0] + [meal_amount] + [0.0]
-meal = [0.0] + [1.0] + [0.0]
-ss_x = [0.0] + [0.0] + [0.0] 
+meal_times = [-1] + [0.0] + [0.3]
+meal_amount = [0.0] + [0.0] + [meal_amount] + [0.0]
+meal = [0.0] + [0.0] + [1.0] + [0.0]
+ss_x = [0.0] + [0.0] + [0.0] + [0.0] 
 
 stim_meal = {
 "meal_amount": {"t": meal_times, "f": meal_amount},
@@ -242,7 +242,7 @@ stim_meal = {
 "ss_x": {"t": meal_times, "f": ss_x}
     }
 
-sim_meal = simulate_meal(model, anthropometrics, stim_meal, inits_meal)
+sim_meal = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0)
 sim_meal['Time'] = sim_meal['Time']*24.0*60.0 
 
 m = (
