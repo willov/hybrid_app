@@ -47,7 +47,6 @@ def simulate(m, anthropometrics, stim, t_start_sim, meal):
         act.AddOutput(name = key, type=const, fvalues = val) 
 
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
-
     
     sim.ResetStatesDerivatives()
     
