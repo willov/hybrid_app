@@ -10,8 +10,8 @@ timeunit = y
 d/dt(SBP) = ((k1_SBP + k2_SBP*(time-age0)) * SBP_vs_IC) - drugS  // ~ linear with time
 d/dt(DBP) = ((k1_DBP - k2_DBP*(time-age0)) * DBP_vs_IC) - drugD  // ~ exponential with time 
 
-SBP(0) = 120 
-DBP(0) = 70 
+SBP(0) = 131.613
+DBP(0) = 83.4642
 
 ########## PARAMETERS
 k1_SBP = 0.4081
@@ -50,9 +50,9 @@ e2 = drug_on<1, dummy, 1   //This is only used to trigger the reset of the simul
 ########## INPUTS
 drug_on = drug_on                 @ 0
 
-IC_SBP = IC_SBP                   @ 120
-IC_DBP = IC_DBP                   @ 70
-age = age                         @ 40
+IC_SBP = IC_SBP                   @ 131.613
+IC_DBP = IC_DBP                   @ 83.4642
+age = age                         @ 45
 
 ########## FEATURES
 
