@@ -69,9 +69,9 @@ Below, you can specify for how long you want to simulate and if you want to take
 if 'age' not in st.session_state:
     st.session_state['age'] = 40.0
 if 'IC_SBP' not in st.session_state:
-    st.session_state['IC_SBP'] = 150.0
+    st.session_state['IC_SBP'] = 131.613
 if 'IC_DBP' not in st.session_state:
-    st.session_state['IC_DBP'] = 80.0
+    st.session_state['IC_DBP'] = 83.4642
 
 
 anthropometrics = {"IC_SBP": st.session_state['IC_SBP'], "IC_DBP": st.session_state['IC_DBP'], "age": st.session_state['age']}
