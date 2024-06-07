@@ -98,9 +98,9 @@ def simulate_meal(m, anthropometrics, stim, inits, t_start_sim):
 # Start the app
 
 st.title("Simulation weight change")
-st.markdown("""Using the model for insulin resistance and blood pressure, you can simulate the dynamics of different changes in energy intake and blood pressure medication based on custom anthropometrics. 
+st.markdown("""Using the model for insulin resistance and weight change, you can here simulate the dynamics of different changes in energy intake based on custom anthropometrics. 
 
-Below, you can specify how big change in energy intake you want to simulate and when/how big meals to simulate.
+Below, you can specify how big change in energy intake you want to simulate and when/how big meals you want to simulate.
 
 """)
 
