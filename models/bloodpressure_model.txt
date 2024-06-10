@@ -27,7 +27,7 @@ t_drug = 2
 effect_drugS = 20
 effect_drugD = 5
 dummy = 0
-age0 = 0
+age0 = 40
 
 ########## VARIABLES
 PP = SBP-DBP
