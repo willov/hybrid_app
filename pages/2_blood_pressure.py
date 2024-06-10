@@ -82,7 +82,7 @@ st.subheader("Blood pressure")
 anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (kg):", 40.0, 300.0, st.session_state.IC_SBP, 0.1, key=f"IC_SBP")
 anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (kg):", 40.0, st.session_state.IC_SBP, st.session_state.IC_DBP, 0.1, key=f"IC_DBP")
 
-start_time = st.number_input("When do you want to start the simulation (age)?:", 0.0, 200.0, st.session_state['age'], key=f"age")
+start_time = st.number_input("When do you want to start the simulation (age)?:", 0.0, 200.0, 30.0, key=f"age")
 end_time = start_time + st.number_input("How long time do you want to simulate (years): ", 0.0, 200.0, 45.0, key=f"end_time")
 
 initials = [st.session_state['IC_SBP'], st.session_state['IC_DBP']]
