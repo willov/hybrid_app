@@ -262,7 +262,7 @@ if n_meals > 0.0:
     alt.Chart(plot_data).mark_line().encode(
         x=alt.X('Time').scale(zero=False).title('Time (minutes)'),
         y=alt.Y('value').scale(zero=False).title(feature_meal),
-        color='variable'
+        color=alt.Color('meals', legend=alt.Legend(orient='bottom'))
     ))
 
     st.altair_chart(m, use_container_width=True)
