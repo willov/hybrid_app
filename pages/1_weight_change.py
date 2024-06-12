@@ -242,7 +242,7 @@ if n_meals > 0.0:
 
     st.subheader("Plotting meal simulations")
     feature_meal = st.selectbox("Feature of the model to plot", model_features[5:], key="meal_plot")
-    baseline = inits_meal[feature_meal]
+    baseline = sim_before_meal[feature_meal]
 
     to_plot = pd.DataFrame(sim_meal[0]['Time'])
     column_names = ['Time']
