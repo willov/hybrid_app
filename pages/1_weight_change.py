@@ -254,7 +254,7 @@ if n_meals > 0.0:
 
     np.disp(type(sim_before_meal[feature_meal])) 
     np.disp(sim_before_meal[feature_meal].tail) 
-    np.disp(inits_meal[feature_meal])
+    np.disp(inits_meal)
     np.disp(type(baseline))
 
     sim_feature.index = to_plot.index
