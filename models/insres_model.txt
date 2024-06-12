@@ -506,7 +506,7 @@ Diabetes = diabetes
 Plasma insulin (pmol/l) = I
 Plasma glucose (mg/dl) = G
 Glucose uptake in muscle tissue (mg/kg/min) = U_idm
-IRS1 (% of max) = measuredIRS1
-PKB308 (% of max) = measuredPKB308
+IRS1 (% of baseline) = measuredIRS1
+PKB308 (% of baseline) = measuredPKB308
 Glucose uptake in fat tissue (mg/kg/min) = U_idf
 

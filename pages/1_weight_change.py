@@ -242,7 +242,7 @@ if n_meals > 0.0:
 
     st.subheader("Plotting meal simulations")
     feature_meal = st.selectbox("Feature of the model to plot", model_features[5:], key="meal_plot")
-    baseline = sim_before_meal[feature_meal].tail
+    baseline = inits_meal[feature_meal]
 
     to_plot = pd.DataFrame(sim_meal[0]['Time'])
     column_names = ['Time']
@@ -252,8 +252,10 @@ if n_meals > 0.0:
         else:
             sim_feature = sim_meal[i][feature_meal]
 
-    np.disp(sim_before_meal[feature_meal]) 
+    np.disp(np.type(sim_before_meal[feature_meal])) 
     np.disp(sim_before_meal[feature_meal].tail) 
+    np.disp(inits_meal[feature_meal])
+    np.disp(np.type(baseline))
 
     sim_feature.index = to_plot.index
     to_plot = pd.concat([to_plot,sim_feature], axis=1)
