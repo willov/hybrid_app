@@ -252,10 +252,10 @@ if n_meals > 0.0:
         else:
             sim_feature = sim_meal[i][feature_meal]
 
-    np.disp(np.type(sim_before_meal[feature_meal])) 
+    np.disp(type(sim_before_meal[feature_meal])) 
     np.disp(sim_before_meal[feature_meal].tail) 
     np.disp(inits_meal[feature_meal])
-    np.disp(np.type(baseline))
+    np.disp(type(baseline))
 
     sim_feature.index = to_plot.index
     to_plot = pd.concat([to_plot,sim_feature], axis=1)
