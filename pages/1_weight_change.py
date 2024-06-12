@@ -242,16 +242,23 @@ if n_meals > 0.0:
 
     st.subheader("Plotting meal simulations")
     feature_meal = st.selectbox("Feature of the model to plot", model_features[5:], key="meal_plot")
-
+    baseline = sim_before_meal[feature_meal].tail
 
     to_plot = pd.DataFrame(sim_meal[0]['Time'])
     column_names = ['Time']
     for i in range(n_meals):
-        sim_feature = sim_meal[i][feature_meal]
-        sim_feature.index = to_plot.index
-        to_plot = pd.concat([to_plot,sim_feature], axis=1)
-        meal_str = str(meal_kcal[i]) + ' kcal meal at age ' + str(meal_time[i]/365.0)
-        column_names.append(meal_str)
+        if 'IRS1' in feature_meal or 'PKB308' in feature_meal:
+            sim_feature = sim_meal[i][feature_meal]/baseline
+        else:
+            sim_feature = sim_meal[i][feature_meal]
+
+    np.disp(sim_before_meal[feature_meal]) 
+    np.disp(sim_before_meal[feature_meal].tail) 
+
+    sim_feature.index = to_plot.index
+    to_plot = pd.concat([to_plot,sim_feature], axis=1)
+    meal_str = str(meal_kcal[i]) + ' kcal meal at age ' + str(meal_time[i]/365.0)
+    column_names.append(meal_str)
 
     to_plot.columns = column_names
     to_plot = to_plot.reset_index(drop=True)
@@ -262,7 +269,7 @@ if n_meals > 0.0:
     alt.Chart(plot_data).mark_line().encode(
         x=alt.X('Time').scale(zero=False).title('Time (minutes)'),
         y=alt.Y('value').scale(zero=False).title(feature_meal),
-        color=alt.Color('variable', legend=alt.Legend(orient='bottom'))
+        color=alt.Color('variable', legend=alt.Legend(orient='bottom')).title("meal")
     ))
 
     st.altair_chart(m, use_container_width=True)
