@@ -250,7 +250,7 @@ if n_meals > 0.0:
             baseline = sim_before_meal[feature_meal]
             np.disp(sim_before_meal[feature_meal])
             np.disp(sim_meal[i][feature_meal])
-            sim_feature = sim_meal[i][feature_meal].divide(baseline)
+            sim_feature = sim_meal[i][feature_meal] #.divide(baseline)
         else:
             sim_feature = sim_meal[i][feature_meal]
 
