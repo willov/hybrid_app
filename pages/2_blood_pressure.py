@@ -126,7 +126,7 @@ IC_SBPdata = v[0,:]
 dataage = np.array([30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80])
 
 
-mindiff, chosenAgeIndex = min((abs(age - userage), idx) for idx, age in enumerate(dataage))
+mindiff, chosenAgeIndex = min((abs(age - start_time), idx) for idx, age in enumerate(dataage))
 chosenAge = dataage[chosenAgeIndex]
 dataSBP = v[chosenAgeIndex, :]
 mindiff, chosenColumn = min((abs(sbp - SBP0), idx) for idx, sbp in enumerate(dataSBP))
