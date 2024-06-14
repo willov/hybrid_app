@@ -66,26 +66,21 @@ Below, you can specify for how long you want to simulate and if you want to take
 
 """)
 
-if 'age' not in st.session_state:
-    st.session_state['age'] = 40.0
-if 'IC_SBP' not in st.session_state:
-    st.session_state['IC_SBP'] = 131.613
-if 'IC_DBP' not in st.session_state:
-    st.session_state['IC_DBP'] = 83.4642
-
-
-anthropometrics = {"IC_SBP": st.session_state['IC_SBP'], "IC_DBP": st.session_state['IC_DBP'], "age": st.session_state['age']}
+if 'SBP0' not in st.session_state:
+    st.session_state['SBP0'] = 131.613
+if 'DBP0' not in st.session_state:
+    st.session_state['DBP0'] = 83.4642
 
 # Specifying blood pressure medication
 st.subheader("Blood pressure")
 
-anthropometrics["IC_SBP"] = st.number_input("Systolic blood pressure at start (mmHg)):", 40.0, 300.0, st.session_state.IC_SBP, 1.0, key=f"IC_SBP")
-anthropometrics["IC_DBP"] = st.number_input("Diastolic blood pressure at start (mmHg):", 40.0, st.session_state.IC_SBP, st.session_state.IC_DBP, 1.0, key=f"IC_DBP")
+SBP0 = st.number_input("Systolic blood pressure at start (mmHg)):", 40.0, 300.0, st.session_state.SBP0, 1.0, key=f"SBP0")
+DBP0 = st.number_input("Diastolic blood pressure at start (mmHg):", 40.0, st.session_state.SBP0, st.session_state.DBP0, 1.0, key=f"DBP0")
 
 start_time = st.number_input("When do you want to start the simulation (age)?:", 0.0, 200.0, 40.0, key=f"start_time")
 end_time = start_time + st.number_input("How long time do you want to simulate (years): ", 0.0, 200.0, 40.0, key=f"end_time")
 
-initials = [st.session_state['IC_SBP'], st.session_state['IC_DBP']]
+initials = [st.session_state['SBP0'], st.session_state['DBP0']]
 
 med_times = []
 med_lengths = [] 
@@ -110,6 +105,36 @@ if take_BPmed:
 med_times.append(end_time)
 t_long = med_times 
 st.divider()
+
+#%% find correct bp group based on sbp and dbp value
+v = np.array([
+    [111.472772277228, 117.860744407774, 125.223689035570, 131.612577924459],
+    [112.666850018335, 119.611294462780, 124.055738907224, 133.362211221122],
+    [113.166483314998, 121.500733406674, 129.834066740007, 139.556288962229],
+    [114.221672167217, 124.084616795013, 133.390172350568, 142.557755775577],
+    [114.584250091676, 126.251833516685, 136.390722405574, 149.169416941694],
+    [117.724605793913, 128.419966996700, 139.669050238357, 153.558855885588],
+    [120.168683535020, 131.002933626696, 142.947378071140, 156.558489182251],
+    [121.361844517785, 133.585900256692, 144.697011367803, 157.475705903924],
+    [123.529977997800, 135.335533553355, 147.420700403374, 161.170700403373],
+    [124.170333700037, 135.837917125046, 148.476806013935, 167.644389438944],
+    [126.197744774477, 136.893105977264, 146.893105977264, 165.3671617161719]
+])
+
+IC_DBPdata = np.array([71.7975011786893, 75.8451202263084, 80.6667452459532, 83.4641678453560])
+IC_SBPdata = v[0,:]
+dataage = np.array([30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80])
+
+
+mindiff, chosenAgeIndex = min((abs(age - userage), idx) for idx, age in enumerate(dataage))
+chosenAge = dataage[chosenAgeIndex]
+dataSBP = v[chosenAgeIndex, :]
+mindiff, chosenColumn = min((abs(sbp - SBP0), idx) for idx, sbp in enumerate(dataSBP))
+
+IC_DBP = IC_DBPdata[chosenColumn]
+IC_SBP = IC_SBPdata[chosenColumn]
+
+anthropometrics = {IC_SBP, IC_DBP}
 
 # Setup stimulation to the model
 
