@@ -246,17 +246,7 @@ if n_meals > 0.0:
     to_plot = pd.DataFrame(sim_meal[0]['Time'])
     column_names = ['Time']
     for i in range(n_meals):
-        if 'IRS1' in feature_meal or 'PKB308' in feature_meal:
-            baseline = sim_before_meal[feature_meal]
-            np.disp(sim_before_meal[feature_meal])
-            np.disp(sim_meal[i][feature_meal])
-            sim_feature = sim_meal[i][feature_meal].divide(baseline)
-            np.disp(sim_feature)
-        else:
-            sim_feature = sim_meal[i][feature_meal]
-
-    np.disp(sim_before_meal[feature_meal])
-    np.disp(sim_meal[i][feature_meal])
+        sim_feature = sim_meal[i][feature_meal]
 
     sim_feature.index = to_plot.index
     to_plot = pd.concat([to_plot,sim_feature], axis=1)
