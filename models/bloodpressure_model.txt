@@ -23,7 +23,7 @@ k2_DBP = 0.0183
 bSBP = 99.8670
 bDBP = 55.9788
 
-t_drug =´2// 3.6 
+t_drug = 2// 3.6 
 effect_drugS = 20
 effect_drugD = 5
 dummy = 0
