@@ -99,7 +99,7 @@ st.markdown(f"**Blood pressure medication**")
 take_BPmed = st.checkbox("Do you know want to add a blood pressure medication?")
 if take_BPmed:
     med_times.append(st.number_input("Start of blood pressure medication (age): ", start_time, 100.0, 45.0, key=f"BP_med"))
-    med_times.append(med_times[1] + 5)
+    med_times.append(med_times[1] + 2)
     drug_on = [0] + [0] + [1] + [0] + [0] 
 
 med_times.append(end_time)
