@@ -134,7 +134,7 @@ mindiff, chosenColumn = min((abs(sbp - SBP0), idx) for idx, sbp in enumerate(dat
 IC_DBP = IC_DBPdata[chosenColumn]
 IC_SBP = IC_SBPdata[chosenColumn]
 
-anthropometrics = {IC_SBP, IC_DBP}
+anthropometrics = {"IC_SBP": IC_SBP, "IC_DBP": IC_DBP}
 
 # Setup stimulation to the model
 
