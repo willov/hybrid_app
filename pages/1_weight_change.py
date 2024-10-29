@@ -8,6 +8,7 @@ import altair as alt
 from array import array
 import plotly.express as px
 import plotly.graph_objects as go
+from json import JSONEncoder
 
 # Install sund in a custom location
 import subprocess
@@ -17,6 +18,13 @@ if "sund" not in os.listdir('./custom_package'):
 
 sys.path.append('./custom_package')
 import sund
+
+
+class NumpyArrayEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return JSONEncoder.default(self, obj)
 
 st.elements.utils._shown_default_value_warning=True # This is not a good solution, but it hides the warning of using default values and sessionstate api
 
@@ -51,6 +59,11 @@ def simulate(m, anthropometrics, stim, t_start_sim, n):
     
     sim.ResetStatesDerivatives()
 
+    for key, value in anthropometrics.items():
+        stim[key] = value
+    with open(f'simulate_input_{n}_t_{t_start_sim}.json', 'w') as f:
+        json.dump(stim, f, cls=NumpyArrayEncoder)
+    
     # Getting initial values
     
     fs = []
@@ -66,8 +79,12 @@ def simulate(m, anthropometrics, stim, t_start_sim, n):
     inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
    
+   
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
+
+    with open(f'simulate_simres_{n}_t_{t_start_sim}.json', 'w') as f:
+        json.dump(sim_results.to_dict(), f, cls=NumpyArrayEncoder )
 
     sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
     inits = sim.statevalues
@@ -82,6 +99,14 @@ def simulate_meal(m, anthropometrics, stim, inits, t_start_sim, n):
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
     for key,val in anthropometrics.items():
         act.AddOutput(name = key, type=const, fvalues = val)
+
+
+
+    for key, value in anthropometrics.items():
+        stim[key] = value
+    with open(f'simulate_meal_{n}_input_t_{t_start_sim}.json', 'w') as f:
+        json.dump(stim, f, cls=NumpyArrayEncoder)
+    
 
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
 
