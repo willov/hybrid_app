@@ -37,7 +37,7 @@ model, model_features = setup_model('insres_model')
 def flatten(list):
     return [item for sublist in list for item in sublist]
 
-def simulate(m, anthropometrics, stim, t_start_sim):
+def simulate(m, anthropometrics, stim, t_start_sim, n):
     act = sund.Activity(timeunit = 'd')
     pwc = sund.PIECEWISE_CONSTANT # space saving only
     const = sund.CONSTANT # space saving only
@@ -50,7 +50,7 @@ def simulate(m, anthropometrics, stim, t_start_sim):
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
     
     sim.ResetStatesDerivatives()
-    
+
     # Getting initial values
     
     fs = []
@@ -73,7 +73,7 @@ def simulate(m, anthropometrics, stim, t_start_sim):
     inits = sim.statevalues
     return sim_diet_results, inits
 
-def simulate_meal(m, anthropometrics, stim, inits, t_start_sim):
+def simulate_meal(m, anthropometrics, stim, inits, t_start_sim, n):
     act = sund.Activity(timeunit = 'd')
     pwc = sund.PIECEWISE_CONSTANT # space saving only
     const = sund.CONSTANT # space saving only
@@ -81,13 +81,14 @@ def simulate_meal(m, anthropometrics, stim, inits, t_start_sim):
     for key,val in stim.items():
         act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
     for key,val in anthropometrics.items():
-        act.AddOutput(name = key, type=const, fvalues = val) 
+        act.AddOutput(name = key, type=const, fvalues = val)
 
     sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
 
     sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
    
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
+
     sim_results.insert(0, 'Time', sim.timevector)
     sim_meal_results = sim_results[(sim_results['Time']>=t_start_sim)]
     sim_meal_results['Time'] = sim_meal_results['Time']*24.0*60.0 
@@ -179,7 +180,7 @@ stim_long = {
     }
 
 t_start_sim = min(stim_long["ss_x"]["t"])+10.0
-sim_long, inits = simulate(model, anthropometrics, stim_long, t_start_sim)
+sim_long, inits = simulate(model, anthropometrics, stim_long, t_start_sim, -1)
 sim_long['Time'] = sim_long['Time']/365.0
 
 st.divider()
@@ -195,7 +196,7 @@ sim_meal = list(range(n_meals))
 
 for i in range(n_meals):
     st.markdown(f"**Meal {i+1}**")
-    meal_time.append(st.number_input("Time of meal (age): ", start_time, start_time+diet_length, start_time, key=f"meal_times{i}")*365.0)
+    meal_time.append(st.number_input("Time of meal (age): ", start_time, start_time+diet_length, min(start_time+10*i, start_time+diet_length), key=f"meal_times{i}")*365.0)
     meal_kcal.append(st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals{i}"))
     t_before_meal = t_long[0:3] + [meal_time[i]] 
     stim_before_meal = {
@@ -204,12 +205,12 @@ for i in range(n_meals):
         }
 
     t_start_sim = min(stim_before_meal["ss_x"]["t"])+10.0
-    sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_before_meal, t_start_sim)
+    sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_before_meal, t_start_sim, i)
 
     meal_times = [0.0] + [0.001] + [0.3]
     meal_amount = [0.0] + [0.0] + [meal_kcal[i]] + [0.0]
     meal = [0.0] + [0.0] + [1.0] + [0.0]
-    ss_x_meal = [1.0] + [1.0] + [1.0] + [1.0] 
+    ss_x_meal = [1.0] + [1.0] + [1.0] + [1.0]
 
     stim_meal = {
     "meal_amount": {"t": meal_times, "f": meal_amount},
@@ -218,7 +219,7 @@ for i in range(n_meals):
     "ss_x": {"t": meal_times, "f": ss_x_meal},
         }
 
-    sim_meal[i] = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0)
+    sim_meal[i] = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0, i)
     st.divider()
 
 if n_meals < 1.0:
@@ -243,26 +244,27 @@ if n_meals > 0.0:
     st.subheader("Plotting meal simulations")
     feature_meal = st.selectbox("Feature of the model to plot", model_features[5:], key="meal_plot")
 
-    to_plot = pd.DataFrame(sim_meal[0]['Time'])
-    column_names = ['Time']
     for i in range(n_meals):
+        to_plot = pd.DataFrame(sim_meal[0]['Time'])
+        column_names = ['Time']
+        
         sim_feature = sim_meal[i][feature_meal]
 
-    sim_feature.index = to_plot.index
-    to_plot = pd.concat([to_plot,sim_feature], axis=1)
-    meal_str = str(meal_kcal[i]) + ' kcal meal at age ' + str(meal_time[i]/365.0)
-    column_names.append(meal_str)
+        sim_feature.index = to_plot.index
+        to_plot = pd.concat([to_plot,sim_feature], axis=1)
+        meal_str = str(meal_kcal[i]) + ' kcal meal at age ' + str(meal_time[i]/365.0)
+        column_names.append(meal_str)
 
-    to_plot.columns = column_names
-    to_plot = to_plot.reset_index(drop=True)
-    to_plot = to_plot.set_index('Time')
-    plot_data = to_plot.reset_index().melt('Time')
+        to_plot.columns = column_names
+        to_plot = to_plot.reset_index(drop=True)
+        to_plot = to_plot.set_index('Time')
+        plot_data = to_plot.reset_index().melt('Time')
 
-    m = (
-    alt.Chart(plot_data).mark_line().encode(
-        x=alt.X('Time').scale(zero=False).title('Time (minutes)'),
-        y=alt.Y('value').scale(zero=False).title(feature_meal),
-        color=alt.Color('variable', legend=alt.Legend(orient='bottom')).title("meal")
-    ))
+        m = (
+        alt.Chart(plot_data).mark_line().encode(
+            x=alt.X('Time').scale(zero=False).title('Time (minutes)'),
+            y=alt.Y('value').scale(zero=False).title(feature_meal),
+            color=alt.Color('variable', legend=alt.Legend(orient='bottom')).title("meal")
+        ))
 
-    st.altair_chart(m, use_container_width=True)
+        st.altair_chart(m, use_container_width=True)
