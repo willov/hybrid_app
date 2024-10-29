@@ -12,13 +12,14 @@ import plotly.graph_objects as go
 # Install sund in a custom location
 import subprocess
 import sys
+
+os.makedirs('./custom_package', exist_ok=True)
+
 if "sund" not in os.listdir('./custom_package'):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'https://isbgroup.eu/edu/assets/sund-1.0.1.tar.gz#sha256=669a1d05c5c8b68500086e183d831650277012b3ea57e94356de1987b6e94e3e'])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'https://isbgroup.eu/sund-toolbox/releases/sund-1.2.23.tar.gz#sha256=71dcbea1b26f58cef04feeed6659451642f07af85ae049d8868cb4fe547edad3'])
 
 sys.path.append('./custom_package')
 import sund
-
-st.elements.utils._shown_default_value_warning=True # This is not a good solution, but it hides the warning of using default values and sessionstate api
 
 # Setup the models
 

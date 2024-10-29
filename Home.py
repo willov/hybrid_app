@@ -6,9 +6,12 @@ import subprocess
 import sys
 import os 
 
-if "sund" not in os.listdir('./custom_package'):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'https://isbgroup.eu/edu/assets/sund-1.0.1.tar.gz#sha256=669a1d05c5c8b68500086e183d831650277012b3ea57e94356de1987b6e94e3e'])
+os.makedirs('./custom_package', exist_ok=True)
 
+if "sund" not in os.listdir('./custom_package'):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'https://isbgroup.eu/sund-toolbox/releases/sund-1.2.23.tar.gz#sha256=71dcbea1b26f58cef04feeed6659451642f07af85ae049d8868cb4fe547edad3'])
+
+# Runthe app
 
 st.title("Digital twins and hybrid modelling for simulation of physiological variables and stroke risk")
 st.markdown("""This app can be used to simulate the mechanistic part of our hybrid physiological digital twin, that combines mechanistic models with a machine learning model. 
