@@ -8,6 +8,7 @@ import altair as alt
 from array import array
 import plotly.express as px
 import plotly.graph_objects as go
+import copy
 
 # Install sund in a custom location
 import subprocess
@@ -54,25 +55,17 @@ def simulate(m, anthropometrics, stim, t_start_sim, n):
 
     # Getting initial values
     
-    fs = []
-    for path, subdirs, files in os.walk('./results'):
-        for name in files:
-            if 'inits' in name.split('(')[0] and "ignore" not in path:
-                fs.append(os.path.join(path, name))
-    fs.sort()
-    with open(fs[0],'r') as f:
-        inits_in = json.load(f)
-        inits = inits_in['x']
-  
-    inits[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
-    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
+    initial_conditions = copy.deepcopy(m.statevalues)
+
+    initial_conditions[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
+    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = initial_conditions)
    
     sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
     sim_results.insert(0, 'Time', sim.timevector)
 
     sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
-    inits = sim.statevalues
-    return sim_diet_results, inits
+    new_initial_conditions = sim.statevalues
+    return sim_diet_results, new_initial_conditions
 
 def simulate_meal(m, anthropometrics, stim, inits, t_start_sim, n):
     act = sund.Activity(timeunit = 'd')
@@ -122,7 +115,7 @@ if 'height' not in st.session_state:
 if 'age' not in st.session_state:
     st.session_state['age'] = 40.0
 st.session_state['Ginit'] = 0.5
-st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']  
+st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']
 if 'Finit' not in st.session_state:
     if st.session_state['sex']== 'Woman':
         st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 102.01)
@@ -171,16 +164,16 @@ start_time = st.session_state['age']
 diet_start = st.number_input("Diet start (age): ", st.session_state['age'], 100.0, 40.0, 0.1, key=f"diet_start")
 diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 40.0, 0.1, key=f"diet_length")
 diet = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
-EIchange = [0.0] + [0.0] + [0.0] + [diet] + [0.0] 
-t_long = [st.session_state['age']*365.0-10.0] + [st.session_state['age']*365.0] + [diet_start*365.0] + [(st.session_state['age']+diet_length)*365.0] 
-ss_x = [0] + [0] + [1] + [1] + [0] 
+EIchange = [0.0, 0.0, 0, diet, diet] 
+t_long = [st.session_state['age']*365.0-28.0, st.session_state['age']*365, diet_start*365.0, (st.session_state['age']+diet_length)*365.0] 
+ss_x = [0, 0, 0, 1, 0] 
 
 stim_long = {
     "EIchange": {"t": t_long, "f": EIchange},
     "ss_x": {"t": t_long, "f": ss_x},
     }
 
-t_start_sim = min(stim_long["ss_x"]["t"])+10.0
+t_start_sim = min(stim_long["ss_x"]["t"])
 sim_long, inits = simulate(model, anthropometrics, stim_long, t_start_sim, -1)
 sim_long['Time'] = sim_long['Time']/365.0
 
@@ -205,7 +198,7 @@ for i in range(n_meals):
     "ss_x": {"t": t_before_meal, "f": ss_x},
         }
 
-    t_start_sim = min(stim_before_meal["ss_x"]["t"])+10.0
+    t_start_sim = min(stim_before_meal["ss_x"]["t"])
     sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_before_meal, t_start_sim, i)
 
     meal_times = [0.0] + [0.001] + [0.3]
@@ -232,7 +225,7 @@ st.subheader("Plotting long term simulation of weight change")
 feature_long = st.selectbox("Feature of the model to plot", model_features, key="long_plot")
 
 l = (
-    alt.Chart(sim_long).mark_point().encode(
+    alt.Chart(sim_long[sim_long['Time']>st.session_state['age']]).mark_line().encode(
     x = alt.X('Time').scale(zero=False).title('Time(age)'),
     y = alt.Y(feature_long).scale(zero=False)
 ))
