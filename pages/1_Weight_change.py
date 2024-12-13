@@ -144,11 +144,11 @@ anthropometrics["ECFinit"] = st.session_state['ECFinit']
 
 fat_known = st.checkbox("Do you know your fat mass?")
 if fat_known:
-    st.session_state['Finit'] = st.number_input("Fat mass (kg):", 0.0, 1000.0, st.session_state.Finit, 0.1, key="Finit")
+    st.session_state['Finit'] = st.number_input("Fat mass (kg):", 0.0, 1000.0, st.session_state.Finit, 0.1, key="Finit_input")
 
 lean_known = st.checkbox("Do you know your lean mass?")
 if lean_known:
-   st.session_state['Linit'] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.Linit, 0.1, key="Linit")
+   st.session_state['Linit'] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.Linit, 0.1, key="Linit_input")
 
 anthropometrics["Finit"] = st.session_state['Finit']
 anthropometrics["Linit"] = st.session_state['Linit']
