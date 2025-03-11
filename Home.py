@@ -9,7 +9,7 @@ import os
 os.makedirs('./custom_package', exist_ok=True)
 
 if "sund" not in os.listdir('./custom_package'):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'https://isbgroup.eu/sund-toolbox/releases/sund-1.2.23.tar.gz#sha256=71dcbea1b26f58cef04feeed6659451642f07af85ae049d8868cb4fe547edad3'])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'https://isbgroup.eu/sund-toolbox/releases/sund-1.2.24.tar.gz'])
 
 # Runthe app
 
