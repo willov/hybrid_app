@@ -505,6 +505,7 @@ Lean mass (kg) = L
 Diabetes = diabetes
 Plasma insulin (pmol/l) = I
 Plasma glucose (mg/dl) = G
+Plasma glucose (mmol) = G/18
 Glucose uptake in muscle tissue (mg/kg/min) = U_idm
 IRS1 (a.u.) = measuredIRS1
 PKB308 (a.u.) = measuredPKB308
