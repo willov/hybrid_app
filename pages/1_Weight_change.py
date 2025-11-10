@@ -176,7 +176,7 @@ sim_long, inits = simulate(model, anthropometrics, stim_long, t_start_sim, -1)
 sim_long['Time'] = sim_long['Time']/365.0
 
 st.divider()
-st.subheader("Meals")
+st.subheader("Meals to simulate")
 
 meal_amount = []
 meal_kcal = []
@@ -218,7 +218,7 @@ if n_meals < 1.0:
     st.divider()
 
 # Plotting weight change and meals
-st.subheader("Plotting long term simulation of weight change")
+st.subheader("Long term simulation of weight change")
 
 feature_long = st.selectbox("Feature of the model to plot", model_features, key="long_plot")
 
@@ -233,10 +233,11 @@ st.altair_chart(l, width='stretch')
 if n_meals > 0.0:
     st.divider()
 
-    st.subheader("Plotting meal simulations")
+    st.subheader("Meal simulations at different ages")
     feature_meal = st.selectbox("Feature of the model to plot", model_features[5:], key="meal_plot")
 
     for i in range(n_meals):
+        st.markdown(f"#### Meal simulation at age {meal_time[i]/365.0} years ({meal_kcal[i]} kcal)")
         to_plot = pd.DataFrame(sim_meal[0]['Time'])
         column_names = ['Time']
         
@@ -256,7 +257,7 @@ if n_meals > 0.0:
         alt.Chart(plot_data).mark_line().encode(
             x=alt.X('Time').scale(zero=False).title('Time (minutes)'),
             y=alt.Y('value').scale(zero=False).title(feature_meal),
-            color=alt.Color('variable', legend=alt.Legend(orient='bottom')).title("meal")
+            # color=alt.Color('variable', legend=alt.Legend(orient='bottom')).title("")
         ))
 
         st.altair_chart(m, width='stretch')
