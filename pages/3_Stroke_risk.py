@@ -129,7 +129,7 @@ with col2:
     end_time = st.number_input("Simulation end age (years):", start_time, 100.0, min(start_time + 20, 90.0), 1.0, key="risk_end_time")
 
 with col3:
-    diet_change = st.number_input("Diet change (kcal/day):", -1000.0, 1000.0, 0.0, 50.0, key="risk_diet_change")
+    diet_change = st.number_input("Diet change (kcal/day):", -1000.0, 1000.0, 100.0, 50.0, key="risk_diet_change")
 
 
 st.divider()
