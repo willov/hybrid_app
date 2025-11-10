@@ -1,31 +1,13 @@
-import os
 import pandas as pd
-import numpy as np
 import streamlit as st
 import math 
 import altair as alt
-import copy
 
-# Install sund in a custom location
-import subprocess
-import sys
+# Import shared utilities
+from functions import setup_model, simulate_insres_weight, simulate_meal, setup_custom_packages
 
-os.makedirs('./custom_package', exist_ok=True)
-
-if "sund" not in os.listdir('./custom_package'):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'sund<=3.0'])
-
-sys.path.append('./custom_package')
-import sund
-
-# Setup the models
-def setup_model(model_name):
-    sund.install_model(f"./models/{model_name}.txt")
-    model = sund.load_model(model_name)
-
-    features = model.feature_names
-    return model, features
-
+# Setup
+setup_custom_packages()
 model, model_features = setup_model('insres_model')
 
 # Define long-term features to exclude from meal plotting
@@ -35,80 +17,6 @@ long_term_features = [
 ]
 # Filter to only short-term features suitable for meal responses
 meal_features = [f for f in model_features if f not in long_term_features]
-
-# Define functions needed
-
-def flatten(list):
-    return [item for sublist in list for item in sublist]
-
-
-def simulate(m, anthropometrics, stim, t_start_sim, n):
-    act = sund.Activity(time_unit = 'd')
-
-    for key,val in stim.items():
-        act.add_output(
-            name = key, type="piecewise_constant", 
-            t = val["t"], f = val["f"]
-        ) 
-    for key,val in anthropometrics.items():
-        act.add_output(name = key, type="constant", f = val) 
-
-    sim = sund.Simulation(models = m, activities = act, time_unit = 'd')
-
-    # Getting initial values
-    initial_conditions = copy.deepcopy(sim.state_values)
-
-    # Set initial conditions using state names and index logic
-    state_mapping = {
-        'Gly': anthropometrics['Ginit'],
-        'ECF': anthropometrics['ECFinit'],
-        'F': anthropometrics['Finit'],
-        'L': anthropometrics['Linit']
-    }
-    for state_name, value in state_mapping.items():
-        if state_name in sim.state_names:
-            idx = sim.state_names.index(state_name)
-            initial_conditions[idx] = value
-
-    # simulate
-    sim.simulate(
-        time_vector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000),
-        state_values = initial_conditions
-    )
-
-    sim_results = pd.DataFrame(sim.feature_values, columns=sim.feature_names)
-    sim_results.insert(0, 'Time', sim.time_vector)
-
-    sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
-    new_initial_conditions = sim.state_values
-    return sim_diet_results, new_initial_conditions
-
-
-def simulate_meal(m, anthropometrics, stim, inits, t_start_sim, n):
-    act = sund.Activity(time_unit = 'd')
-
-    for key,val in stim.items():
-        act.add_output(
-        name = key, type="piecewise_constant",
-        t = val["t"], f = val["f"]
-    ) 
-    for key,val in anthropometrics.items():
-        act.add_output(name = key, type="constant", f = val)
-
-    sim = sund.Simulation(models = m, activities = act, time_unit = 'd')
-
-    sim.simulate(
-        time_vector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000),
-        state_values = inits
-    )
-
-    sim_results = pd.DataFrame(sim.feature_values,columns=sim.feature_names)
-
-    sim_results.insert(0, 'Time', sim.time_vector)
-    sim_meal_results = sim_results[(sim_results['Time']>=t_start_sim)]
-    sim_meal_results['Time'] = sim_meal_results['Time']*24.0*60.0 
-
-    return sim_meal_results
 
 
 # Start the app
@@ -250,7 +158,7 @@ stim_long = {
 }
 
 t_start_sim = min(stim_long["ss_x"]["t"])
-sim_long, inits = simulate(model, anthropometrics, stim_long, t_start_sim, -1)
+sim_long, inits = simulate_insres_weight(model, anthropometrics, stim_long, t_start_sim)
 sim_long['Time'] = sim_long['Time']/365.0
 
 st.divider()
@@ -275,7 +183,7 @@ for i in range(n_meals):
     }
 
     t_start_sim = min(stim_before_meal["ss_x"]["t"])
-    sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_before_meal, t_start_sim, i)
+    sim_before_meal, inits_meal = simulate_insres_weight(model, anthropometrics, stim_before_meal, t_start_sim)
 
     meal_times = [0.0] + [0.001] + [0.3]
     meal_amount = [0.0] + [0.0] + [meal_kcal[i]] + [0.0]
@@ -286,7 +194,7 @@ for i in range(n_meals):
         "ss_x": {"t": meal_times, "f": ss_x_meal},
     }
 
-    sim_meal[i] = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0, i)
+    sim_meal[i] = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0)
     st.divider()
 
 if n_meals < 1.0:
