@@ -149,8 +149,12 @@ if fat_known:
 
 
 lean_known = st.checkbox("Do you know your lean mass?")
+if fat_known: 
+    max_lean_pct = 100.0 - fat_pct
+else:
+    max_lean_pct = 100.0
 if lean_known:
-    lean_pct = st.number_input("Lean percentage (%):", 0.0, 100.0, 
+    lean_pct = st.number_input("Lean percentage (%):", 0.0, max_lean_pct, 
                                 (st.session_state['Linit']/st.session_state['weight'])*100, 
                                 0.1, key="Linit_pct")
     st.session_state['Linit'] = (lean_pct / 100.0) * st.session_state['weight']
