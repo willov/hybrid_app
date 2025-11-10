@@ -2,7 +2,7 @@
 insres_model
 
 ########## METADATA
-timeunit = d
+time_unit = d
 
 ########## MACROS
 

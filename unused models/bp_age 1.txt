@@ -1,8 +1,8 @@
 ########## NAME
 bp_age
 ########## METADATA
-timeunit = y
-//Contact person: Kajsa
+time_unit = y
+author =  Kajsa Tunedal
 
 ########## MACROS
 ########## STATES

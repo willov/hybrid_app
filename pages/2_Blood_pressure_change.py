@@ -14,7 +14,7 @@ import sys
 os.makedirs('./custom_package', exist_ok=True)
 
 if "sund" not in os.listdir('./custom_package'):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'https://isbgroup.eu/sund-toolbox/releases/sund-1.2.24.tar.gz'])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'sund<=3.0'])
 
 sys.path.append('./custom_package')
 import sund
@@ -22,11 +22,11 @@ import sund
 # Setup the models
 
 def setup_model(model_name):
-    sund.installModel(f"./models/{model_name}.txt")
-    model_class = sund.importModel(model_name)
+    sund.install_model(f"./models/{model_name}.txt")
+    model_class = sund.import_model(model_name)
     model = model_class() 
 
-    features = model.featurenames
+    features = model.feature_names
     return model, features
 
 model, model_features = setup_model('bloodpressure_model')
@@ -37,24 +37,23 @@ def flatten(list):
     return [item for sublist in list for item in sublist]
 
 def simulate(m, stim, anthropometrics, initials): #, extra_time = 10):
-    act = sund.Activity(timeunit = 'y')
-    pwc = sund.PIECEWISE_CONSTANT # space saving only
-    const = sund.CONSTANT # space saving only
+    act = sund.Activity(time_unit = 'y')
+    pwc = type="piecewise_constant" # space saving only
+    const = type="constant" # space saving only
 
     for key,val in stim.items():
-        act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
+        act.add_output(name = key, type=pwc, t = val["t"], f = val["f"]) 
     for key,val in anthropometrics.items():
-        act.AddOutput(name = key, type=const, fvalues = val) 
+        act.add_output(name = key, type=const, f = val) 
 
-    sim = sund.Simulation(models = m, activities = act, timeunit = 'y')
+    sim = sund.Simulation(models = m, activities = act, time_unit = 'y')
 
-    sim.ResetStatesDerivatives()
     t_start = min(stim["drug_on"]["t"])
 
-    sim.Simulate(timevector = np.linspace(t_start, max(stim["drug_on"]["t"]), 10000), statevalues = initials) # +extra_time
+    sim.simulate(time_vector = np.linspace(t_start, max(stim["drug_on"]["t"]), 10000), state_values = initials) # +extra_time
     
-    sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
-    sim_results.insert(0, 'Time', sim.timevector)
+    sim_results = pd.DataFrame(sim.feature_values,columns=sim.feature_names)
+    sim_results.insert(0, 'Time', sim.time_vector)
     
     return sim_results
 
@@ -157,5 +156,5 @@ c = (
     y = alt.Y(feature).scale(zero=False)
 ))
 
-st.altair_chart(c, use_container_width=True)
+st.altair_chart(c, width='stretch')
 

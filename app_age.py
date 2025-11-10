@@ -59,16 +59,16 @@ IC_SBP = IC_SBPdata[chosenColumn]
 
 #%% install model and simulate
 
-sund.installModel('bp_age.txt')
-Modelage = sund.importModel('bp_age')
+sund.install_model('bp_age.txt')
+Modelage = sund.import_model('bp_age')
 agemodel = Modelage()
 t_drug = 2
 
-drug = sund.Activity(timeunit='y')
-drug.AddOutput(sund.PIECEWISE_CONSTANT, 'bp_treatment', tvalues=[drugstart-1,drugstart,drugstart+t_drug], fvalues=[0,0,bp_treatment,0])
+drug = sund.Activity(time_unit='y')
+drug.add_output(type="piecewise_constant", 'bp_treatment', t=[drugstart-1,drugstart,drugstart+t_drug], f=[0,0,bp_treatment,0])
 
 
-simAge = sund.Simulation(timeunit='y', models = agemodel, activities = drug)
+simAge = sund.Simulation(time_unit='y', models = agemodel, activities = drug)
 
 k1_SBP = 0.4081
 k2_SBP = 0
@@ -80,23 +80,23 @@ effect_drugS = 20
 effect_drugD = 5
 dummy=0
 theta2 = [k1_SBP, k2_SBP, k1_DBP, k2_DBP,bSBP,bDBP,IC_SBP,IC_DBP,t_drug,effect_drugS,effect_drugD,SBP0,DBP0,dummy]
-agemodel.statevalues = [SBP0,DBP0]
-simAge.Simulate(timevector=np.linspace(userage,userage+simlength,1000),parametervalues=theta2, resetstatesderivatives=True)
+agemodel.state_values = [SBP0,DBP0]
+simAge.simulate(time_vector=np.linspace(userage,userage+simlength,1000),parametervalues=theta2, reset=True)
 
 #%% plot
-st.markdown('## Simulate')
+st.markdown('## simulate')
 
-plot_data4={"Time": simAge.timevector, "SBP": simAge.featuredata[:,0]}
+plot_data4={"Time": simAge.time_vector, "SBP": simAge.feature_values[:,0]}
 st.line_chart(plot_data4, x="Time", y="SBP")
 
-plot_data4={"Time": simAge.timevector, "DBP": simAge.featuredata[:,1]}
+plot_data4={"Time": simAge.time_vector, "DBP": simAge.feature_values[:,1]}
 st.line_chart(plot_data4, x="Time", y="DBP")
 
-plot_data4={"Time": simAge.timevector, "drugS": simAge.featuredata[:,2]}
+plot_data4={"Time": simAge.time_vector, "drugS": simAge.feature_values[:,2]}
 st.line_chart(plot_data4, x="Time", y="drugS")
 
-plot_data4={"Time": simAge.timevector, "ddtSBP": simAge.featuredata[:,7]}
+plot_data4={"Time": simAge.time_vector, "ddtSBP": simAge.feature_values[:,7]}
 st.line_chart(plot_data4, x="Time", y="ddtSBP")
 
-plot_data4={"Time": simAge.timevector, "ddtDBP": simAge.featuredata[:,8]}
+plot_data4={"Time": simAge.time_vector, "ddtDBP": simAge.feature_values[:,8]}
 st.line_chart(plot_data4, x="Time", y="ddtDBP")

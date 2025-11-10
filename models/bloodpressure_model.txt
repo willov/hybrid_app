@@ -2,7 +2,7 @@
 bloodpressure_model
 
 ########## METADATA
-timeunit = y
+time_unit = y
 
 ########## MACROS
 

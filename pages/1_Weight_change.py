@@ -17,7 +17,7 @@ import sys
 os.makedirs('./custom_package', exist_ok=True)
 
 if "sund" not in os.listdir('./custom_package'):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'https://isbgroup.eu/sund-toolbox/releases/sund-1.2.24.tar.gz'])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'sund<=3.0'])
 
 sys.path.append('./custom_package')
 import sund
@@ -25,11 +25,11 @@ import sund
 # Setup the models
 
 def setup_model(model_name):
-    sund.installModel(f"./models/{model_name}.txt")
-    model_class = sund.importModel(model_name)
+    sund.install_model(f"./models/{model_name}.txt")
+    model_class = sund.import_model(model_name)
     model = model_class() 
 
-    features = model.featurenames
+    features = model.feature_names
     return model, features
 
 model, model_features = setup_model('insres_model')
@@ -40,50 +40,48 @@ def flatten(list):
     return [item for sublist in list for item in sublist]
 
 def simulate(m, anthropometrics, stim, t_start_sim, n):
-    act = sund.Activity(timeunit = 'd')
-    pwc = sund.PIECEWISE_CONSTANT # space saving only
-    const = sund.CONSTANT # space saving only
+    act = sund.Activity(time_unit = 'd')
+    pwc = type="piecewise_constant" # space saving only
+    const = type="constant" # space saving only
 
     for key,val in stim.items():
-        act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
+        act.add_output(name = key, type=pwc, t = val["t"], f = val["f"]) 
     for key,val in anthropometrics.items():
-        act.AddOutput(name = key, type=const, fvalues = val) 
+        act.add_output(name = key, type=const, f = val) 
 
-    sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
+    sim = sund.Simulation(models = m, activities = act, time_unit = 'd')
     
-    sim.ResetStatesDerivatives()
-
     # Getting initial values
     
-    initial_conditions = copy.deepcopy(m.statevalues)
+    initial_conditions = copy.deepcopy(m.state_values)
 
     initial_conditions[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
-    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = initial_conditions)
+    sim.simulate(time_vector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), state_values = initial_conditions)
    
-    sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
-    sim_results.insert(0, 'Time', sim.timevector)
+    sim_results = pd.DataFrame(sim.feature_values,columns=sim.feature_names)
+    sim_results.insert(0, 'Time', sim.time_vector)
 
     sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
-    new_initial_conditions = sim.statevalues
+    new_initial_conditions = sim.state_values
     return sim_diet_results, new_initial_conditions
 
 def simulate_meal(m, anthropometrics, stim, inits, t_start_sim, n):
-    act = sund.Activity(timeunit = 'd')
-    pwc = sund.PIECEWISE_CONSTANT # space saving only
-    const = sund.CONSTANT # space saving only
+    act = sund.Activity(time_unit = 'd')
+    pwc = type="piecewise_constant" # space saving only
+    const = type="constant" # space saving only
 
     for key,val in stim.items():
-        act.AddOutput(name = key, type=pwc, tvalues = val["t"], fvalues = val["f"]) 
+        act.add_output(name = key, type=pwc, t = val["t"], f = val["f"]) 
     for key,val in anthropometrics.items():
-        act.AddOutput(name = key, type=const, fvalues = val)
+        act.add_output(name = key, type=const, f = val)
 
-    sim = sund.Simulation(models = m, activities = act, timeunit = 'd')
+    sim = sund.Simulation(models = m, activities = act, time_unit = 'd')
 
-    sim.Simulate(timevector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), statevalues = inits)
+    sim.simulate(time_vector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), state_values = inits)
    
-    sim_results = pd.DataFrame(sim.featuredata,columns=sim.featurenames)
+    sim_results = pd.DataFrame(sim.feature_values,columns=sim.feature_names)
 
-    sim_results.insert(0, 'Time', sim.timevector)
+    sim_results.insert(0, 'Time', sim.time_vector)
     sim_meal_results = sim_results[(sim_results['Time']>=t_start_sim)]
     sim_meal_results['Time'] = sim_meal_results['Time']*24.0*60.0 
 
@@ -230,7 +228,7 @@ l = (
     y = alt.Y(feature_long).scale(zero=False)
 ))
 
-st.altair_chart(l, use_container_width=True)
+st.altair_chart(l, width='stretch')
 
 if n_meals > 0.0:
     st.divider()
@@ -261,4 +259,4 @@ if n_meals > 0.0:
             color=alt.Color('variable', legend=alt.Legend(orient='bottom')).title("meal")
         ))
 
-        st.altair_chart(m, use_container_width=True)
+        st.altair_chart(m, width='stretch')

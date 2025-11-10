@@ -2,7 +2,7 @@
 alcohol_model
 
 ########## METADATA
-timeunit = m
+time_unit = m
 
 ########## MACROS
 

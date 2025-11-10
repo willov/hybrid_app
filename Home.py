@@ -9,9 +9,13 @@ import os
 os.makedirs('./custom_package', exist_ok=True)
 
 if "sund" not in os.listdir('./custom_package'):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'https://isbgroup.eu/sund-toolbox/releases/sund-1.2.24.tar.gz'])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "--target=./custom_package", 'sund<=3.0'])
+    # Install the models
+    sys.path.append('./custom_package')
+    import sund
+    sund.install_model("./models/*.txt")
 
-# Runthe app
+# Run the app
 
 st.title("Digital twins and hybrid modelling for simulation of physiological variables and stroke risk")
 st.markdown("""This app can be used to simulate the mechanistic part of our hybrid physiological digital twin, that combines mechanistic models with a machine learning model. 
@@ -26,4 +30,3 @@ Please note that this application is only for research and visualization purpose
 This application is a companion-application to the publication titled \"Digital twins and hybrid modelling for simulation of physiological variables and stroke risk\", [available as a preprint on bioRxiv](https://www.biorxiv.org/content/10.1101/2022.03.25.485803v1).                    
 """)
 
-         
