@@ -75,8 +75,13 @@ def simulate(m, anthropometrics, stim, t_start_sim, n):
             idx = m.state_names.index(state_name)
             initial_conditions[idx] = value
 
+    # simulate
+    sim.simulate(
+        time_vector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000),
+        state_values = initial_conditions
+    )
 
-    sim_results = pd.DataFrame(sim.feature_values,columns=sim.feature_names)
+    sim_results = pd.DataFrame(sim.feature_values, columns=sim.feature_names)
     sim_results.insert(0, 'Time', sim.time_vector)
 
     sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
@@ -97,7 +102,10 @@ def simulate_meal(m, anthropometrics, stim, inits, t_start_sim, n):
 
     sim = sund.Simulation(models = m, activities = act, time_unit = 'd')
 
-    sim.simulate(time_vector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), state_values = inits)
+    sim.simulate(
+        time_vector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000),
+        state_values = inits
+    )
 
     sim_results = pd.DataFrame(sim.feature_values,columns=sim.feature_names)
 
