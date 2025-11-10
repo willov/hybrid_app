@@ -57,7 +57,7 @@ def simulate(m, anthropometrics, stim, t_start_sim, n):
 
     initial_conditions[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
     sim.simulate(time_vector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), state_values = initial_conditions)
-   
+
     sim_results = pd.DataFrame(sim.feature_values,columns=sim.feature_names)
     sim_results.insert(0, 'Time', sim.time_vector)
 
@@ -78,7 +78,7 @@ def simulate_meal(m, anthropometrics, stim, inits, t_start_sim, n):
     sim = sund.Simulation(models = m, activities = act, time_unit = 'd')
 
     sim.simulate(time_vector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), state_values = inits)
-   
+
     sim_results = pd.DataFrame(sim.feature_values,columns=sim.feature_names)
 
     sim_results.insert(0, 'Time', sim.time_vector)
@@ -122,10 +122,12 @@ if 'Finit' not in st.session_state:
 if 'Linit' not in st.session_state:
     st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
-anthropometrics = {"weight": st.session_state['weight'], "ECFinit": st.session_state['ECFinit'], 
-                   "height": st.session_state['height'], "age": st.session_state['age'], 
-                   "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
-                   "Ginit": st.session_state['Ginit']}  
+anthropometrics = {
+    "weight": st.session_state['weight'], "ECFinit": st.session_state['ECFinit'], 
+    "height": st.session_state['height'], "age": st.session_state['age'], 
+    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
+    "Ginit": st.session_state['Ginit']
+}  
 
 anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
 anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state['weight'], key="weight") # max, min 
@@ -139,7 +141,7 @@ if fat_known:
 
 lean_known = st.checkbox("Do you know your lean mass?")
 if lean_known:
-   st.session_state['Linit'] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.Linit, 0.1, key="Linit_input")
+    st.session_state['Linit'] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.Linit, 0.1, key="Linit_input")
 
 anthropometrics["Finit"] = st.session_state['Finit']
 anthropometrics["Linit"] = st.session_state['Linit']
@@ -192,9 +194,9 @@ for i in range(n_meals):
     meal_kcal.append(st.number_input("Size of meal (kcal): ",0.0, 10000.0, 312.0, key=f"diet_kcals{i}"))
     t_before_meal = t_long[0:3] + [meal_time[i]] 
     stim_before_meal = {
-    "EIchange": {"t": t_before_meal, "f": EIchange},
-    "ss_x": {"t": t_before_meal, "f": ss_x},
-        }
+        "EIchange": {"t": t_before_meal, "f": EIchange},
+        "ss_x": {"t": t_before_meal, "f": ss_x},
+    }
 
     t_start_sim = min(stim_before_meal["ss_x"]["t"])
     sim_before_meal, inits_meal = simulate(model, anthropometrics, stim_before_meal, t_start_sim, i)
