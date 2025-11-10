@@ -203,15 +203,12 @@ for i in range(n_meals):
 
     meal_times = [0.0] + [0.001] + [0.3]
     meal_amount = [0.0] + [0.0] + [meal_kcal[i]] + [0.0]
-    meal = [0.0] + [0.0] + [1.0] + [0.0]
     ss_x_meal = [1.0] + [1.0] + [1.0] + [1.0]
 
     stim_meal = {
-    "meal_amount": {"t": meal_times, "f": meal_amount},
-    "meal": {"t": meal_times, "f": meal},
-    "meal_time": {"t": meal_times, "f": meal},
-    "ss_x": {"t": meal_times, "f": ss_x_meal},
-        }
+        "meal_amount": {"t": meal_times, "f": meal_amount},
+        "ss_x": {"t": meal_times, "f": ss_x_meal},
+    }
 
     sim_meal[i] = simulate_meal(model, anthropometrics, stim_meal, inits_meal, 0.0, i)
     st.divider()
