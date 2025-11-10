@@ -363,27 +363,3 @@ if 'risk_results' in st.session_state:
 
         st.altair_chart(sbp_chart, width="stretch")
         st.altair_chart(dbp_chart, width="stretch")
-
-    with tab3:
-        # Normalize for visualization
-        results_normalized = results_df.copy()
-        results_normalized['Weight (kg)'] = (results_normalized['Weight (kg)'] / results_normalized['Weight (kg)'].max()) * 100
-        results_normalized['BMI'] = (results_normalized['BMI'] / results_normalized['BMI'].max()) * 100
-        results_normalized['SBP (mmHg)'] = (results_normalized['SBP (mmHg)'] / 160) * 100  # Normalize to 160 mmHg
-        results_normalized['DBP (mmHg)'] = (results_normalized['DBP (mmHg)'] / 100) * 100  # Normalize to 100 mmHg
-        results_normalized['Stroke Risk (%)'] = results_normalized['Stroke Risk (%)']
-
-        all_factors = results_normalized.melt(
-            id_vars=['Age'],
-            value_vars=['Weight (kg)', 'BMI', 'SBP (mmHg)', 'DBP (mmHg)', 'Stroke Risk (%)'],
-            var_name='Factor',
-            value_name='Value'
-        )
-
-        combined_chart = alt.Chart(all_factors).mark_line().encode(
-            x=alt.X('Age:Q').scale(zero=False),
-            y=alt.Y('Value:Q').scale(zero=False),
-            color='Factor:N'
-        ).properties(height=400, title="All Factors Over Time (normalized)")
-
-        st.altair_chart(combined_chart, width="stretch")
