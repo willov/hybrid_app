@@ -214,9 +214,8 @@ if st.button("Calculate Risk Trajectory", type="primary"):
         # COMBINE SIMULATIONS AND CALCULATE RISK
         # ====================================================================
 
-        # Use the BP simulation time as the common time grid (already in years from start)
-        sim_bp['Time_years'] = sim_bp['Time'] + start_time
-        time_common = sim_bp['Time_years'].values
+        # Use the BP simulation time as the common time grid (already in years, absolute time)
+        time_common = sim_bp['Time'].values
 
         # Interpolate weight simulation results to match BP time points
         weight_interp = {}
