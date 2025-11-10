@@ -68,13 +68,14 @@ def simulate(m, anthropometrics, stim, t_start_sim, n):
 
 def simulate_meal(m, anthropometrics, stim, inits, t_start_sim, n):
     act = sund.Activity(time_unit = 'd')
-    pwc = type="piecewise_constant" # space saving only
-    const = type="constant" # space saving only
 
     for key,val in stim.items():
-        act.add_output(name = key, type=pwc, t = val["t"], f = val["f"]) 
+        act.add_output(
+        name = key, type="piecewise_constant",
+        t = val["t"], f = val["f"]
+    ) 
     for key,val in anthropometrics.items():
-        act.add_output(name = key, type=const, f = val)
+        act.add_output(name = key, type="constant", f = val)
 
     sim = sund.Simulation(models = m, activities = act, time_unit = 'd')
 
