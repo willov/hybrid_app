@@ -238,8 +238,8 @@ t_long = []
 
 start_time = st.session_state['age']
 
-diet_start = st.number_input("Diet start (age): ", st.session_state['age'], 100.0, 40.0, 0.1, key=f"diet_start")
-diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 40.0, 0.1, key=f"diet_length")
+diet_start = st.number_input("Diet start (age): ", st.session_state['age'], 100.0, st.session_state['age'], 0.1, key=f"diet_start")
+diet_length = st.number_input("Diet length (years): ", 0.0, 100.0, 5.0, 0.1, key=f"diet_length")
 diet = st.number_input("Change in kcal of diet (kcal): ", -1000.0, 1000.0, 400.0, 1.0, key=f"EIchange")
 EIchange = [0.0, 0.0, 0, diet, diet] 
 t_long = [st.session_state['age']*365.0-28.0, st.session_state['age']*365, diet_start*365.0, (st.session_state['age']+diet_length)*365.0] 
