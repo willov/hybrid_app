@@ -284,7 +284,7 @@ meal = 0 // boolean
 
 ########## VARIABLES
 // Insulin resistance
-xF              = (ss_x > 0)  ? (F/Finit)    : 1
+xF              = (ss_x > 0)  ? (F/Finit)  : 1
 xL              = (ss_x > 0)  ? (L/Linit)  : 1   
 
 f_IR_diabetes       = 1 - b_diabetes*log(xF) 
