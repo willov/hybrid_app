@@ -65,7 +65,6 @@ def simulate(m, anthropometrics, stim, t_start_sim, n):
         'F': anthropometrics['Finit'],
         'L': anthropometrics['Linit']
     }
-    
     for state_name, value in state_mapping.items():
         if state_name in sim.state_names:
             idx = sim.state_names.index(state_name)
@@ -161,7 +160,7 @@ anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.sess
 anthropometrics["age"] = st.number_input("Age (years):", 0.0, 100.0, st.session_state['age'], key="age") # max, min 
 anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_state['height'],  key="height") 
 anthropometrics["ECFinit"] = st.session_state['ECFinit']
-
+anthropometrics["RMRinit"] = (9.99*anthropometrics["weight"] + 6.25*anthropometrics["height"] - 4.92*anthropometrics["age"] - 166*(1 if anthropometrics["sex"] == "Man" else 0) + 5) * 4184
 # Handle fat and lean mass inputs
 
 fat_known = st.checkbox("Do you know your fat mass?")
