@@ -288,8 +288,8 @@ xF  = (ss_x > 0)  ? (F/Finit)  : 1
 xL  = (ss_x > 0)  ? (L/Linit)  : 1   
 
 f_IR_diabetes = 1 - b_diabetes*log(xF) 
-f_IR_ir       = (f_IR_diabetes < 1.046) ? 1 - b_IR*log(xF) : 1.007097156799198
-f_IR_glut4    = (f_IR_diabetes < 1.046) ? 1 - b_GLUT*log(xF) : 1.008221115115309
+f_IR_ir       = (f_IR_diabetes < 1.046) ? min(1, 1 - b_IR*log(xF)   ) : 1.007097156799198
+f_IR_glut4    = (f_IR_diabetes < 1.046) ? min(1, 1 - b_GLUT*log(xF) ) : 1.008221115115309
 
 f_IR_CLGI     = (f_IR_diabetes < 1.0046) ? (1 + (b_CLGI*log(xF))*scale) :   0.926294640396772
 f_IR_EGP      = (f_IR_diabetes < 1.0046) ? (1 + (b_EGP*log(xF))*scale)  :   0.860830533146272 
