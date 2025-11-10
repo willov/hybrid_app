@@ -116,6 +116,22 @@ with col2:
     DBP0 = st.number_input("Diastolic BP (mmHg):", 40.0, 180.0, st.session_state['DBP0'], key="risk_DBP0")
     st.session_state['DBP0'] = DBP0
 
+
+st.divider()
+st.subheader("Simulation Parameters")
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    start_time = st.number_input("Simulation start age (years):", age, 100.0, age, 1.0, key="risk_start_time")
+
+with col2:
+    end_time = st.number_input("Simulation end age (years):", start_time, 100.0, min(start_time + 20, 90.0), 1.0, key="risk_end_time")
+
+with col3:
+    diet_change = st.number_input("Diet change (kcal/day):", -1000.0, 1000.0, 0.0, 50.0, key="risk_diet_change")
+
+
 st.divider()
 st.subheader("Additional Risk Factors")
 
@@ -144,20 +160,6 @@ with col2:
 
 with col3:
     pass  # Placeholder for alignment
-
-st.divider()
-st.subheader("Simulation Parameters")
-
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    start_time = st.number_input("Simulation start age (years):", age, 100.0, age, 1.0, key="risk_start_time")
-
-with col2:
-    end_time = st.number_input("Simulation end age (years):", start_time, 100.0, min(start_time + 20, 90.0), 1.0, key="risk_end_time")
-
-with col3:
-    diet_change = st.number_input("Diet change (kcal/day):", -1000.0, 1000.0, 0.0, 50.0, key="risk_diet_change")
 
 # ============================================================================
 # RUN SIMULATIONS
