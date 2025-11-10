@@ -32,6 +32,13 @@ def setup_model(model_name):
 
 model, model_features = setup_model('insres_model')
 
+# Define long-term features to exclude from meal plotting
+long_term_features = [
+    'Weight (kg)', 'BMI (kg/m^2)', 'Fat mass (kg)', 'Fat mass (%)', 
+    'Lean mass (kg)', 'Free fat mass (kg)', 'Diabetes'
+]
+# Filter to only short-term features suitable for meal responses
+meal_features = [f for f in model_features if f not in long_term_features]
 
 # Define functions needed
 
@@ -271,7 +278,7 @@ if n_meals < 1.0:
 # Plotting weight change and meals
 st.subheader("Long term simulation of weight change")
 
-feature_long = st.selectbox("Feature of the model to plot", model_features, key="long_plot")
+feature_long = st.selectbox("Feature of the model to plot", long_term_features, key="long_plot")
 
 l = (
     alt.Chart(sim_long[sim_long['Time']>st.session_state['age']]).mark_line().encode(
@@ -285,7 +292,7 @@ if n_meals > 0.0:
     st.divider()
 
     st.subheader("Meal simulations at different ages")
-    feature_meal = st.selectbox("Feature of the model to plot", model_features[5:], key="meal_plot")
+    feature_meal = st.selectbox("Feature of the model to plot", meal_features, key="meal_plot")
 
     for i in range(n_meals):
         st.markdown(f"#### Meal simulation at age {meal_time[i]/365.0} years ({meal_kcal[i]} kcal)")
