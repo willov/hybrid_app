@@ -49,7 +49,7 @@ def flatten(nested_list):
     return [item for sublist in nested_list for item in sublist]
 
 
-def simulate_insres_weight(m, anthropometrics, stim, t_start_sim):
+def simulate_insres_weight(m, anthropometrics, stim, t_start_sim, time_vector=None):
     """
     Simulate insulin resistance and weight change model (Page 1).
     
@@ -58,6 +58,7 @@ def simulate_insres_weight(m, anthropometrics, stim, t_start_sim):
         anthropometrics: Dict with age, sex, height, weight, fat mass, lean mass, etc.
         stim: Dict with stimulus inputs (EIchange, meal_kcal, ss_x, etc.)
         t_start_sim: Start time for simulation
+        time_vector: Optional custom time vector for simulation (in days)
     
     Returns:
         Tuple of (sim_results DataFrame, new_initial_conditions)
@@ -97,10 +98,13 @@ def simulate_insres_weight(m, anthropometrics, stim, t_start_sim):
             initial_conditions[idx] = value
     
     # simulate
-    sim.simulate(
-        time_vector=np.linspace(
+    if time_vector is None:
+        time_vector = np.linspace(
             min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000
-        ),
+        )
+    
+    sim.simulate(
+        time_vector=time_vector,
         state_values=initial_conditions
     )
     
@@ -158,7 +162,7 @@ def simulate_meal(m, anthropometrics, stim, inits, t_start_sim):
     return sim_meal_results
 
 
-def simulate_bp(m, stim, anthropometrics, initials):
+def simulate_bp(m, stim, anthropometrics, initials, time_vector=None):
     """
     Simulate blood pressure change model (Page 2).
     
@@ -167,6 +171,7 @@ def simulate_bp(m, stim, anthropometrics, initials):
         stim: Dict with stimulus inputs (drug_on, etc.)
         anthropometrics: Dict with IC_SBP, IC_DBP
         initials: Initial state [SBP, DBP]
+        time_vector: Optional custom time vector for simulation (in years)
     
     Returns:
         sim_results DataFrame
@@ -189,8 +194,11 @@ def simulate_bp(m, stim, anthropometrics, initials):
     
     t_start = min(stim["drug_on"]["t"])
     
+    if time_vector is None:
+        time_vector = np.linspace(t_start, max(stim["drug_on"]["t"]), 10000)
+    
     sim.simulate(
-        time_vector=np.linspace(t_start, max(stim["drug_on"]["t"]), 10000),
+        time_vector=time_vector,
         state_values=initials
     )
     

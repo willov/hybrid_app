@@ -170,6 +170,10 @@ with col3:
 
 if st.button("Calculate Risk Trajectory", type="primary"):
     with st.spinner("Running simulations..."):
+        # Create a common time vector for both simulations (in years, absolute time)
+        time_common = np.linspace(start_time, end_time, 10000)
+        time_common_days = time_common * 365.0  # Convert to days for weight simulation
+        
         # Prepare weight simulation
         EIchange = [0.0, 0.0, 0.0, diet_change, diet_change]
         t_long = [
@@ -187,9 +191,9 @@ if st.button("Calculate Risk Trajectory", type="primary"):
 
         t_start_sim = min(stim_long["ss_x"]["t"])
 
-        # Run weight simulation
+        # Run weight simulation with common time vector
         sim_weight, weight_inits = simulate_insres_weight(
-            weight_model, anthropometrics, stim_long, t_start_sim
+            weight_model, anthropometrics, stim_long, t_start_sim, time_vector=time_common_days
         )
         sim_weight['Time'] = sim_weight['Time'] / 365.0
 
@@ -210,24 +214,21 @@ if st.button("Calculate Risk Trajectory", type="primary"):
             "drug_on": {"t": drug_on_times, "f": drug_on_values}
         }
 
-        # Run BP simulation
-        sim_bp = simulate_bp(bp_model, stim_bp, anthropometrics_bp, initials_bp)
+        # Run BP simulation with common time vector
+        sim_bp = simulate_bp(bp_model, stim_bp, anthropometrics_bp, initials_bp, time_vector=time_common)
 
 
         # ====================================================================
         # COMBINE SIMULATIONS AND CALCULATE RISK
         # ====================================================================
 
-        # Use the BP simulation time as the common time grid (already in years, absolute time)
-        time_common = sim_bp['Time'].values
-
-        # Interpolate weight simulation results to match BP time points
+        # Extract weight values directly (already on common time grid)
         weight_interp = {}
         for col in sim_weight.columns:
             if col != 'Time':
                 weight_interp[col] = sim_weight[col].values
     
-        # Extract BP values
+        # Extract BP values directly (already on common time grid)
         bp_interp = {}
         for col in sim_bp.columns:
             bp_interp[col] = sim_bp[col].values
