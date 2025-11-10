@@ -56,7 +56,7 @@ def simulate(m, anthropometrics, stim, t_start_sim, n):
     sim = sund.Simulation(models = m, activities = act, time_unit = 'd')
 
     # Getting initial values
-    initial_conditions = copy.deepcopy(m.state_values)
+    initial_conditions = copy.deepcopy(sim.state_values)
 
     # Set initial conditions using state names and index logic
     state_mapping = {
@@ -67,8 +67,8 @@ def simulate(m, anthropometrics, stim, t_start_sim, n):
     }
     
     for state_name, value in state_mapping.items():
-        if state_name in m.state_names:
-            idx = m.state_names.index(state_name)
+        if state_name in sim.state_names:
+            idx = sim.state_names.index(state_name)
             initial_conditions[idx] = value
 
     # simulate
