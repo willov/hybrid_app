@@ -147,10 +147,13 @@ if 'Linit' not in st.session_state:
     st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
 anthropometrics = {
-    "weight": st.session_state['weight'], "ECFinit": st.session_state['ECFinit'], 
-    "height": st.session_state['height'], "age": st.session_state['age'], 
-    "Finit": st.session_state['Finit'], "Linit": st.session_state['Linit'],
-    "Ginit": st.session_state['Ginit']
+    "age": st.session_state['age'], 
+    "height": st.session_state['height'], 
+    "weight": st.session_state['weight'], 
+    "ECFinit": st.session_state['ECFinit'], 
+    "Finit": st.session_state['Finit'], 
+    "Ginit": st.session_state['Ginit'],
+    "Linit": st.session_state['Linit'],
 }  
 
 anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
