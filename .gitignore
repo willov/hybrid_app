@@ -5,3 +5,4 @@
 *.asv
 *.cpp
 custom_package/
+functions/__pycache__/
