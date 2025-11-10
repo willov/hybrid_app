@@ -149,6 +149,9 @@ with col2:
 
 with col3:
     bp_medication = st.checkbox("On BP medication", value=False, key="risk_bp_med")
+    if bp_medication:
+        bp_med_start = st.number_input("Medication start age (years):", start_time, end_time, start_time + 2, 1.0, key="risk_bp_med_start")
+        st.session_state['bp_med_start'] = bp_med_start
 
 col1, col2, col3 = st.columns(3)
 
@@ -199,8 +202,9 @@ if st.button("Calculate Risk Trajectory", type="primary"):
         drug_on_values = [0, 0, 0]
         if bp_medication:
             med_start = st.session_state.get('bp_med_start', start_time + 2)
-            drug_on_times = [start_time, med_start, end_time]
-            drug_on_values = [0, 1, 0]
+            med_end = med_start + 2  # Medication lasts 2 years
+            drug_on_times = [start_time, med_start, med_end, end_time]
+            drug_on_values = [0, 0, 1, 0, 0]  # SUND requires len(f) == len(t) + 1
 
         stim_bp = {
             "drug_on": {"t": drug_on_times, "f": drug_on_values}
