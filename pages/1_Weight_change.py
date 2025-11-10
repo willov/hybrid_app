@@ -133,17 +133,63 @@ anthropometrics["age"] = st.number_input("Age (years):", 0.0, 100.0, st.session_
 anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_state['height'],  key="height") 
 anthropometrics["ECFinit"] = st.session_state['ECFinit']
 
+# Handle fat and lean mass inputs
+
 fat_known = st.checkbox("Do you know your fat mass?")
 if fat_known:
-    st.session_state['Finit'] = st.number_input("Fat mass (kg):", 0.0, 1000.0, st.session_state.Finit, 0.1, key="Finit_input")
+    fat_pct = st.number_input("Fat percentage (%):", 0.0, 100.0, 
+                                (st.session_state['Finit']/st.session_state['weight'])*100, 
+                                0.1, key="Finit_pct")
+    st.session_state['Finit'] = (fat_pct / 100.0) * st.session_state['weight']
+
+
 
 lean_known = st.checkbox("Do you know your lean mass?")
 if lean_known:
-   st.session_state['Linit'] = st.number_input("Lean mass (kg):", 0.0, 1000.0, st.session_state.Linit, 0.1, key="Linit_input")
+    lean_pct = st.number_input("Lean percentage (%):", 0.0, 100.0, 
+                                (st.session_state['Linit']/st.session_state['weight'])*100, 
+                                0.1, key="Linit_pct")
+    st.session_state['Linit'] = (lean_pct / 100.0) * st.session_state['weight']
+
+# Adjust based on what's known
+if fat_known and lean_known:
+    # Both known: scale Gly and ECF to match total weight
+    # BW = F + L + (1 + 2.7)*Gly + ECF
+    remaining = st.session_state['weight'] - st.session_state['Finit'] - st.session_state['Linit']
+    original_other = (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit']
+    
+    if original_other > 0:
+        scale_factor = remaining / original_other
+        st.session_state['Ginit'] = st.session_state['Ginit'] * scale_factor
+        st.session_state['ECFinit'] = st.session_state['ECFinit'] * scale_factor
+        st.info(f"""
+                Fat mass: {st.session_state['Finit']:.1f} kg  
+                Lean mass: {st.session_state['Linit']:.1f} kg  
+                Estimated glycogen mass: {st.session_state['Ginit']:.2f} kg  
+                Estimated extracellular fluid mass: {st.session_state['ECFinit']:.2f} kg
+                """)
+    
+elif fat_known and not lean_known:
+    # Only fat known: adjust lean mass
+    st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + 
+                                                                (1.0 + 2.7)*st.session_state['Ginit'] + 
+                                                                st.session_state['ECFinit'])
+    st.info(f"""
+            Fat mass: {st.session_state['Finit']:.1f} kg  
+            Estimated lean mass: {st.session_state['Linit']:.1f} kg
+            """)
+    
+elif lean_known and not fat_known:
+    # Only lean known: adjust fat mass
+    st.session_state['Finit'] = st.session_state['weight'] - (st.session_state['Linit'] + 
+                                                                (1.0 + 2.7)*st.session_state['Ginit'] + 
+                                                                st.session_state['ECFinit'])
+    st.info(f"Lean mass: {st.session_state['Linit']:.1f} kg, estimated fat mass: {st.session_state['Finit']:.1f} kg")
 
 anthropometrics["Finit"] = st.session_state['Finit']
 anthropometrics["Linit"] = st.session_state['Linit']
 
+# Map sex to numerical representation
 anthropometrics["sex"] = float(anthropometrics["sex"].lower() in ["male", "man", "men", "boy", "1", "chap", "guy"]) #Converts to a numerical representation
 
 
