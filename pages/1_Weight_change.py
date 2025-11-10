@@ -62,8 +62,19 @@ def simulate(m, anthropometrics, stim, t_start_sim, n):
     # Getting initial values
     initial_conditions = copy.deepcopy(m.state_values)
 
-    initial_conditions[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
-    sim.simulate(time_vector = np.linspace(min(stim["ss_x"]["t"]), max(stim["ss_x"]["t"]), 10000), state_values = initial_conditions)
+    # Set initial conditions using state names and index logic
+    state_mapping = {
+        'Gly': anthropometrics['Ginit'],
+        'ECF': anthropometrics['ECFinit'],
+        'F': anthropometrics['Finit'],
+        'L': anthropometrics['Linit']
+    }
+    
+    for state_name, value in state_mapping.items():
+        if state_name in m.state_names:
+            idx = m.state_names.index(state_name)
+            initial_conditions[idx] = value
+
 
     sim_results = pd.DataFrame(sim.feature_values,columns=sim.feature_names)
     sim_results.insert(0, 'Time', sim.time_vector)
