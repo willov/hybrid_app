@@ -23,7 +23,6 @@ sys.path.append('./custom_package')
 import sund
 
 # Setup the models
-
 def setup_model(model_name):
     sund.install_model(f"./models/{model_name}.txt")
     model = sund.load_model(model_name)
@@ -33,25 +32,27 @@ def setup_model(model_name):
 
 model, model_features = setup_model('insres_model')
 
+
 # Define functions needed
 
 def flatten(list):
     return [item for sublist in list for item in sublist]
 
+
 def simulate(m, anthropometrics, stim, t_start_sim, n):
     act = sund.Activity(time_unit = 'd')
-    pwc = type="piecewise_constant" # space saving only
-    const = type="constant" # space saving only
 
     for key,val in stim.items():
-        act.add_output(name = key, type=pwc, t = val["t"], f = val["f"]) 
+        act.add_output(
+            name = key, type="piecewise_constant", 
+            t = val["t"], f = val["f"]
+        ) 
     for key,val in anthropometrics.items():
-        act.add_output(name = key, type=const, f = val) 
+        act.add_output(name = key, type="constant", f = val) 
 
     sim = sund.Simulation(models = m, activities = act, time_unit = 'd')
-    
+
     # Getting initial values
-    
     initial_conditions = copy.deepcopy(m.state_values)
 
     initial_conditions[1:5] = [anthropometrics[i] for i in ['Ginit','ECFinit','Finit','Linit']]
@@ -63,6 +64,7 @@ def simulate(m, anthropometrics, stim, t_start_sim, n):
     sim_diet_results = sim_results[(sim_results['Time']>=t_start_sim)]
     new_initial_conditions = sim.state_values
     return sim_diet_results, new_initial_conditions
+
 
 def simulate_meal(m, anthropometrics, stim, inits, t_start_sim, n):
     act = sund.Activity(time_unit = 'd')
@@ -170,7 +172,7 @@ ss_x = [0, 0, 0, 1, 0]
 stim_long = {
     "EIchange": {"t": t_long, "f": EIchange},
     "ss_x": {"t": t_long, "f": ss_x},
-    }
+}
 
 t_start_sim = min(stim_long["ss_x"]["t"])
 sim_long, inits = simulate(model, anthropometrics, stim_long, t_start_sim, -1)

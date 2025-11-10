@@ -20,7 +20,6 @@ sys.path.append('./custom_package')
 import sund
 
 # Setup the models
-
 def setup_model(model_name):
     sund.install_model(f"./models/{model_name}.txt")
     model = sund.load_model(model_name)
@@ -30,20 +29,23 @@ def setup_model(model_name):
 
 model, model_features = setup_model('bloodpressure_model')
 
+
 # Define functions needed
 
 def flatten(list):
     return [item for sublist in list for item in sublist]
 
+
 def simulate(m, stim, anthropometrics, initials): #, extra_time = 10):
     act = sund.Activity(time_unit = 'y')
-    pwc = type="piecewise_constant" # space saving only
-    const = type="constant" # space saving only
 
     for key,val in stim.items():
-        act.add_output(name = key, type=pwc, t = val["t"], f = val["f"]) 
+        act.add_output(
+            name = key, type="piecewise_constant",
+            t = val["t"], f = val["f"]
+        ) 
     for key,val in anthropometrics.items():
-        act.add_output(name = key, type=const, f = val) 
+        act.add_output(name = key, type="constant", f = val)
 
     sim = sund.Simulation(models = m, activities = act, time_unit = 'y')
 
@@ -55,6 +57,7 @@ def simulate(m, stim, anthropometrics, initials): #, extra_time = 10):
     sim_results.insert(0, 'Time', sim.time_vector)
     
     return sim_results
+
 
 # Start the app
 
