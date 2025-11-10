@@ -330,7 +330,7 @@ if 'risk_results' in st.session_state:
     st.subheader("Clinical Factor Trajectories")
 
     # Create tabs for different views
-    tab1, tab2, tab3 = st.tabs(["Weight & BMI", "Blood Pressure", "All Factors"])
+    tab1, tab2 = st.tabs(["Weight & BMI", "Blood Pressure"])
 
     with tab1:
         weight_chart = alt.Chart(results_df).mark_line().encode(
