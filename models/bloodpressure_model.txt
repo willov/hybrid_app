@@ -23,13 +23,13 @@ k2_DBP = 0.0183
 bSBP = 99.8670
 bDBP = 55.9788
 
-t_drug = 2// 3.6 
+t_drug       = 2 //3.6 
 effect_drugS = 20
 effect_drugD = 5
-dummy = 0
+dummy        = 0
 
 ########## VARIABLES
-PP = SBP-DBP
+PP  = SBP-DBP
 MAP = DBP + (PP/3)
 
 SBP_vs_IC = (IC_SBP-bSBP)/(117.86-bSBP)
@@ -41,7 +41,7 @@ drugD = (effect_drugD/t_drug)*sign(drug_on)
 ########## FUNCTIONS
 
 ########## EVENTS
-e = drug_on>0, dummy, 1   //This is only used to trigger the reset of the simulation when the treatment activity triggers
+e  = drug_on>0, dummy, 1   //This is only used to trigger the reset of the simulation when the treatment activity triggers
 e2 = drug_on<1, dummy, 1   //This is only used to trigger the reset of the simulation when the treatment activity triggers
 
 ########## OUTPUTS
@@ -55,7 +55,7 @@ age = age                         @ 45
 
 ########## FEATURES
 
-Systolic blood pressure (mmHg) = SBP
+Systolic blood pressure (mmHg)  = SBP
 Diastolic blood pressure (mmHg) = DBP
-Mean arterial pressure (mmHg) = MAP
+Mean arterial pressure (mmHg)   = MAP
 
