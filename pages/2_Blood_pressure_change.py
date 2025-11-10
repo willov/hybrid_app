@@ -23,8 +23,7 @@ import sund
 
 def setup_model(model_name):
     sund.install_model(f"./models/{model_name}.txt")
-    model_class = sund.import_model(model_name)
-    model = model_class() 
+    model = sund.load_model(model_name)
 
     features = model.feature_names
     return model, features
@@ -140,7 +139,7 @@ anthropometrics = {"IC_SBP": IC_SBP, "IC_DBP": IC_DBP}
 
 stim = {
     "drug_on": {"t": t_long, "f": drug_on}
-    }
+}
 
 # Plotting blood pressure 
 
