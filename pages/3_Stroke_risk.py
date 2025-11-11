@@ -1,5 +1,5 @@
 """
-Page 3: Continuous Stroke Risk Simulation
+Page 3: Continuous stroke risk simulation
 Combines weight, blood pressure, and metabolic simulations with stroke risk prediction.
 """
 
@@ -19,7 +19,7 @@ from functions import (
 # Setup
 setup_custom_packages()
 
-st.title("Continuous Stroke Risk Simulation")
+st.title("Continuous stroke risk simulation")
 st.markdown("""
 Simulate your 5-year stroke risk as it evolves over time based on changes in:
 - Weight and metabolic factors (insulin resistance, blood glucose)
@@ -57,7 +57,7 @@ long_term_features = [
 ]
 
 st.divider()
-st.subheader("Input Parameters")
+st.subheader("Input parameters")
 
 col1, col2, col3, col4 = st.columns(4)
 
@@ -104,7 +104,7 @@ anthropometrics = {
 }
 
 st.divider()
-st.subheader("Blood Pressure")
+st.subheader("Blood pressure")
 
 col1, col2 = st.columns(2)
 
@@ -118,7 +118,7 @@ with col2:
 
 
 st.divider()
-st.subheader("Simulation Parameters")
+st.subheader("Simulation parameters")
 
 col1, col2, col3 = st.columns(3)
 
@@ -133,7 +133,7 @@ with col3:
 
 
 st.divider()
-st.subheader("Additional Risk Factors")
+st.subheader("Additional risk factors")
 
 col1, col2, col3 = st.columns(3)
 
@@ -145,7 +145,7 @@ with col1:
         cpd = 0
 
 with col2:
-    has_diabetes = st.checkbox("Type 2 Diabetes", value=False, key="risk_diabetes")
+    has_diabetes = st.checkbox("Type 2 diabetes", value=False, key="risk_diabetes")
 
     if has_diabetes:
         weight_model.state_values[weight_model.state_names.index('diabetes')] = 1.0
