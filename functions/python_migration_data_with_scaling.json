@@ -1,0 +1,210 @@
+{
+  "Age Model <50": {
+    "model_logistic_50": {
+      "intercept": -0.8715507036301888,
+      "feature_names": [
+        "factor(SEX)2",
+        "scale(SBP, center = TRUE, scale = TRUE)",
+        "scale(BMI, center = TRUE, scale = TRUE)",
+        "scale(DBP, center = TRUE, scale = TRUE)",
+        "CPD",
+        "factor(AF_beforestroke)1",
+        "factor(DMRX)1"
+      ],
+      "feature_coefficients": [
+        0.053373333385212704,
+        0.5654060746386629,
+        0.2087414359076848,
+        0.09439786840080866,
+        0.003365926895704614,
+        1.175058403670895,
+        -0.4240172903759157
+      ],
+      "all_coefficients": {
+        "(Intercept)": -0.8715507036301888,
+        "factor(SEX)2": 0.053373333385212704,
+        "scale(SBP, center = TRUE, scale = TRUE)": 0.5654060746386629,
+        "scale(BMI, center = TRUE, scale = TRUE)": 0.2087414359076848,
+        "scale(DBP, center = TRUE, scale = TRUE)": 0.09439786840080866,
+        "CPD": 0.003365926895704614,
+        "factor(AF_beforestroke)1": 1.175058403670895,
+        "factor(DMRX)1": -0.4240172903759157
+      },
+      "scaling_parameters": {
+        "SBP": {
+          "mean": 131.09183673469389,
+          "std": 22.33846251151444,
+          "n_obs": 196
+        },
+        "BMI": {
+          "mean": 27.26840707685437,
+          "std": 5.777686166264382,
+          "n_obs": 196
+        },
+        "DBP": {
+          "mean": 83.36224489795919,
+          "std": 12.678930758979618,
+          "n_obs": 196
+        }
+      },
+      "test_prediction": 0.22109740718108417,
+      "test_log_odds": -1.2592826358530258
+    }
+  },
+  "Age Model 50-59": {
+    "model_logistic_5059": {
+      "intercept": -1.0476404059614175,
+      "feature_names": [
+        "factor(SEX)2",
+        "scale(SBP, center = TRUE, scale = TRUE)",
+        "scale(BMI, center = TRUE, scale = TRUE)",
+        "scale(DBP, center = TRUE, scale = TRUE)",
+        "CPD",
+        "factor(AF_beforestroke)1",
+        "factor(DMRX)1"
+      ],
+      "feature_coefficients": [
+        0.13586064490253794,
+        0.2014147094877806,
+        0.17301890675495288,
+        0.41976355708480906,
+        -0.007314394027627083,
+        1.7775977058765724,
+        1.0356841126017386
+      ],
+      "all_coefficients": {
+        "(Intercept)": -1.0476404059614175,
+        "factor(SEX)2": 0.13586064490253794,
+        "scale(SBP, center = TRUE, scale = TRUE)": 0.2014147094877806,
+        "scale(BMI, center = TRUE, scale = TRUE)": 0.17301890675495288,
+        "scale(DBP, center = TRUE, scale = TRUE)": 0.41976355708480906,
+        "CPD": -0.007314394027627083,
+        "factor(AF_beforestroke)1": 1.7775977058765724,
+        "factor(DMRX)1": 1.0356841126017386
+      },
+      "scaling_parameters": {
+        "SBP": {
+          "mean": 140.73558484349257,
+          "std": 25.294790400363425,
+          "n_obs": 607
+        },
+        "BMI": {
+          "mean": 27.179438186784367,
+          "std": 4.941991887641759,
+          "n_obs": 607
+        },
+        "DBP": {
+          "mean": 84.92668863261945,
+          "std": 13.970619078358459,
+          "n_obs": 607
+        }
+      },
+      "test_prediction": 0.1919976722729057,
+      "test_log_odds": -1.4370816909916357
+    }
+  },
+  "Age Model 60-69": {
+    "model_logistic_6069": {
+      "intercept": -0.9521825636873885,
+      "feature_names": [
+        "factor(SEX)2",
+        "scale(SBP, center = TRUE, scale = TRUE)",
+        "scale(BMI, center = TRUE, scale = TRUE)",
+        "scale(DBP, center = TRUE, scale = TRUE)",
+        "CPD",
+        "factor(AF_beforestroke)1",
+        "factor(DMRX)1"
+      ],
+      "feature_coefficients": [
+        -0.14651673941319526,
+        0.3126319077904226,
+        0.019837016626090997,
+        0.23724523148598947,
+        0.03191070955466227,
+        2.2801999800981227,
+        1.1185912589726623
+      ],
+      "all_coefficients": {
+        "(Intercept)": -0.9521825636873885,
+        "factor(SEX)2": -0.14651673941319526,
+        "scale(SBP, center = TRUE, scale = TRUE)": 0.3126319077904226,
+        "scale(BMI, center = TRUE, scale = TRUE)": 0.019837016626090997,
+        "scale(DBP, center = TRUE, scale = TRUE)": 0.23724523148598947,
+        "CPD": 0.03191070955466227,
+        "factor(AF_beforestroke)1": 2.2801999800981227,
+        "factor(DMRX)1": 1.1185912589726623
+      },
+      "scaling_parameters": {
+        "SBP": {
+          "mean": 146.20493009565857,
+          "std": 25.704888519329028,
+          "n_obs": 1359
+        },
+        "BMI": {
+          "mean": 27.402991012269492,
+          "std": 5.112936354291975,
+          "n_obs": 1359
+        },
+        "DBP": {
+          "mean": 82.40250183958793,
+          "std": 13.563610337974238,
+          "n_obs": 1359
+        }
+      },
+      "test_prediction": 0.2104455090793711,
+      "test_log_odds": -1.3222420954658125
+    }
+  },
+  "Age Model 70+": {
+    "model_logistic_70": {
+      "intercept": -0.9526706349666544,
+      "feature_names": [
+        "factor(SEX)2",
+        "scale(SBP, center = TRUE, scale = TRUE)",
+        "scale(BMI, center = TRUE, scale = TRUE)",
+        "scale(DBP, center = TRUE, scale = TRUE)",
+        "CPD",
+        "factor(AF_beforestroke)1",
+        "factor(DMRX)1"
+      ],
+      "feature_coefficients": [
+        0.12008668216648007,
+        0.15351544834733907,
+        0.048710306499009266,
+        0.25016126541665906,
+        0.024985693465335572,
+        2.6819657006655246,
+        0.2099806897061476
+      ],
+      "all_coefficients": {
+        "(Intercept)": -0.9526706349666544,
+        "factor(SEX)2": 0.12008668216648007,
+        "scale(SBP, center = TRUE, scale = TRUE)": 0.15351544834733907,
+        "scale(BMI, center = TRUE, scale = TRUE)": 0.048710306499009266,
+        "scale(DBP, center = TRUE, scale = TRUE)": 0.25016126541665906,
+        "CPD": 0.024985693465335572,
+        "factor(AF_beforestroke)1": 2.6819657006655246,
+        "factor(DMRX)1": 0.2099806897061476
+      },
+      "scaling_parameters": {
+        "SBP": {
+          "mean": 155.25378787878788,
+          "std": 33.356203380405674,
+          "n_obs": 2508
+        },
+        "BMI": {
+          "mean": 26.712819337815414,
+          "std": 4.4281571903223655,
+          "n_obs": 2508
+        },
+        "DBP": {
+          "mean": 73.9383971291866,
+          "std": 11.639594001798729,
+          "n_obs": 2508
+        }
+      },
+      "test_prediction": 0.26825717446035513,
+      "test_log_odds": -1.0034829944215182
+    }
+  }
+}
