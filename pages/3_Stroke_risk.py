@@ -147,6 +147,9 @@ with col1:
 with col2:
     has_diabetes = st.checkbox("Type 2 Diabetes", value=False, key="risk_diabetes")
 
+    if has_diabetes:
+        weight_model.state_values[weight_model.state_names.index('diabetes')] = 1.0
+
 with col3:
     bp_medication = st.checkbox("On BP medication", value=False, key="risk_bp_med")
     if bp_medication:
@@ -330,37 +333,41 @@ if 'risk_results' in st.session_state:
     st.divider()
     st.subheader("Clinical Factor Trajectories")
 
-    # Create tabs for different views
-    tab1, tab2 = st.tabs(["Weight & BMI", "Blood Pressure"])
+    weight_chart = alt.Chart(results_df).mark_line().encode(
+        x=alt.X('Age:Q').scale(zero=False),
+        y=alt.Y('Weight (kg):Q').scale(zero=False),
+        color=alt.value('#1f77b4')
+    ).properties(height=300, title="Weight Over Time")
 
-    with tab1:
-        weight_chart = alt.Chart(results_df).mark_line().encode(
-            x=alt.X('Age:Q').scale(zero=False),
-            y=alt.Y('Weight (kg):Q').scale(zero=False),
-            color=alt.value('#1f77b4')
-        ).properties(height=300, title="Weight Over Time")
+    bmi_chart = alt.Chart(results_df).mark_line().encode(
+        x=alt.X('Age:Q').scale(zero=False),
+        y=alt.Y('BMI:Q').scale(zero=False),
+        color=alt.value('#ff7f0e')
+    ).properties(height=300, title="BMI Over Time")
 
-        bmi_chart = alt.Chart(results_df).mark_line().encode(
-            x=alt.X('Age:Q').scale(zero=False),
-            y=alt.Y('BMI:Q').scale(zero=False),
-            color=alt.value('#ff7f0e')
-        ).properties(height=300, title="BMI Over Time")
+    st.altair_chart(weight_chart, width="stretch")
+    st.altair_chart(bmi_chart, width="stretch")
 
-        st.altair_chart(weight_chart, width="stretch")
-        st.altair_chart(bmi_chart, width="stretch")
+    sbp_chart = alt.Chart(results_df).mark_line().encode(
+        x=alt.X('Age:Q').scale(zero=False),
+        y=alt.Y('SBP (mmHg):Q').scale(zero=False),
+        color=alt.value('#2ca02c')
+    ).properties(height=300, title="Systolic BP Over Time")
 
-    with tab2:
-        sbp_chart = alt.Chart(results_df).mark_line().encode(
-            x=alt.X('Age:Q').scale(zero=False),
-            y=alt.Y('SBP (mmHg):Q').scale(zero=False),
-            color=alt.value('#2ca02c')
-        ).properties(height=300, title="Systolic BP Over Time")
+    dbp_chart = alt.Chart(results_df).mark_line().encode(
+        x=alt.X('Age:Q').scale(zero=False),
+        y=alt.Y('DBP (mmHg):Q').scale(zero=False),
+        color=alt.value('#d62728')
+    ).properties(height=300, title="Diastolic BP Over Time")
 
-        dbp_chart = alt.Chart(results_df).mark_line().encode(
-            x=alt.X('Age:Q').scale(zero=False),
-            y=alt.Y('DBP (mmHg):Q').scale(zero=False),
-            color=alt.value('#d62728')
-        ).properties(height=300, title="Diastolic BP Over Time")
+    st.altair_chart(sbp_chart, width="stretch")
+    st.altair_chart(dbp_chart, width="stretch")
 
-        st.altair_chart(sbp_chart, width="stretch")
-        st.altair_chart(dbp_chart, width="stretch")
+    # Make another chart for diabetes
+    diabetes_chart = alt.Chart(results_df).mark_line().encode(
+        x=alt.X('Age:Q').scale(zero=False),
+        y=alt.Y('Diabetes:Q').scale(zero=False),
+        color=alt.value('#9467bd')
+    ).properties(height=300, title="Diabetes Status Over Time")
+
+    st.altair_chart(diabetes_chart, width="stretch")
