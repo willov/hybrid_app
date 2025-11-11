@@ -444,8 +444,8 @@ eventY  = lt(beta*(G-G_b),-S_b),Y, Y2
 eventY2 = gt(beta*(G-G_b),-S_b),Y2, 0 
 #eventBetamass = gt(G,diabetes_def), betamass, 0.3
 #eventDiabetes = gt(G,diabetes_def), diabetes, 1
-eventBetamass = gt(BMI, 28) && gt(time, 0), betamass, 0.3
-eventDiabetes = gt(BMI, 28), diabetes, 1  # G, diabetes_def
+eventBetamass = gt(BMI, 29.5) && gt(time, 0), betamass, 0.3
+eventDiabetes = gt(BMI, 29.5), diabetes, 1  # G, diabetes_def
 ########## OUTPUTS
 
 ########## INPUTS
