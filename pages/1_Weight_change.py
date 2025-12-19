@@ -45,28 +45,30 @@ if 'age' not in st.session_state:
     st.session_state['age'] = 40.0
 st.session_state['Ginit'] = 0.5
 st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']
-if 'Finit' not in st.session_state:
-    if st.session_state['sex']== 'Woman':
-        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 102.01)
-    elif st.session_state['sex']== 'Man': 
-        st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 103.95) 
-if 'Linit' not in st.session_state:
-    st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
 
 anthropometrics = {
     "age": st.session_state['age'], 
     "height": st.session_state['height'], 
     "weight": st.session_state['weight'], 
     "ECFinit": st.session_state['ECFinit'], 
-    "Finit": st.session_state['Finit'], 
+    "Finit": st.session_state.get('Finit', None), 
     "Ginit": st.session_state['Ginit'],
-    "Linit": st.session_state['Linit'],
+    "Linit": st.session_state.get('Linit', None),
 }  
 
 anthropometrics["sex"] = st.selectbox("Sex:", ["Man", "Woman"], ["Man", "Woman"].index(st.session_state['sex']), key="sex")
 anthropometrics["weight"] = st.number_input("Weight (kg):", 0.0, 1000.0, st.session_state['weight'], key="weight") # max, min 
 anthropometrics["age"] = st.number_input("Age (years):", 0.0, 100.0, st.session_state['age'], key="age") # max, min 
 anthropometrics["height"] = st.number_input("Height (m):", 0.0, 2.5, st.session_state['height'],  key="height") 
+
+# Recalculate dependent anthropometrics when inputs change
+st.session_state['ECFinit'] = 0.7*0.235*st.session_state['weight']
+if st.session_state['sex']== 'Woman':
+    st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 39.96*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 102.01)
+elif st.session_state['sex']== 'Man': 
+    st.session_state['Finit'] = (st.session_state['weight']/100.0)*(0.14*st.session_state['age'] + 37.31*math.log(st.session_state['weight']/((st.session_state['height'])**2.0)) - 103.95) 
+st.session_state['Linit'] = st.session_state['weight'] - (st.session_state['Finit'] + (1.0 + 2.7)*st.session_state['Ginit'] + st.session_state['ECFinit'])
+
 anthropometrics["ECFinit"] = st.session_state['ECFinit']
 anthropometrics["RMRinit"] = (9.99*anthropometrics["weight"] + 6.25*anthropometrics["height"] - 4.92*anthropometrics["age"] - 166*(1 if anthropometrics["sex"] == "Man" else 0) + 5) * 4184
 # Handle fat and lean mass inputs
