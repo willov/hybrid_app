@@ -1,2 +1,3 @@
 build-essential
 clang
+python3-dev
